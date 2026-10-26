@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL, AUTO_POPOVER_OFF, BRAND_CLAUDE, BRAND_DEEPSEEK, PAGE_ZOOM_08, PAGE_ZOOM_1, PAGE_ZOOM_125, PAGE_ZOOM_15, PAGE_ZOOM_SYSTEM, PALETTE_COLORING_BRAND, PALETTE_COLORING_CUSTOM, USERNAME_MAX } from '../../constants'
-import { COMBINE_SVGS } from 'virtual:dsh-claude-style/generated'
+import { AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL, AUTO_POPOVER_OFF, BRAND_CHANGZHENG, BRAND_EMBER, PAGE_ZOOM_08, PAGE_ZOOM_1, PAGE_ZOOM_125, PAGE_ZOOM_15, PAGE_ZOOM_SYSTEM, PALETTE_COLORING_BRAND, PALETTE_COLORING_CUSTOM, USERNAME_MAX } from '../../constants'
 import { createHostToast } from '../../shared/host-toast'
 import { PreviewCards } from '../../shared/preview-cards'
 import type { Prefs } from '../../constants'
@@ -23,35 +22,32 @@ export function createSettingsGeneralTab(): SettingsTab {
   /** The name of the colour card that is keeping the page's colours fixed. */
   function paletteName(colouring: Prefs['paletteColors']) {
     if (colouring === PALETTE_COLORING_CUSTOM) return copy('paletteCustom')
-    return colouring === BRAND_DEEPSEEK ? copy('brandDeepseek') : copy('brandClaude')
+    return colouring === BRAND_EMBER ? copy('brandDeepseek') : copy('brandClaude')
   }
 
   /**
-   * The theme style renders as a grid of large cards, each carrying the
-   * brand's own mark: brands are presets, not sibling tiers of one setting.
-   * The stylesheet picks the mark off the logo's data-brand, so a new brand
-   * is one option here plus one rule in settings-cards.css.
+   * The theme style renders as a grid of large cards, each carrying the brand's
+   * own mark: brands are presets, not sibling tiers of one setting. The
+   * stylesheet picks the mark off the logo's data-brand, so a new brand is one
+   * option here plus one rule in settings-cards.css.
    */
   function themePicker(prefs: Prefs, write: SettingsView['write']) {
     const options: PreviewOption<Prefs['brand']>[] = [
-      // DeepSeek's lockup is one piece of art that already draws the mark with
-      // its word; Claude's card carries the mark and the word as two pieces.
       {
-        value: BRAND_DEEPSEEK,
-        label: copy('brandDeepseek'),
-        attributes: { 'data-brand': BRAND_DEEPSEEK },
-        content: React.createElement('span', {
-          className: 'dsh-claude-brand-card-lockup',
-          'aria-hidden': 'true',
-          dangerouslySetInnerHTML: { __html: COMBINE_SVGS.deepseek },
-        }),
+        value: BRAND_CHANGZHENG,
+        label: copy('brandClaude'),
+        attributes: { 'data-brand': BRAND_CHANGZHENG },
+        content: [
+          React.createElement('span', { key: 'mark', className: 'dsh-claude-brand-card-logo', 'data-brand': BRAND_CHANGZHENG, 'aria-hidden': 'true' }),
+          React.createElement('span', { key: 'word', className: 'dsh-claude-brand-card-word dsh-claude-masked-word', 'aria-hidden': 'true' }),
+        ],
       },
       {
-        value: BRAND_CLAUDE,
-        label: copy('brandClaude'),
-        attributes: { 'data-brand': BRAND_CLAUDE },
+        value: BRAND_EMBER,
+        label: copy('brandDeepseek'),
+        attributes: { 'data-brand': BRAND_EMBER },
         content: [
-          React.createElement('span', { key: 'mark', className: 'dsh-claude-brand-card-logo', 'data-brand': BRAND_CLAUDE, 'aria-hidden': 'true' }),
+          React.createElement('span', { key: 'mark', className: 'dsh-claude-brand-card-logo', 'data-brand': BRAND_EMBER, 'aria-hidden': 'true' }),
           React.createElement('span', { key: 'word', className: 'dsh-claude-brand-card-word dsh-claude-masked-word', 'aria-hidden': 'true' }),
         ],
       },

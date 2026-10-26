@@ -2,13 +2,13 @@ import { QUIET_ATTR } from '../../constants'
 import { observeMatches } from '@dsh-claude-style/engine/bus'
 import { requestFrame } from '@dsh-claude-style/engine/frame'
 import { closestConversationSession, conversationSessionId, findChatTarget } from '@dsh-claude-style/engine/host'
-import { hostChatCopy, hostChatSeat } from '../../core/i18n'
+import { hostChatSeat } from '../../core/i18n'
 import { readPrefs, subscribePrefs } from '../../core/prefs'
 import { buildElement, writeTextInPlace } from '@dsh-claude-style/engine/dom'
 import { formatHostDuration } from '../../shared/format'
 import { motionMs } from '../../shared/motion'
 import { releaseSwappingText, setSwappingText } from '../../shared/swapping-text'
-import { activityWords, waitingWord, THINKING_KEY } from '../../shared/turn-activity'
+import { activityWords, THINKING_KEY } from '../../shared/turn-activity'
 import { startWaitLoader, releaseWaitLoader } from './wait-loader'
 import { CHAT_RUNNING_SELECTOR, CHAT_RUNNING_TEXT_SELECTOR } from '@dsh-claude-style/contracts/dom'
 import { WAIT_OVERTIME_MS, openTurn, waitStart, wordForPass } from './wait-state'
@@ -232,11 +232,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const precise = prefs.statusDetail === true
     const activity = activityWords(snapshot, turn, precise)
     // One word stands for the model thinking and for a wait nothing can be read
-    // from (shared/turn-activity): the skin's own under the Claude brand, the
-    // host's own under the DeepSeek brand. The thinking state answers no word of
-    // its own — that word is the one below — so the clause standing from before
+    // from (shared/turn-activity). The thinking state answers no word of its
+    // own — that word is the one below — so the clause standing from before
     // holds the line instead of a fallback and a return.
-    const waiting = waitingWord(prefs.brand, hostChatCopy('chat.deepDiving', 'Deep diving', ctx), copy(THINKING_KEY))
+    const waiting = copy(THINKING_KEY)
     const own = activity !== null && activity.key === null && activity.aboutCall === undefined
     const said = activity === null || activity.key === THINKING_KEY
       ? null

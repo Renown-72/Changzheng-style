@@ -16,7 +16,7 @@
     // work from the top of the input area, and stands on the panel that takes
     // the card's place while the reader is asked for something.
     await probe.onlyFor(['deepy', 'crab-states'], async function () {
-      var mascotName = window.SMOKE_CASE === 'deepy' ? 'deepy' : 'crab'
+      var mascotName = window.SMOKE_CASE === 'deepy' ? 'deepy' : 'changzheng'
       var driver = window.__deepy
       var whaleNow = function () {
         var node = document.querySelector('.dsh-claude-' + mascotName)
@@ -65,7 +65,7 @@
       for (var mountWait = 0; mountWait < 40 && document.querySelector('.dsh-claude-' + mascotName) === null; mountWait++) await sleep(50)
       await sleep(400)
       r.states.home = whaleNow()
-      r.states.crab = document.querySelector('.dsh-claude-crab') !== null
+      r.states.crab = document.querySelector('.dsh-claude-changzheng') !== null
       // Frames change on the whale's own node, and no frame wakes a pass. The
       // caret motion's own frames are settled first (see the crab case).
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
@@ -222,7 +222,7 @@
       deepyConversation.remove()
       await sleep(200)
       r.states.gone = whaleNow() === null && document.querySelectorAll('[data-dsh-claude-' + mascotName + '-anchor]').length === 0
-      if (mascotName === 'crab') {
+      if (mascotName === 'changzheng') {
         // Where it appears: kept to the home page, the crab stays off the
         // conversation; with the mascot off it leaves the home card as well.
         document.body.appendChild(deepyConversation)
@@ -242,7 +242,7 @@
         r.states.off = whaleNow()
         window.__pushForm({ mascot: 'deepy' })
         await sleep(300)
-        r.states.deepyPicked = document.querySelector('.dsh-claude-deepy') !== null && document.querySelector('.dsh-claude-crab') === null
+        r.states.deepyPicked = document.querySelector('.dsh-claude-deepy') !== null && document.querySelector('.dsh-claude-changzheng') === null
         window.__pushForm({ mascot: 'crab', mascotScope: 'all' })
         scopeHero.remove()
         await sleep(200)

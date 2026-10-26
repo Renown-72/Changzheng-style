@@ -93,7 +93,7 @@ const MARKS = [
   ['custom brand word', 'data-dsh-claude-custom-word', 'text'],
   ['custom brand word image', 'data-dsh-claude-custom-word', 'image'],
   ['custom brand tint', 'data-dsh-claude-custom-tint', ''],
-  ['custom brand accent', 'data-dsh-claude-accent', '#d97757'],
+  ['custom brand accent', 'data-dsh-claude-accent', '#ff3355'],
   // The zoom the reader picks: the sheet keys rules on each of its values, and
   // the walk had no state that reached them (D9). The colour card under the
   // Claude palette waits for a spec that reads its mark (surface.json).

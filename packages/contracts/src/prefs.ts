@@ -18,18 +18,18 @@ export const BILLING_OFF = 'off'
 /** The billing choices, in the settings' order: the two official tables, or no billing at all. */
 export const BILLING_CHOICES = [BILLING_OFF, ...CURRENCIES] as const
 
-/** Brand marks selectable from the settings page. `claude` is the default. */
-export const BRAND_CLAUDE = 'claude'
+/** Brand marks selectable from the settings page. `changzheng` is the default. */
+export const BRAND_CHANGZHENG = 'changzheng'
 /**
- * The DeepSeek brand: the host's own brand area stays (no Claude variant
- * matches) and takes DeepSeek's brand blue, both palettes turn blue
- * (theme/tokens.css), the skin's Claude marks give way to DeepSeek's whale,
- * and Deepy the pixel whale takes the crab's place on the composer.
+ * The polar pair to the red card: the same HUD, lit in cyan instead of crimson
+ * — the hologram's second channel. Both cards keep the neon HUD structure; only
+ * their seeds and their avatar mascot's colours change.
  */
-export const BRAND_DEEPSEEK = 'deepseek'
-/** What earlier builds stored for the DeepSeek choice, when it was labelled "Off". */
-export const BRAND_DEEPSEEK_LEGACY = 'off'
-export const BRANDS = [BRAND_CLAUDE, BRAND_DEEPSEEK] as const
+export const BRAND_EMBER = 'ember'
+/** What earlier builds stored for the two cards, before the skin took its own look. */
+export const BRAND_LEGACY_RED = 'claude'
+export const BRAND_LEGACY_CYAN = 'deepseek'
+export const BRANDS = [BRAND_CHANGZHENG, BRAND_EMBER] as const
 
 /**
  * Which colours the page paints: one brand's own card, `brand` for whichever
@@ -85,20 +85,20 @@ export const MESSAGE_ENTER_GROW = 'grow'
 export const MESSAGE_ENTER_MODES = [MESSAGE_ENTER_FLIGHT, MESSAGE_ENTER_GROW] as const
 
 /** Who paints the colours: the skin's own palette, or the host's colour tokens left to the host and other theme plugins. */
-export const PALETTE_CLAUDE = 'claude'
+export const PALETTE_SKIN = 'skin'
 export const PALETTE_HOST = 'host'
-export const PALETTES = [PALETTE_CLAUDE, PALETTE_HOST] as const
+export const PALETTES = [PALETTE_SKIN, PALETTE_HOST] as const
 /** Who sets the type, under the same two answers. */
-export const TYPEFACE_CLAUDE = 'claude'
+export const TYPEFACE_SKIN = 'skin'
 export const TYPEFACE_HOST = 'host'
-export const TYPEFACES = [TYPEFACE_CLAUDE, TYPEFACE_HOST] as const
+export const TYPEFACES = [TYPEFACE_SKIN, TYPEFACE_HOST] as const
 
 /** The mascot on the composer, chosen apart from the brand: follow the brand, pick one, or show none. */
 export const MASCOT_BRAND = 'brand'
-export const MASCOT_CRAB = 'crab'
+export const MASCOT_CHANGZHENG = 'changzheng'
 export const MASCOT_DEEPY = 'deepy'
 export const MASCOT_OFF = 'off'
-export const MASCOTS = [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF] as const
+export const MASCOTS = [MASCOT_BRAND, MASCOT_CHANGZHENG, MASCOT_DEEPY, MASCOT_OFF] as const
 /** Where the mascot stands: the home page alone, or the home page and the conversation. */
 export const MASCOT_SCOPE_HOME = 'home'
 export const MASCOT_SCOPE_ALL = 'all'
@@ -249,12 +249,26 @@ export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec | ListSpe
  * shapes, so an old value never keeps the package from starting.
  */
 export const PREFS = {
-  brand: { type: 'choice', values: BRANDS, default: BRAND_CLAUDE, legacy: { [BRAND_DEEPSEEK_LEGACY]: BRAND_DEEPSEEK } },
+  brand: {
+    type: 'choice',
+    values: BRANDS,
+    default: BRAND_CHANGZHENG,
+    legacy: { [BRAND_LEGACY_RED]: BRAND_CHANGZHENG, [BRAND_LEGACY_CYAN]: BRAND_EMBER, off: BRAND_EMBER },
+  },
   brandName: { type: 'text', default: '', max: BRAND_NAME_MAX },
   brandInk: { type: 'choice', values: BRAND_INKS, default: BRAND_INK_ORIGINAL },
   brandAccent: { type: 'color', default: '' },
-  /** One brand's card, `brand` to follow the theme style, or the reader's four. */
-  paletteColors: { type: 'choice', values: PALETTE_COLORINGS, default: PALETTE_COLORING_BRAND },
+  /**
+   * One brand's card, `brand` to follow the theme style, or the reader's four.
+   * A card an earlier build stored by its own name lands on the card that
+   * replaced it, so a reader who pinned one keeps a pinned card.
+   */
+  paletteColors: {
+    type: 'choice',
+    values: PALETTE_COLORINGS,
+    default: PALETTE_COLORING_BRAND,
+    legacy: { [BRAND_LEGACY_RED]: BRAND_CHANGZHENG, [BRAND_LEGACY_CYAN]: BRAND_EMBER },
+  },
   /** The reader's four colours, empty until picked; each falls back to the card's own. */
   customAccent: { type: 'color', default: '' },
   customCanvasLight: { type: 'color', default: '' },
@@ -286,12 +300,12 @@ export const PREFS = {
   banLocale: { type: 'choice', values: BAN_LOCALES, default: BAN_LOCALE_EN },
   homeLayout: { type: 'choice', values: HOME_LAYOUTS, default: HOME_LAYOUT_STUDIO },
   homeRipple: { type: 'boolean', default: false },
-  palette: { type: 'choice', values: PALETTES, default: PALETTE_CLAUDE },
-  typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_CLAUDE },
+  palette: { type: 'choice', values: PALETTES, default: PALETTE_SKIN, legacy: { claude: PALETTE_SKIN } },
+  typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_SKIN, legacy: { claude: TYPEFACE_SKIN } },
   conversationWidth: { type: 'choice', values: CONVERSATION_WIDTHS, default: CONVERSATION_WIDTH_FULL },
   composerBottomGap: { type: 'choice', values: COMPOSER_GAPS, default: COMPOSER_GAP_THEME },
-  /** The mascot on the composer; the resolved one rides the document. */
-  mascot: { type: 'choice', values: MASCOTS, default: MASCOT_BRAND },
+  /** The old two characters were the crab and the whale; each lands on the character that took its place. */
+  mascot: { type: 'choice', values: MASCOTS, default: MASCOT_BRAND, legacy: { crab: MASCOT_CHANGZHENG } },
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
   permissionsControl: { type: 'boolean', default: true },
   statsPosition: { type: 'choice', values: STATS_POSITIONS, default: STATS_POSITION_CONTEXT },

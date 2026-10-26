@@ -1,6 +1,7 @@
 # Style Guide · 设计令牌
 
-Design tokens for `dsh-claude-style`, recreating the Claude Code Desktop aesthetic.
+Design tokens for `dsh-claude-style`, reproducing the neon HUD look of *The Fire
+Rises*' Long March girl.
 
 ## Palette
 
@@ -29,28 +30,25 @@ the brand art from the same table (D30).
 
 Rules:
 
-- Never pure black. The Claude card's light canvas is the desktop's `#FFFFFF`
-  with a `#FAFAFA` sidebar; its dark canvas is `#191919` with a `#1F1F1F`
-  sidebar. The DeepSeek card's light canvas is `#FBFCFF` with a `#F7F9FF`
-  sidebar; every surface, border and ink step around them is derived from that
-  canvas.
-  The reader's own message plate is the card's `bubble` fill: Claude's neutral
-  plate, DeepSeek's light blue `#ECF0FF`; the custom card derives it from its
-  own canvas, so a conversation bubble reads as the card that painted it.
+- Never pure black. The crimson card's light canvas is a cold white `#F7F4FB`
+  with a `#EFEAF7` sidebar; its dark canvas is the hologram's deep violet
+  `#0F0A1A` with a `#0A0614` sidebar. Every surface, border and ink step around
+  them is derived from that canvas.
+  The reader's own message plate is the card's `bubble` fill: the crimson card's
+  pink wash `#FFE4EA`, the cyan card's `#D6F7F4`; the custom card derives it from
+  its own canvas, so a conversation bubble reads as the card that painted it.
 - Accent usage stays under ~10% of visible elements.
 - Literal colours stay outside the ladder: the selection ring, the ripple's
-  front, the peak and off-peak badges and the popover shadow.
+  front, the peak and off-peak badges, the data ramp and the popover shadow.
 
-**The DeepSeek card** turns both schemes blue. Its accent is DeepSeek's brand
-blue `#4D6BFE` — the colour of its whale logo and of Deepy; the sidebar's whale
-and wordmark and the hero's fish take it as their ink. Its light canvas is
-`#FBFCFF` with a `#F7F9FF` sidebar and a light blue reader's bubble, its dark
-canvas a blue-black, and its dark outlines are surface steps rather than
-highlights. The
-skin's Claude marks (the account row's picture without an avatar) become
-DeepSeek's
-whale (`packages/assets/src/brand/deepseek-mark.svg`, the host's `FISH_LOGO_PATH`); the
-reasoning slider's accent follows whichever palette is in force.
+**The two cards** are the same HUD lit two ways. The **crimson card** (the
+default) is the character's own palette: the neon crimson `#FF3355` of her scarf
+and of the panels behind her, on the deep violet hologram canvas. The **cyan
+card** swaps the channel: the neon cyan `#4CF0E8` of the HUD's second light, on a
+near-black teal canvas. Both draw their outlines as flat surface steps rather
+than highlights, because a HUD panel is a raised plate with a lit contour of its
+own; both ink their brand art with the accent. The star gold `#FFD54A` is the
+ladder's third colour, kept literal where it paints a badge.
 
 The tables below are generated from `packages/client/src/theme/tokens.json` by `npm run build`;
 edit the JSON, not the tables. A token's row names the tone it reads and the
@@ -60,8 +58,8 @@ card leaves unset.
 <!-- generated:tokens (packages/client/src/theme/tokens.json) -->
 | Card | Accent | Canvas light | Canvas dark | Sidebar light | Sidebar dark | Bubble light | Bubble dark | Link light | Link dark | Edges | Logo ink | Code light | Code dark |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| claude (default) | `#d97757` | `#ffffff` | `#191919` | `#fafafa` | `#1f1f1f` | `#f4f2f3` | `rgba(255, 255, 255, 0.06)` | `#184f95` | `#8ab4f8` | highlight | ink | `#943333` | `#e8a08a` |
-| deepseek | `#4d6bfe` | `#fbfcff` | `#13161d` | `#f7f9ff` | `#13161d` | `#ecf0ff` | `#262b36` | `#3b56d9` | `#8fa4ff` | surface | accent | `#0f1115` | `#eef1f8` |
+| changzheng (default) | `#ff3355` | `#f7f4fb` | `#0f0a1a` | `#efeaf7` | `#0a0614` | `#ffe4ea` | `rgba(255, 51, 85, 0.12)` | `#bf1f45` | `#ff8fa8` | surface | accent | `#a3122f` | `#ff9fb2` |
+| ember | `#4cf0e8` | `#f4fbfb` | `#08111a` | `#eaf6f8` | `#050c14` | `#d6f7f4` | `rgba(76, 240, 232, 0.12)` | `#0d7d78` | `#79f7ef` | surface | accent | `#0a5f5d` | `#8ff8f2` |
 
 | Tone | Seed | Light | Dark |
 | --- | --- | --- | --- |
@@ -102,76 +100,76 @@ card leaves unset.
 | `accent-hover` |  | `Δl -0.063 · C ×1.01` | `Δl +0.071 · C ×0.91 · h +2` |
 | `accent-active` |  | `Δl +0.068 · C ×1.1 · h +1 · α 0.26` | `Δl 0 · C ×1 · α 0.3` |
 | `accent-tint` |  | `Δl 0 · C 0.028` | `Δl 0 · C 0.055` |
-| `ui-link` |  | `Δl -0.069 · C ×0.95` | `Δl +0.1 · C ×0.72` |
-| `ui-link-hover` |  | `Δl -0.143 · C ×0.9` | `Δl +0.19 · C ×0.7` |
+| `ui-link` |  | `Δl -0.15 · C ×0.9` | `Δl +0.1 · C ×0.72` |
+| `ui-link-hover` |  | `Δl -0.2 · C ×0.85` | `Δl +0.19 · C ×0.7` |
 | `link` |  | `Δl 0 · C ×1` | `Δl 0 · C ×1` |
 | `link-underline` |  | `Δl 0 · C ×1 · α 0.6` | `Δl 0 · C ×1 · α 0.6` |
 
-| Token | Tone | claude light | claude dark | deepseek light | deepseek dark | Host alias | Use |
+| Token | Tone | changzheng light | changzheng dark | ember light | ember dark | Host alias | Use |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `--dsw-alias-bg-base` | `canvas` | `#ffffff` | `#191919` | `#fbfcff` | `#13161d` | host's own |  |
-| `--dsw-alias-bg-layer-1` | `surface-1` | `#ffffff` | `#212121` | `#fbfcff` | `#1b1e26` | host's own |  |
-| `--dsw-alias-bg-layer-2` | `surface-2` | `#ffffff` | `#282828` | `#fbfcff` | `#22252d` | host's own |  |
-| `--dsw-alias-bg-layer-3` | `surface-3` | `#ffffff` | `#323232` | `#fcfdff` | `#2b2f37` | host's own |  |
-| `--dsw-alias-bg-overlay` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-border-l1` | `border-1` / `border-1-flat` | `#e9e9e9` | `rgba(255, 255, 255, 0.09)` | — | `#23262e` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
-| `--dsw-alias-border-l2` | `border-2` / `border-2-flat` | `#dedede` | `rgba(255, 255, 255, 0.18)` | — | `#2c3038` | host's own |  |
-| `--dsw-alias-border-l3` | `border-3` / `border-3-flat` | `#cfcfcf` | `rgba(255, 255, 255, 0.3)` | — | `#3a3d46` | host's own |  |
-| `--dsh-claude-divider` | `divider` | `rgba(22, 22, 22, 0.05)` | `rgba(255, 255, 255, 0.06)` | `rgba(19, 20, 22, 0.05)` | `rgba(251, 255, 255, 0.06)` | `var(--dsw-alias-border-l1)` | a line that only separates: foot areas, settings rows, menu separators, the transcript's rule |
-| `--dsw-alias-brand-primary` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own | the single accent: checks, focus rings, selected marks |
-| `--dsw-alias-brand-text` | `on-accent` | `#ffffff` | `#fbfbfb` | `#fbfcff` | `#f2f7ff` | host's own |  |
-| `--dsw-alias-button-primary-fill` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsw-alias-button-primary-hover` | `accent-hover` | `#c46343` | `#eb9170` | `#3d56e9` | `#6a84ff` | host's own |  |
-| `--dsw-alias-button-elevated-fill` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-button-floating-fill` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-button-floating-hover` | `surface-3` | `#ffffff` | `#323232` | `#fcfdff` | `#2b2f37` | host's own |  |
-| `--dsw-alias-button-info-fill` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsw-alias-button-info-hover` | `accent-hover` | `#c46343` | `#eb9170` | `#3d56e9` | `#6a84ff` | host's own |  |
-| `--dsw-alias-interactive-bg-active` | `accent-active` | `rgba(246, 136, 98, 0.26)` | `rgba(217, 119, 87, 0.3)` | `rgba(95, 124, 255, 0.26)` | `rgba(77, 107, 254, 0.3)` | host's own |  |
-| `--dsh-claude-hover-bg` | `hover-wash` | `rgba(6, 6, 6, 0.08)` | `rgba(255, 255, 255, 0.08)` | `rgba(4, 4, 6, 0.08)` | `rgba(251, 255, 255, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
-| `--dsh-claude-field-ring` | literal | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `var(--dsw-alias-brand-primary)` | the ring around a field the reader is renaming in: the session title's own editor, drawn from the selection blue |
-| `--dsw-focus-ring-color` | literal | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | host's own | the keyboard focus ring: the host's own `:focus-visible` rules paint it, and the skin's fallback ring reads it |
-| `--dsh-claude-inline-code-bg` | `code-wash` | `rgba(6, 6, 6, 0.05)` | `rgba(255, 255, 255, 0.05)` | `rgba(4, 4, 6, 0.05)` | `rgba(251, 255, 255, 0.05)` | `var(--dsw-alias-markdown-inline-code)` | inline code fill |
-| `--dsh-claude-inline-code-fg` | card `code` | `#943333` | `#e8a08a` | `#0f1115` | `#eef1f8` | `var(--dsw-alias-label-primary)` | inline code ink |
-| `--dsh-claude-link` | `link` | `#184f95` | `#8ab4f8` | `#3b56d9` | `#8fa4ff` | `var(--dsw-alias-link)` | markdown links |
-| `--dsh-claude-link-underline` | `link-underline` | `rgba(24, 79, 149, 0.6)` | `rgba(138, 180, 248, 0.6)` | `rgba(59, 86, 217, 0.6)` | `rgba(143, 164, 255, 0.6)` | `color-mix(in srgb, var(--dsw-alias-link) 60%, transparent)` | markdown link underline |
-| `--dsw-alias-markdown-code-block` | `code-block` | `#ffffff` | `#212121` | `#ffffff` | `#1b1e26` | host's own |  |
-| `--dsw-alias-markdown-code-block-banner` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
+| `--dsw-alias-bg-base` | `canvas` | `#f7f4fb` | `#0f0a1a` | `#f4fbfb` | `#08111a` | host's own |  |
+| `--dsw-alias-bg-layer-1` | `surface-1` | `#f7f4fb` | `#171223` | `#f4fbfb` | `#101923` | host's own |  |
+| `--dsw-alias-bg-layer-2` | `surface-2` | `#f7f4fb` | `#1e192a` | `#f4fbfb` | `#16202a` | host's own |  |
+| `--dsw-alias-bg-layer-3` | `surface-3` | `#f8f5fc` | `#272234` | `#f5fcfc` | `#1f2933` | host's own |  |
+| `--dsw-alias-bg-overlay` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
+| `--dsw-alias-border-l1` | `border-1` / `border-1-flat` | — | `#1e192b` | — | `#17212b` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
+| `--dsw-alias-border-l2` | `border-2` / `border-2-flat` | — | `#282335` | — | `#202a34` | host's own |  |
+| `--dsw-alias-border-l3` | `border-3` / `border-3-flat` | — | `#353043` | — | `#2d3842` | host's own |  |
+| `--dsh-claude-divider` | `divider` | `rgba(16, 14, 19, 0.05)` | `rgba(247, 241, 255, 0.06)` | `rgba(14, 19, 19, 0.05)` | `rgba(237, 251, 255, 0.06)` | `var(--dsw-alias-border-l1)` | a line that only separates: foot areas, settings rows, menu separators, the transcript's rule |
+| `--dsw-alias-brand-primary` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own | the single accent: checks, focus rings, selected marks |
+| `--dsw-alias-brand-text` | `on-accent` | `#f7f4fb` | `#ece6fe` | `#f4fbfb` | `#e2f0fd` | host's own |  |
+| `--dsw-alias-button-primary-fill` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own |  |
+| `--dsw-alias-button-primary-hover` | `accent-hover` | `#e80042` | `#ff5f6a` | `#25dbd4` | `#7cffff` | host's own |  |
+| `--dsw-alias-button-elevated-fill` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
+| `--dsw-alias-button-floating-fill` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
+| `--dsw-alias-button-floating-hover` | `surface-3` | `#f8f5fc` | `#272234` | `#f5fcfc` | `#1f2933` | host's own |  |
+| `--dsw-alias-button-info-fill` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own |  |
+| `--dsw-alias-button-info-hover` | `accent-hover` | `#e80042` | `#ff5f6a` | `#25dbd4` | `#7cffff` | host's own |  |
+| `--dsw-alias-interactive-bg-active` | `accent-active` | `rgba(255, 61, 95, 0.26)` | `rgba(255, 51, 85, 0.3)` | `rgba(77, 255, 255, 0.26)` | `rgba(76, 240, 232, 0.3)` | host's own |  |
+| `--dsh-claude-hover-bg` | `hover-wash` | `rgba(3, 2, 4, 0.08)` | `rgba(247, 241, 255, 0.08)` | `rgba(2, 4, 4, 0.08)` | `rgba(237, 251, 255, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
+| `--dsh-claude-field-ring` | literal | `#4cf0e8` | `#4cf0e8` | `#4cf0e8` | `#4cf0e8` | `var(--dsw-alias-brand-primary)` | the ring around a field the reader is renaming in: the session title's own editor, drawn from the HUD's cyan |
+| `--dsw-focus-ring-color` | literal | `rgba(26, 12, 40, 0.45)` | `rgba(244, 240, 255, 0.60)` | `rgba(26, 12, 40, 0.45)` | `rgba(244, 240, 255, 0.60)` | host's own | the keyboard focus ring: the host's own `:focus-visible` rules paint it, and the skin's fallback ring reads it |
+| `--dsh-claude-inline-code-bg` | `code-wash` | `rgba(3, 2, 4, 0.05)` | `rgba(247, 241, 255, 0.05)` | `rgba(2, 4, 4, 0.05)` | `rgba(237, 251, 255, 0.05)` | `var(--dsw-alias-markdown-inline-code)` | inline code fill |
+| `--dsh-claude-inline-code-fg` | card `code` | `#a3122f` | `#ff9fb2` | `#0a5f5d` | `#8ff8f2` | `var(--dsw-alias-label-primary)` | inline code ink |
+| `--dsh-claude-link` | `link` | `#bf1f45` | `#ff8fa8` | `#0d7d78` | `#79f7ef` | `var(--dsw-alias-link)` | markdown links |
+| `--dsh-claude-link-underline` | `link-underline` | `rgba(191, 31, 69, 0.6)` | `rgba(255, 143, 168, 0.6)` | `rgba(13, 125, 120, 0.6)` | `rgba(121, 247, 239, 0.6)` | `color-mix(in srgb, var(--dsw-alias-link) 60%, transparent)` | markdown link underline |
+| `--dsw-alias-markdown-code-block` | `code-block` | `#f9f9f9` | `#171223` | `#fdfdfd` | `#101923` | host's own |  |
+| `--dsw-alias-markdown-code-block-banner` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
 | `--dsw-alias-interactive-bg-hover` | `--dsh-claude-hover-bg` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | host's own |  |
-| `--dsw-alias-interactive-bg-hover-solid` | `hover-plate` | `#f4f4f4` | `#323232` | `#f0f1f4` | `#2b2f37` | host's own | the host's solid hover chip |
-| `--dsw-alias-label-primary` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own |  |
-| `--dsw-alias-label-primary-bluish` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own |  |
-| `--dsw-alias-label-secondary` | `ink-2` | `#70686a` | `#beb6b8` | `#656871` | `#aeb5c4` | host's own |  |
-| `--dsw-alias-label-tertiary` | `ink-3` | `#91888a` | `#9c9395` | `#848891` | `#8a92a3` | host's own |  |
-| `--dsw-alias-label-caption` | `ink-4` | `#b2acad` | `#776f71` | `#a8abb2` | `#676e7d` | host's own |  |
-| `--dsw-alias-label-shimmer` | `shimmer` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
-| `--dsw-alias-label-deep-diving-shimmer` | `shimmer` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; under Claude it is the same warm band as everywhere else |
-| `--dsw-alias-state-business-primary` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsw-alias-state-business-tertiary` | `accent-tint` | `#f6ded7` | `#48261b` | `#dce4f7` | `#252f4c` | host's own |  |
-| `--dsw-alias-link` | `ui-link` | `#bf6446` | `#eaa088` | `#3e57e0` | `#7594fd` | host's own | text link at rest |
-| `--dsw-alias-shadow-lv2` | literal | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | host's own |  |
-| `--dsw-specific-input-major` | `inset` | `#ffffff` | `#141414` | `#ffffff` | `#0e1117` | host's own |  |
-| `--dsw-specific-selector` | `selector` | `#fefefe` | `#323232` | `#fafbfe` | `#2b2f37` | host's own |  |
-| `--dsw-specific-sidebar-fill` | card `sidebar` | `#fafafa` | `#1f1f1f` | `#f7f9ff` | `#13161d` | host's own |  |
-| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsh-claude-canvas` | `canvas` | `#ffffff` | `#191919` | `#fbfcff` | `#13161d` | `var(--dsw-alias-bg-base)` | the page canvas, the search box |
-| `--dsh-claude-sidebar-canvas` | card `sidebar` | `#fafafa` | `#1f1f1f` | `#f7f9ff` | `#13161d` | `var(--dsw-specific-sidebar-fill)` | the sidebar |
-| `--dsh-claude-card` | `card` | `#ffffff` | `#232323` | `#fbfcff` | `#1d2028` | `var(--dsw-alias-bg-overlay)` | cards on the canvas in light and raised in dark: the account popover, the search palette |
-| `--dsh-claude-inverse-fill` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `var(--dsw-alias-interactive-bg-hover)` | the model picker's group label fill: an inverted chip under Claude, a hover-plate chip under the host |
-| `--dsh-claude-inverse-ink` | `inverse-ink` | `#ffffff` | `#171717` | `#feffff` | `#11141a` | `var(--dsw-alias-label-primary)` | the model picker's group label ink |
-| `--dsh-claude-table-head` | `table-head` | `#f4f4f4` | `#282828` | `#f0f1f4` | `#22252d` | `var(--dsw-alias-bg-layer-2)` | table header row |
-| `--dsh-claude-ripple-ink` | `ink-3` | `#91888a` | `#9c9395` | `#848891` | `#8a92a3` | `var(--dsw-alias-label-secondary, #8a8a85)` | the new-conversation page's glyph field, and the wake a ripple leaves in it |
-| `--dsh-claude-data-ink` | literal | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `var(--dsw-alias-link, #3b6ecf)` | the home page's data blue: the deepest step of the model chart's ramp and the ink the heat grid's levels are mixed from |
-| `--dsh-claude-ripple-wave` | literal | `#3b6ef0` | `#7fa6ff` | `#3b6ef0` | `#7fa6ff` | `var(--dsw-alias-link, #3b6ef0)` | the front of a ripple in the new-conversation page's glyph field |
-| `--dsh-claude-scrollbar` | `scrollbar` | `rgba(213, 213, 213, 0.9)` | `rgba(62, 62, 62, 0.9)` | `rgba(209, 210, 213, 0.9)` | `rgba(55, 59, 64, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
-| `--dsh-claude-scrollbar-hover` | `scrollbar-hover` | `rgba(138, 138, 138, 0.8)` | `rgba(113, 113, 113, 0.9)` | `rgba(134, 135, 138, 0.8)` | `rgba(105, 109, 115, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
-| `--dsh-claude-link-hover` | `ui-link-hover` | `#a35035` | `#ffbea6` | `#2e41c0` | `#91b1ff` | `var(--dsw-alias-link)` | text link under the pointer |
-| `--dsh-claude-logo-ink` | card `logoInk` | `#161616` | `#fdfdfd` | `#4d6bfe` | `#4d6bfe` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
-| `--dsw-specific-menu` | `overlay` | `#ffffff` | — | `#ffffff` | — | host's own |  |
-| `--dsw-specific-bubble` | card `bubble` | `#f4f2f3` | `rgba(255, 255, 255, 0.06)` | `#ecf0ff` | `#262b36` | host's own | user message bubble |
-| `--dsh-claude-chip` | `chip` | `#f9f9f9` | — | `#f5f6f9` | — | `var(--dsw-specific-selector)` | segmented control and switch at rest |
-| `--dsh-claude-meter-peak` | literal | `#a4621d` | `#e2a45f` | `#a4621d` | `#e2a45f` | `var(--dsw-alias-state-warn-label)` | the peak rate badge: the expensive end of a provider's own billing clock |
-| `--dsh-claude-meter-valley` | literal | `#3d7550` | `#8cbf96` | `#3d7550` | `#8cbf96` | `var(--dsw-alias-state-success-primary)` | the off-peak rate badge, and the dated promotions priced below it |
+| `--dsw-alias-interactive-bg-hover-solid` | `hover-plate` | `#ece9f0` | `#272234` | `#e9f0f0` | `#1f2933` | host's own | the host's solid hover chip |
+| `--dsw-alias-label-primary` | `ink` | `#100e13` | `#eee8ff` | `#0e1313` | `#e4f2ff` | host's own |  |
+| `--dsw-alias-label-primary-bluish` | `ink` | `#100e13` | `#eee8ff` | `#0e1313` | `#e4f2ff` | host's own |  |
+| `--dsw-alias-label-secondary` | `ink-2` | `#65606c` | `#aba3c0` | `#5b6969` | `#9daec0` | host's own |  |
+| `--dsw-alias-label-tertiary` | `ink-3` | `#857f8c` | `#88809f` | `#798989` | `#7a8c9f` | host's own |  |
+| `--dsw-alias-label-caption` | `ink-4` | `#a7a2ad` | `#655d79` | `#9eabab` | `#576879` | host's own |  |
+| `--dsw-alias-label-shimmer` | `shimmer` | `#100e13` | `#eee8ff` | `#0e1313` | `#e4f2ff` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
+| `--dsw-alias-label-deep-diving-shimmer` | `shimmer` | `#100e13` | `#eee8ff` | `#0e1313` | `#e4f2ff` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; under Claude it is the same warm band as everywhere else |
+| `--dsw-alias-state-business-primary` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own |  |
+| `--dsw-alias-state-business-tertiary` | `accent-tint` | `#f6dddd` | `#482425` | `#d0eae8` | `#003937` | host's own |  |
+| `--dsw-alias-link` | `ui-link` | `#bf0031` | `#ff7d85` | `#1fbcb6` | `#a5ffff` | host's own | text link at rest |
+| `--dsw-alias-shadow-lv2` | literal | `0 4px 18px rgba(26, 12, 40, 0.10), 0 1px 3px rgba(26, 12, 40, 0.05)` | `0 4px 18px rgba(2, 0, 8, 0.55), 0 1px 3px rgba(2, 0, 8, 0.40)` | `0 4px 18px rgba(26, 12, 40, 0.10), 0 1px 3px rgba(26, 12, 40, 0.05)` | `0 4px 18px rgba(2, 0, 8, 0.55), 0 1px 3px rgba(2, 0, 8, 0.40)` | host's own |  |
+| `--dsw-specific-input-major` | `inset` | `#f9f9f9` | `#0a0614` | `#fdfdfd` | `#040c14` | host's own |  |
+| `--dsw-specific-selector` | `selector` | `#f6f3fa` | `#272234` | `#f3fafa` | `#1f2933` | host's own |  |
+| `--dsw-specific-sidebar-fill` | card `sidebar` | `#efeaf7` | `#0a0614` | `#eaf6f8` | `#050c14` | host's own |  |
+| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own |  |
+| `--dsh-claude-canvas` | `canvas` | `#f7f4fb` | `#0f0a1a` | `#f4fbfb` | `#08111a` | `var(--dsw-alias-bg-base)` | the page canvas, the search box |
+| `--dsh-claude-sidebar-canvas` | card `sidebar` | `#efeaf7` | `#0a0614` | `#eaf6f8` | `#050c14` | `var(--dsw-specific-sidebar-fill)` | the sidebar |
+| `--dsh-claude-card` | `card` | `#f7f4fb` | `#191425` | `#f4fbfb` | `#111b24` | `var(--dsw-alias-bg-overlay)` | cards on the canvas in light and raised in dark: the account popover, the search palette |
+| `--dsh-claude-inverse-fill` | `ink` | `#100e13` | `#eee8ff` | `#0e1313` | `#e4f2ff` | `var(--dsw-alias-interactive-bg-hover)` | the model picker's group label fill: an inverted chip under Claude, a hover-plate chip under the host |
+| `--dsh-claude-inverse-ink` | `inverse-ink` | `#fbf8ff` | `#0d0817` | `#f8ffff` | `#060f17` | `var(--dsw-alias-label-primary)` | the model picker's group label ink |
+| `--dsh-claude-table-head` | `table-head` | `#ece9f0` | `#1e192a` | `#e9f0f0` | `#16202a` | `var(--dsw-alias-bg-layer-2)` | table header row |
+| `--dsh-claude-ripple-ink` | `ink-3` | `#857f8c` | `#88809f` | `#798989` | `#7a8c9f` | `var(--dsw-alias-label-secondary, #8a8a85)` | the new-conversation page's glyph field, and the wake a ripple leaves in it |
+| `--dsh-claude-data-ink` | literal | `#c2183f` | `#ff5c7a` | `#c2183f` | `#ff5c7a` | `var(--dsw-alias-link, #c2183f)` | the home page's data ink: the deepest step of the model chart's ramp and the ink the heat grid's levels are mixed from |
+| `--dsh-claude-ripple-wave` | literal | `#ff3355` | `#4cf0e8` | `#ff3355` | `#4cf0e8` | `var(--dsw-alias-link, #ff3355)` | the front of a ripple in the new-conversation page's glyph field |
+| `--dsh-claude-scrollbar` | `scrollbar` | `rgba(205, 202, 209, 0.9)` | `rgba(51, 46, 63, 0.9)` | `rgba(202, 209, 209, 0.9)` | `rgba(42, 53, 63, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
+| `--dsh-claude-scrollbar-hover` | `scrollbar-hover` | `rgba(130, 128, 134, 0.8)` | `rgba(100, 95, 114, 0.9)` | `rgba(128, 134, 134, 0.8)` | `rgba(91, 103, 114, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
+| `--dsh-claude-link-hover` | `ui-link-hover` | `#a90026` | `#ff9ca2` | `#14aba5` | `#b2ffff` | `var(--dsw-alias-link)` | text link under the pointer |
+| `--dsh-claude-logo-ink` | card `logoInk` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
+| `--dsw-specific-menu` | `overlay` | `#f9f9f9` | — | `#fdfdfd` | — | host's own |  |
+| `--dsw-specific-bubble` | card `bubble` | `#ffe4ea` | `rgba(255, 51, 85, 0.12)` | `#d6f7f4` | `rgba(76, 240, 232, 0.12)` | host's own | user message bubble |
+| `--dsh-claude-chip` | `chip` | `#f1eef5` | — | `#eef5f5` | — | `var(--dsw-specific-selector)` | segmented control and switch at rest |
+| `--dsh-claude-meter-peak` | literal | `#b3401c` | `#ff9a5c` | `#b3401c` | `#ff9a5c` | `var(--dsw-alias-state-warn-label)` | the peak rate badge: the expensive end of a provider's own billing clock |
+| `--dsh-claude-meter-valley` | literal | `#8a6508` | `#ffd54a` | `#8a6508` | `#ffd54a` | `var(--dsw-alias-state-success-primary)` | the off-peak rate badge, and the dated promotions priced below it |
 <!-- /generated:tokens -->
 
 **Host token bindings.** The skin supplies its palette through the host's own
@@ -188,10 +186,10 @@ light, a raised gray in dark).
 
 ## Two palettes · 两套配色归属
 
-The Colours and Typefaces rows each choose who paints: **Claude** (the default)
-or **Follow the host**. Every rule that writes a host token carries the Claude
-gate in its selector — `[data-dsh-claude-palette="claude"]` for colours,
-`[data-dsh-claude-typeface="claude"]` for `--dsw-font-*` — and so does every
+The Colours and Typefaces rows each choose who paints: the **skin's own** (the
+default) or **Follow the host**. Every rule that writes a host token carries the
+skin gate in its selector — `[data-dsh-claude-palette="skin"]` for colours,
+`[data-dsh-claude-typeface="skin"]` for `--dsw-font-*` — and so does every
 rule that paints the skin's canvas onto the host's frame (`<html>`, `<body>`,
 `#root`, the sidebar and conversation
 columns); the build refuses an ungated one. Under "follow the host" those rules
@@ -209,9 +207,11 @@ popover card blurs what lies behind it (`blur(16px) saturate(1.4)`).
 
 Under the host typeface the skin's own faces fall back to the host's:
 `--dsh-claude-font-serif`, `-prose` and `-brand` to `--dsw-font-family` (the host
-carries no serif), `--dsh-claude-font-code` to `--ds-font-family-code`.
+carries no condensed display face), `--dsh-claude-font-code` to
+`--ds-font-family-code`.
 
-The account-hold page keeps its own colours, reproducing a Claude screen.
+The account-hold page keeps its own colours, reproducing the console screen it
+draws.
 The reasoning slider and its trigger take the theme accent: the dot matrix and
 knob glow read `--dsh-claude-apex*`, and the level ramp reads
 `--dsh-claude-effort-*`. Translucent neutral hover tints and the usage panel's
@@ -290,8 +290,8 @@ and scrolls to its end.
 
 ## Typography
 
-- **Serif display** — headings / editorial statements (`--dsh-claude-font-serif`).
-- **Sans UI** — chrome, body (`--dsw-font-family`).
+- **Condensed display** — headings, the brand lockup (`--dsh-claude-font-serif`).
+- **Sans UI** — chrome, body, conversation prose (`--dsw-font-family`).
 - **Mono** — code, technical labels (`--dsh-claude-font-code`).
 
 
@@ -511,7 +511,7 @@ panel's day tip uses. The segment carries the tip rather than the words because
 the host clips a crumb's overflow for its ellipsis. The press opens a field over
 the words' own line: canvas fill, a 1px ring in the selection blue, a 4px radius,
 and 1px to either side of the words with 3px above and below them, so the ring
-hugs the name the way Claude's own field does rather than laying a card over it.
+hugs the name the way the console's own field does rather than laying a card over it.
 The field stands in the page's own space, so the reader's zoom keeps it on the
 title; a rename the host refuses keeps the field, ringed in the host's error
 tone.
@@ -630,7 +630,7 @@ with 4px padding, 40px rows at 10px radius, and 14px text.
 
 The stamp's value names the picker (`workspace` or `preset`), because the two
 cards differ. The preset card keeps the popover table's 32px rows for its
-two-line entries. The workspace card is Claude Code's folder menu: a 180px-min
+two-line entries. The workspace card is a folder menu: a 180px-min
 card with 4px padding, 26px plain-text rows (no folder glyph in front of each
 folder, no `＋` on the pinned add row) and the accent check on the current one.
 
@@ -856,8 +856,8 @@ transition, since the press hands the whole page to the other side.
 ## The waiting line · 模型正在做什么的那一行
 
 The host's running row, its divider and its live region stay as the host draws
-them. Its whale tail is DeepSeek's own character, so under the Claude brand the
-skin hides it and leads the line with its own loader: 4px dots of the accent in
+them. Its whale tail is the host's own character, so the skin hides it and leads
+the line with its own loader: 4px dots of the accent in
 force in an 18 × 14 box, playing one of three motions
 (`features/chat-wait/wait-loader.ts`). Three dots bounce — each rising the
 skin's 8px and flattening against the floor as it leaves, half a second a bounce
@@ -875,8 +875,7 @@ dot it is paired with in the motion arriving takes its place there, at its size,
 then travels into its own path over 480ms on the harmonic curve. The dots are
 paired so they travel least; from three dots to four one splits in two, and from
 four to three the spare one glides onto its partner and is gone where the two
-meet. Under the
-other brands the host's whale stands. The host's own
+meet. The host's own
 shimmering words step aside for the skin's line beside it: the wording in the
 secondary label at 14px on a 24px line,
 the turn's clock 8px later in the caption at 13px with tabular figures, and the
@@ -919,7 +918,7 @@ inside `…_composerStack …_composerHero` — so only the arrangement differs.
 
 | | Classic | Studio |
 |---|---|---|
-| greeting | centred, 44.2px serif, brand mark on its line | top left, one fixed line naming the user ("What's up next, …?") in the 20px sans UI face, a 21px brand mark on its line |
+| greeting | centred, 44.2px condensed display, brand mark on its line | top left, one fixed line naming the user ("What's up next, …?") in the 20px sans UI face, a 21px brand mark on its line |
 | composer card | vertically centred in the scroll body | the conversation's single-line inline form, resting on the window's bottom edge (16px foot) |
 | between them | — | the usage panel |
 | permission control | the segment group | the conversation's trigger and its card |
@@ -953,13 +952,13 @@ picker. In the studio form the ring sits on the single-line input box itself
 trigger fills the card's empty mode strip on the preset a new session starts in
 — disabled, like the rest of the card's controls.
 
-The panel is Claude Code's dashboard shape: a flat warm-gray wash (a
+The panel is the dashboard's own shape: a flat violet wash (a
 `color-mix` of the label tone at 4% over the card tone, which flips with the
 theme on its own), an Overview/Models tab pair on the left of its head, and the
 All/30d/7d range pills on the right. The active tab and range pill are a gray
 chip one step below that wash — half the radius the 20px control would round to,
 so it reads as a rounded rectangle rather than a full pill. Overview carries six
-stat cells in a 3×2 grid under Claude Code's names (Sessions, Messages, Total
+stat cells in a 3×2 grid under its own names (Sessions, Messages, Total
 tokens, Active days, Peak hour, Favorite model) whose tiles sit one clear step
 deeper than the panel (15% of the label tone) and set a 12px label over a 13px
 bold figure — the figure stays barely above its own label, which is also what
@@ -978,9 +977,9 @@ hero, and a range that has not reached it steps down to the longest book it has
 passed, so the range pills keep the same book whenever the totals allow. The heat
 grid takes one
 equal column per week (twenty-six weeks), square cells from a 3px gutter, in
-Claude Code's blue data ramp (`#3b6ecf` mixed in at the shares `HOME_HEAT_RAMP`
+the crimson data ramp (`#c2183f` mixed in at the shares `HOME_HEAT_RAMP`
 in `packages/client/src/constants.ts` lists, over the neutral empty cell); because the columns are fractions of the panel's own width, the newest
-week can never fall past the edge. Hovering a cell raises Claude Code's day tip
+week can never fall past the edge. Hovering a cell raises the day tip
 after a short rest: a solid pill in the label ink with the canvas tone for text
 (so it inverts with the theme), 13px medium, reading the day in the shell's
 language and the tokens that day spent ("Sep 9 — 15.9k tokens"), the same figure
@@ -994,7 +993,7 @@ except where the cell holds more room below it, and there it hangs under the cel
 so it never reaches over the grid's top edge across the stat cells; its width is
 taken from the words it carries and its height from its own box
 (`packages/client/src/features/home/heat-tip.ts`).
-Models is Claude Code's own shape: one column
+Models is a stacked bar chart: one column
 per day of the chart's thirty-day window, stacked from the axis up with each
 model's slice in its rank's colour (ranks past the ramp share its last, grey
 step), four gridlines with their token labels in a 34px left gutter and every
@@ -1002,7 +1001,7 @@ third column's date under it in the shell's language ("Aug 26"), and beneath it
 the ranked list — swatch, model name, the input/output split, and the share of
 the models shown — folding past six rows behind one "show more" row, which turns
 into "show less" once the list is open. The chart
-and the list write counts Claude Code's way: one decimal at most, no trailing
+and the list write counts the console's way: one decimal at most, no trailing
 ".0", a lowercase k ("109M", "963.6k"). The list reads the roll-up's per-model
 buckets; the chart reads its per-day per-model map, so a day with nothing
 attributed to a model draws no stack. Each column is sized to its day's total
@@ -1033,74 +1032,37 @@ stand-in rows — and the heat grid's empty cell **is** the zero step, so "no da
 and "a day with no usage" stay different things: a missing value draws a
 placeholder, a zero day draws the grid's own base tone.
 
-## The composer crab · 输入卡片上的螃蟹
+## The mascot · 输入卡片上的长征姬
 
-Claude Code's pixel crab is the mascot under the Claude brand (or when picked in
-the Mascot row). It stands where Deepy does — the composer card's top edge on
-both home layouts, the input area or the panel that replaces its card in a
-conversation (unless Where it appears keeps it to the home page) — and follows
-the same states with the same keys. It is drawn on a 52×36 grid of cells at 2px
-a cell, crisp (`pixelated`, 104×72px): feet on the bottom row, on the edge of
-what it stands on; the right claw four cells in from the grid's right edge, so
-it stands 8px inside the card's right edge, where the 18px corner starts to
-round, and the four spare cells take a lean, a note or a sparkle. The resting
-crab — shell 16×12 cells, claws 4×4, eyes 2×2, four legs 2×4 — is 48×32px
-(columns 24–47, rows 20–35) and only it takes the pointer. The shell is the clay
-accent `#d97757` in both themes, the side-on back `#b9603f`, the eyes `#141413`;
-the props (the laptop, the thought bubble, letters, notes, the hard hat) are an
-ink mask filled with the tertiary label ink. Every frame lasts 80ms, Claude
-Code's pace. Its laptop frames are Claude Code's own routine; the rest are drawn
-by `scripts/draw-crab.py` after the same character. With the animation choice
-resolved to "reduced" each state holds its still frame; a click or a pull still
-plays its reaction.
+The pixel Long March girl is the mascot on the composer. She stands on the
+composer card's top edge on both home layouts, and on the input area or the panel
+that replaces its card in a conversation (unless Where it appears keeps her to the
+home page). She is drawn on a 52×36 grid of cells at 2px a cell, crisp
+(`pixelated`, 104×72px): feet on the bottom row, on the edge of what she stands
+on, and the cells on the right take a lean, a note or a sparkle. Her resting body
+is 48×32px (columns 24–47, rows 20–35), and only it takes the pointer.
+
+Three layers make one frame, so both colour cards share one drawing: the colour
+sheet holds what she is made of — white hair `#f4f0ff`, the skin, the crimson
+eyes, the star-gold clip `#ffd54a` — the **accent mask** holds the scarf and the
+skirt and is filled with the palette's accent, and the **ink mask** holds the
+props (the laptop, the thought bubble, letters, notes, the hard hat) and is filled
+with the tertiary label ink. Every frame lasts 80ms. The drawings come from
+`scripts/draw-changzheng.py`. With the animation choice resolved to "reduced"
+each state holds its still frame; a click or a pull still plays its reaction.
 
 | State | Animation | Still frame |
 |---|---|---|
-| idle, every 20–40 s a look around, a claw wave or Claude Code's whole laptop routine | `idle`, `idle-look`, `idle-wave`, `idle-laptop` | 0 |
+| idle, every 20–40 s a look around, a wave or a while at the laptop | `idle`, `idle-look`, `idle-wave`, `idle-laptop` | 0 |
 | the model reasons or has not answered: eyes up to a thought bubble | `thinking` | 18 |
 | the model writes or tools run: 1 / 2 / 3+ sessions at work (typing / headphones / typing in a hard hat) | `typing` / `music` / `building` | 0 / 0 / 0 |
 | subagents running: 1 / 2+ (headphones / conducting) | `music` / `conducting` | 0 / 0 |
 | a compaction runs: squashed | `compacting` | 3 |
 | an approval, a question or a plan review waits: an exclamation mark | `notification` | 0 |
 | a tool call or a turn failed (4.8 s): crossed eyes, a shake | `error` | 4 |
-| a turn or a compaction finished (5.2 s): hops, claws up | `happy` | 3 |
+| a turn or a compaction finished (5.2 s): hops, arms up | `happy` | 3 |
 | a quiet minute / the next pointer move or key | `sleeping` / `waking` | 0 / 11 |
 | a click on the left / right half, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | 0 |
-
-## Deepy · 小鲸鱼
-
-Under the DeepSeek brand (or when picked in the Mascot row) the mascot is
-Deepy, the pixel whale of the Deepy theme pack: a 52×52 grid of logical pixels drawn at 2px a pixel (a 104px
-square), its ground line — row 48.5, the middle of its shadow — on the top edge
-of what it stands on. Every sheet's crop box reaches 3px past that ground line,
-and the whale paints over the host's cards, so its box is lifted by those 3px:
-the sprite's last row lands on the card's top edge, and the shadow's tail stays
-off the card instead of being stamped across it. Its box is 8px in from the
-right end of the card it stands over. On the home page that is the composer card
-(both layouts); in a conversation it is the whole input area, and the panel that
-replaces the card while the reader is asked for something (those panels start
-6–8px above their card). Every frame lasts 50ms. The sheets carry five device
-pixels to a logical pixel and are scaled down smoothly, so the whale stays crisp
-from 1× to 2× screens without `image-rendering: pixelated`, which would drop
-rows on a downscale. The body is Deepy's blue `#4E6FFF` with a navy `#142660`
-outline and a white belly in both themes; on the dark canvas the outline and the
-soft shadow recede and the blue body carries the shape. Only the resting body
-(columns 12–44, rows 30–48) takes the pointer. With the animation choice
-resolved to "reduced" each state holds its still frame; a click or a pull still
-plays its reaction.
-
-| State | Animation | Still frame |
-|---|---|---|
-| idle, every 20–40 s a look around or a spout | `idle`, `idle-look`, `idle-spout` | 0 |
-| the model reasons or has not answered | `thinking` | 20 |
-| the model writes or tools run: 1 / 2 / 3+ sessions at work | `typing` / `music` / `building` | 16 / 0 / 0 |
-| subagents running: 1 / 2+ | `music` / `conducting` | 0 / 6 |
-| a compaction runs | `compacting` | 20 |
-| an approval, a question or a plan review waits | `notification` | 12 |
-| a tool call or a turn failed (4.8 s) | `error` | 24 |
-| a turn or a compaction finished (5.2 s) | `happy` | 44 |
-| a quiet minute (no work, no pointer move or key) / the next pointer move or key | `sleeping` / `waking` | 10 / 29 |
-| a click on the face / the tail, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | 0 |
 
 ## Implementation notes
 

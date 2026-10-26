@@ -97,21 +97,21 @@ body[data-dsh-claude-style] [data-chat-running][data-dsh-claude-wait] [data-dsh-
   max-width: 100%;
 }
 
-/* The host leads its running row with a whale tail, which is DeepSeek's own
-   character. Under the Claude brand the skin hides it and stands its own loader
-   where it was: the line's first child, ahead of the wording, so the row reads
-   loader, words, clock. The snippet the bouncing motion is ported from is
-   recorded in docs/THIRD_PARTY_NOTICES.md. */
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] [data-chat-running][data-dsh-claude-wait] [data-dsh-claude-part~="running-icon"] {
+/* The host leads its running row with a whale tail, which is the host's own
+   character. Neither colour card is that brand, so the skin hides it under both
+   and stands its own loader where it was: the line's first child, ahead of the
+   wording, so the row reads loader, words, clock. The snippet the bouncing
+   motion is ported from is recorded in docs/THIRD_PARTY_NOTICES.md. */
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) [data-chat-running][data-dsh-claude-wait] [data-dsh-claude-part~="running-icon"] {
   display: none;
 }
 
-/* Hidden under every other brand, where the host's own whale tail stands. */
+/* Hidden until a card of this skin takes it up. */
 body[data-dsh-claude-style] .dsh-claude-chat-wait-loader {
   display: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] .dsh-claude-chat-wait-loader {
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) .dsh-claude-chat-wait-loader {
   display: inline-flex;
   position: relative;
   flex: none;

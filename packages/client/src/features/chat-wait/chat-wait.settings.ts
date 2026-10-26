@@ -1,10 +1,8 @@
 import * as React from 'react'
 import { STATUS_MOTION_SWEEP, STATUS_MOTION_WASH } from '../../constants'
-import { hostChatCopy } from '../../core/i18n'
 import { motionReduced } from '../../core/prefs'
 import { motionMs } from '../../shared/motion'
 import { SWEEP_BAND_CLASS, SWEEP_GLYPHS_CLASS } from '../../shared/sweep-band'
-import { waitingWord } from '../../shared/turn-activity'
 import { PreviewCards } from '../../shared/preview-cards'
 import { copy } from './copy'
 import type { PreviewOption } from '../../shared/preview-cards'
@@ -59,7 +57,7 @@ function StatusMotionPicker(props: SettingsRowView) {
     copy('statusDetailSampleThinking'),
   ]
   const plainWords = [
-    waitingWord(props.prefs.brand, hostChatCopy('chat.deepDiving', 'Deep diving'), copy('chatWaitThinking')),
+    copy('chatWaitThinking'),
     copy('chatWaitTools'),
   ]
   const [preciseTurn, setPreciseTurn] = React.useState(0)

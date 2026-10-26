@@ -52,20 +52,16 @@ function readBillingRows(query: URLSearchParams) {
  *
  * A name is looked up in the user's own drop point first — the harness home's
  * `dsh-claude-style/fonts/` — and then in the package's `lib/fonts/` (D75). The
- * JetBrains Mono files and the two look-alike faces behind the Anthropic ones
- * (Inter, Noto Serif) ship in the npm package; the Anthropic faces do not
- * (copyright), so only a copy the user dropped in answers them. A name neither
- * directory holds is absent: sendFile's ENOENT becomes a 404, which the browser
- * half's font stacks fall back from.
+ * JetBrains Mono files and the UI sans (Inter) ship in the npm package, so both
+ * directories answer them: the drop point lets a reader put their own cut of a
+ * face under the same name. A name neither directory holds is absent:
+ * sendFile's ENOENT becomes a 404, which the browser half's font stacks fall
+ * back from.
  */
 const FONT_FILES = {
   'JetBrainsMonoVariable.ttf': 'font/ttf',
   'JetBrainsMonoItalicVariable.ttf': 'font/ttf',
-  'AnthropicSansWebText.ttf': 'font/ttf',
-  'AnthropicSerifWebText.ttf': 'font/ttf',
-  'AnthropicMonoWeb.ttf': 'font/ttf',
   'InterVariable.woff2': 'font/woff2',
-  'NotoSerifVariable.woff2': 'font/woff2',
 }
 /**
  * The assets the build routed rather than inlined, served under

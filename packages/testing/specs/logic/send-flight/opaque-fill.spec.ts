@@ -15,8 +15,8 @@ test('a translucent fill is written as the colour the screen paints', () => {
   // The host's own light user bubble over its canvas.
   expect(chatSendOpaque('rgba(0, 0, 0, 0.08)', 'rgb(252, 252, 251)')).toBe('rgb(232, 232, 231)')
   // An opaque fill is already the screen's colour and is left byte for byte.
-  expect(chatSendOpaque('rgb(234, 240, 254)', 'rgb(251, 252, 255)')).toBe('rgb(234, 240, 254)')
-  expect(chatSendOpaque('rgba(234, 240, 254, 1)', 'rgb(251, 252, 255)')).toBe('rgba(234, 240, 254, 1)')
+  expect(chatSendOpaque('rgb(234, 240, 254)', 'rgb(244, 251, 251)')).toBe('rgb(234, 240, 254)')
+  expect(chatSendOpaque('rgba(234, 240, 254, 1)', 'rgb(244, 251, 251)')).toBe('rgba(234, 240, 254, 1)')
 })
 
 test('a colour the browser can paint is read in whatever form the page states it', () => {

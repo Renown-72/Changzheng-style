@@ -199,15 +199,14 @@
         return frames[frames.length - 1]
       }
       r.wait = { working: await awaitWord(function (reading) { return reading.word === 'Thinking…' && reading.copies === 1 }) }
-      // The whale tail is DeepSeek's own character: under that brand the host's
-      // icon comes back and the skin's dots stand down, and the Claude brand
-      // takes them up again. The word the line waits on follows the brand too
-      // (shared/turn-activity): the skin's own under Claude, and the host's own
-      // — the one the host's own interface shows — under DeepSeek.
-      window.__pushForm({ brand: 'deepseek' })
-      r.wait.deepseek = await awaitWord(function (reading) { return reading.word === 'Deep diving' && reading.copies === 1 })
-      window.__pushForm({ brand: 'claude' })
-      r.wait.claudeAgain = await awaitWord(function (reading) { return reading.word === 'Thinking…' && reading.copies === 1 })
+      // The host's whale tail is its own character: the skin hides it and leads
+      // the line with its own dots under both colour cards. The word a wait
+      // stands on is the skin's own under both cards too (shared/turn-activity),
+      // so flinging the cards back and forth changes neither.
+      window.__pushForm({ brand: 'ember' })
+      r.wait.ember = await awaitWord(function (reading) { return reading.word === 'Thinking…' && reading.copies === 1 })
+      window.__pushForm({ brand: 'changzheng' })
+      r.wait.changzhengAgain = await awaitWord(function (reading) { return reading.word === 'Thinking…' && reading.copies === 1 })
       foreignLine.remove()
       words.parentElement.appendChild(foreignLine)
       await probe.settle()

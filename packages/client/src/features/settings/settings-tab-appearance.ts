@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PALETTE_CLAUDE, PALETTE_HOST, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
+import { PALETTE_SKIN, PALETTE_HOST, TYPEFACE_SKIN, TYPEFACE_HOST } from '../../constants'
 import { brandRows, paletteCardsRow } from './settings-brand'
 import { copy } from './copy'
 import type { Prefs } from '../../constants'
@@ -17,11 +17,11 @@ export function createSettingsAppearanceTab(): SettingsTab {
     const write = view.write
     const controls = view.controls
     const paletteOptions: SegmentOption<Prefs['palette']>[] = [
-      { value: PALETTE_CLAUDE, label: copy('paletteClaude') },
+      { value: PALETTE_SKIN, label: copy('paletteClaude') },
       { value: PALETTE_HOST, label: copy('paletteHost') },
     ]
     const typefaceOptions: SegmentOption<Prefs['typeface']>[] = [
-      { value: TYPEFACE_CLAUDE, label: copy('typefaceClaude') },
+      { value: TYPEFACE_SKIN, label: copy('typefaceClaude') },
       { value: TYPEFACE_HOST, label: copy('typefaceHost') },
     ]
     return [

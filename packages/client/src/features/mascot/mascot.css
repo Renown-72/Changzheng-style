@@ -1,0 +1,113 @@
+/* ── The composer mascot, the pixel Long March girl ─────────────────────────
+   She is drawn on a 52×36 grid of cells at 2px a cell (104×72px): feet on the
+   bottom row, on the top edge of what she stands on; the room a lean, a note or
+   a sparkle takes stays on the right. The player writes the sheet and the
+   sprite's crop box as custom properties when an animation starts; each frame
+   is a translation of the strip inside the sprite's window, played by the
+   browser's animation engine (packages/client/src/features/mascot/mascot-player.ts),
+   eight frames to a sheet row.
+
+   Three layers make one frame, because the two colour cards share one drawing:
+   the strip paints her colour sheet (hair, skin, eyes, the star clip), its
+   ::before fills the accent mask with the palette's accent (the scarf and the
+   skirt), and its ::after fills the ink mask with the tertiary label ink (the
+   laptop, the thought bubble, letters, notes, the hat). Only she takes the
+   pointer. */
+
+/* Her spacing on the home page's single-line card: 8px inside the card's right
+   edge, so the feet stand where the 18px corner starts to round. */
+body[data-dsh-claude-style] .dsh-claude-changzheng {
+  position: absolute;
+  right: 0;
+  /* Feet on the card's edge: the card draws its outline inside its own box. */
+  bottom: 100%;
+  z-index: 1;
+  width: 104px;
+  height: 72px;
+  pointer-events: none;
+}
+
+/* Hidden until the first sheet has drawn a frame: a host half that predates
+   the sheets leaves no empty box to click on. */
+body[data-dsh-claude-style] .dsh-claude-changzheng:not([data-ready]) {
+  visibility: hidden;
+}
+
+/* A conversation's input area and the panels that take its card's place span
+   the whole column, so she is set in from the edge of the card they centre;
+   those panels start 6–8px above their card. */
+body[data-dsh-claude-style] :is([data-dsh-claude-changzheng-anchor="stack"], [data-dsh-claude-changzheng-anchor="panel"]) {
+  position: relative;
+}
+
+body[data-dsh-claude-style] [data-dsh-claude-changzheng-anchor="stack"] > .dsh-claude-changzheng {
+  right: max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2);
+}
+
+body[data-dsh-claude-style] [data-dsh-claude-changzheng-anchor="panel"] > .dsh-claude-changzheng {
+  right: max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2);
+  bottom: calc(100% - 7px);
+}
+
+/* The sprite's window: the crop box's height, under the custom property the
+   player writes. */
+body[data-dsh-claude-style] .dsh-claude-changzheng-sprite {
+  height: calc(var(--dsh-claude-mascot-h, 0) * 2px);
+  overflow: hidden;
+  position: absolute;
+  left: calc(var(--dsh-claude-changzheng-x, 0) * 2px);
+  top: calc(var(--dsh-claude-changzheng-y, 0) * 2px);
+  width: calc(var(--dsh-claude-changzheng-w, 0) * 2px);
+}
+
+/* The strip carries the whole sheet and is translated frame to frame: a
+   transform composites, where a background-position would repaint. Its box is
+   the sheet's own box — `--dsh-claude-changzheng-cell-w` is one frame cell, the
+   crop box with the transparent margin the build lays around it (MASCOT_GUTTER,
+   features/mascot/sheets.ts). The art is one pixel a cell, scaled to 2px:
+   whole multiples, so `pixelated` keeps every cell square. */
+body[data-dsh-claude-style] .dsh-claude-changzheng-strip {
+  position: relative;
+  display: block;
+  width: calc(var(--dsh-claude-changzheng-cell-w, 0) * 16px);
+  height: calc(var(--dsh-claude-changzheng-strip-h, 0) * 2px);
+  background-image: var(--dsh-claude-mascot-sheet, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+/* The scarf and the skirt: the accent mask, so both colour cards share the
+   drawing and the palette in force decides the colour. */
+body[data-dsh-claude-style] .dsh-claude-changzheng-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--dsw-alias-brand-primary);
+  -webkit-mask: var(--dsh-claude-mascot-accent, none) no-repeat 0 0 / 100% 100%;
+  mask: var(--dsh-claude-mascot-accent, none) no-repeat 0 0 / 100% 100%;
+  image-rendering: pixelated;
+}
+
+/* The props: the ink mask, filled with the tertiary label ink so it stays a
+   quiet grey on either canvas. */
+body[data-dsh-claude-style] .dsh-claude-changzheng-strip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--dsw-alias-label-tertiary);
+  -webkit-mask: var(--dsh-claude-mascot-ink, none) no-repeat 0 0 / 100% 100%;
+  mask: var(--dsh-claude-mascot-ink, none) no-repeat 0 0 / 100% 100%;
+  image-rendering: pixelated;
+}
+
+/* The resting body: columns 24–47, rows 20–35. */
+body[data-dsh-claude-style] .dsh-claude-changzheng-hit {
+  position: absolute;
+  left: 48px;
+  top: 40px;
+  width: 48px;
+  height: 32px;
+  pointer-events: auto;
+  touch-action: none;
+}

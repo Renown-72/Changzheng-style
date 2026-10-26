@@ -1,8 +1,8 @@
-/* The canvases the Claude palette paints onto the host's own structure; under
-   "follow the host" none of them apply. While a wallpaper plugin shows one
+/* The canvases the skin's own palette paints onto the host's own structure;
+   under "follow the host" none of them apply. While a wallpaper plugin shows one
    (`data-we-wallpaper`) these canvases are not painted, and theme/wallpaper.css
    lays its mask over the layer the plugin put under the shell */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) {
   color: var(--dsw-alias-label-primary);
   background-color: var(--dsh-claude-canvas);
 }
@@ -10,14 +10,14 @@ body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-ds-dark-
 /* The document element sits above the body and cannot read its tokens, so each
    colour card states its canvas here. It stays painted under a wallpaper: the
    layer sits above this canvas and below the shell. */
-html:has(body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-dsh-claude-palette-card="claude"]:not([data-ds-dark-theme])) {
-  background-color: #ffffff;
+html:has(body[data-dsh-claude-style][data-dsh-claude-palette="skin"][data-dsh-claude-palette-card="changzheng"]:not([data-ds-dark-theme])) {
+  background-color: #f7f4fb;
 }
 
-html:has(body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-dsh-claude-palette-card="deepseek"]:not([data-ds-dark-theme])) {
-  background-color: #ffffff;
+html:has(body[data-dsh-claude-style][data-dsh-claude-palette="skin"][data-dsh-claude-palette-card="ember"]:not([data-ds-dark-theme])) {
+  background-color: #f4fbfb;
 }
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) #root {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) #root {
   background-color: var(--dsh-claude-canvas);
 }
 
@@ -28,7 +28,7 @@ body[data-dsh-claude-style]:not([data-ds-dark-theme]) :is([data-pane="sidebar"],
   border-right: 0.5px solid var(--dsw-alias-border-l1);
 }
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-claude-part~="center-column"]) {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-claude-part~="center-column"]) {
   background: var(--dsh-claude-canvas);
 }
 

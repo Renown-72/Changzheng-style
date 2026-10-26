@@ -29,7 +29,7 @@
       document.body.removeAttribute('data-ds-dark-theme')
       // The DeepSeek card's light shell derives from its pale blue-white canvas;
       // its dark card keeps the blue-black steps it already had.
-      window.__pushForm({ paletteColors: 'deepseek' })
+      window.__pushForm({ paletteColors: 'ember' })
       await sleep(250)
       var dsLight = getComputedStyle(document.body)
       r.deepseekPalette = {
@@ -81,7 +81,7 @@
         : Array.prototype.map.call(heroModes.querySelectorAll('.dsh-claude-segments > .dsh-claude-segment'), function (item) { return item.textContent })
       r.classicPermTrigger = heroModes !== null && heroModes.querySelector('.dsh-claude-perm-btn') !== null
       // The crab stands on the classic home page's card too, as Deepy does.
-      r.classicCrab = document.querySelector('[data-composer-card] > .dsh-claude-crab') !== null
+      r.classicCrab = document.querySelector('[data-composer-card] > .dsh-claude-changzheng') !== null
       // The glyph field stands in the hero root, under its content, and takes no
       // press; its switch, off as the page opens, mounts it and takes it back off.
       r.ripple = { off: greetRoot.querySelector('.dsh-claude-ripple-canvas') === null && !greetRoot.hasAttribute('data-dsh-claude-ripple') }

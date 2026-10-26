@@ -382,7 +382,7 @@ export default {
       loader.shown === true && (loader.lanes || []).length === 3 &&
         LANE_DOTS.every(([name, count]) => (laneOf(loader, name).opacity || []).length === count) &&
         LANE_DOTS.some(([name]) => String(loader.motion).includes(name)) &&
-        OPENINGS.includes(String(loader.animation)) && loader.background === 'rgb(217, 119, 87)' &&
+        OPENINGS.includes(String(loader.animation)) && loader.background === 'rgb(255, 51, 85)' &&
         loader.shadow === 'none' && working.whaleShown === false,
       JSON.stringify({ loader, whaleShown: working.whaleShown }))
     // 每条轨道自己的动作：探针把它临时放到「在用」的位置、用它自己的时钟走完一圈，
@@ -512,12 +512,12 @@ export default {
       goneLane !== null && comeLane !== null && goneLane !== comeLane && settled !== null && String(settled.motion).includes(comeLane) &&
         counts.length > 0 && counts.every((one) => one >= 3 && one <= 4) && jumps.length === 0,
       JSON.stringify({ gone: goneLane, come: comeLane, settled: settled === null ? null : settled.motion, fewest: Math.min(...counts), most: Math.max(...counts), jumps }))
-    check('the DeepSeek brand keeps the host\'s whale tail, stands the skin\'s dots down and waits on the host\'s own word',
-      wait.deepseek?.loader?.shown === false && wait.deepseek?.whaleShown === true && wait.deepseek?.word === 'Deep diving',
-      JSON.stringify(wait.deepseek))
-    check('the Claude brand takes the dots back and waits on the skin\'s own word',
-      wait.claudeAgain?.loader?.shown === true && wait.claudeAgain?.whaleShown === false && wait.claudeAgain?.word === 'Thinking…',
-      JSON.stringify(wait.claudeAgain))
+    check('the cyan card hides the host\'s whale tail too and keeps the skin\'s dots and its own word',
+      wait.ember?.loader?.shown === true && wait.ember?.whaleShown === false && wait.ember?.word === 'Thinking…',
+      JSON.stringify(wait.ember))
+    check('the crimson card reads the same after the fling',
+      wait.changzhengAgain?.loader?.shown === true && wait.changzhengAgain?.whaleShown === false && wait.changzhengAgain?.word === 'Thinking…',
+      JSON.stringify(wait.changzhengAgain))
     check('only the host words are marked and a third-party line stays visible before or after the waiting line mounts',
       working.wordsMarked === true && working.foreignShown === true && wait.foreignAfter?.foreignShown === true,
       JSON.stringify({ working, after: wait.foreignAfter }))

@@ -649,29 +649,18 @@ async function hostHalf() {
   const fontHost = fakeHost(mod, { home: fontHome })
   const packaged = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).files
   const fontSource = path.join(ROOT, 'packages', 'assets', 'src', 'fonts')
-  for (const [name, type] of [['JetBrainsMonoVariable.ttf', 'font/ttf'], ['InterVariable.woff2', 'font/woff2'], ['NotoSerifVariable.woff2', 'font/woff2']]) {
+  for (const [name, type] of [['JetBrainsMonoVariable.ttf', 'font/ttf'], ['JetBrainsMonoItalicVariable.ttf', 'font/ttf'], ['InterVariable.woff2', 'font/woff2']]) {
     const face = await requestAsset(fontHost, `/dsh-claude-style/fonts/${name}`)
     check(`the packaged face ${name} ships in the package and is served as ${type}`,
       packaged.includes('lib') && face.status === 200 && face.headers['content-type'] === type &&
         face.raw !== null && Buffer.compare(face.raw, fs.readFileSync(path.join(fontSource, name))) === 0,
       `HTTP ${face.status} ${JSON.stringify(face.headers)}`)
   }
-  const absent = await requestAsset(fontHost, '/dsh-claude-style/fonts/AnthropicSansWebText.ttf')
+  const absent = await requestAsset(fontHost, '/dsh-claude-style/fonts/ReaderOwnFace.ttf')
   check('a face the package does not carry is a 404 until the user drops one in',
     absent.status === 404, `HTTP ${absent.status}`)
   fs.mkdirSync(droppedDir, { recursive: true })
   fs.writeFileSync(path.join(droppedDir, 'JetBrainsMonoVariable.ttf'), Buffer.from('dropped-mono'))
-  // The three faces the package does not carry: the drop point answers each of
-  // their names, so a name missing from the route's whitelist shows up here.
-  for (const name of ['AnthropicSansWebText.ttf', 'AnthropicSerifWebText.ttf', 'AnthropicMonoWeb.ttf']) {
-    const payload = `dropped-${name}`
-    fs.writeFileSync(path.join(droppedDir, name), Buffer.from(payload))
-    const dropped = await requestAsset(fontHost, `/dsh-claude-style/fonts/${name}`)
-    check(`the face ${name} the package does not carry is served from the drop point`,
-      dropped.status === 200 && dropped.headers['content-type'] === 'font/ttf' &&
-        dropped.raw !== null && dropped.raw.toString('utf8') === payload,
-      `HTTP ${dropped.status} ${JSON.stringify(dropped.headers)}`)
-  }
   const overridden = await requestAsset(fontHost, '/dsh-claude-style/fonts/JetBrainsMonoVariable.ttf')
   check("the user's own copy wins over the bundled face of the same name",
     overridden.status === 200 && overridden.raw !== null && overridden.raw.toString('utf8') === 'dropped-mono',

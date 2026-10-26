@@ -29,7 +29,7 @@ export interface MascotSheets {
  * built from the name, and the build reads the marks the stylesheets key on
  * off this type (scripts/source-tree.mjs).
  */
-export type MascotName = 'crab' | 'deepy'
+export type MascotName = 'changzheng' | 'deepy'
 
 /** What one character hands the player (see createMascotPlayer). */
 export interface MascotCharacter {
@@ -42,8 +42,9 @@ export interface MascotCharacter {
 }
 
 /**
- * One mascot on the composer — the crab or Deepy — played from its sheets
- * by the state the agent is in (packages/client/src/features/mascot/mascot-signals.ts).
+ * One mascot on the composer — the pixel Long March girl or Deepy the whale —
+ * played from its sheets by the state the agent is in
+ * (packages/client/src/features/mascot/mascot-signals.ts).
  *
  * It stands on the composer card, or on the approval panel that takes the
  * card's place: that panel is the composer chain's fallback wrapper, whose
@@ -75,7 +76,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** How far a press travels before it lifts the mascot. */
   const LIFT_PX = 4
   const PREFIX = `dsh-claude-${character.name}` as const
-  /** The transparent margin each frame cell carries in this character's sheets (DEEPY_GUTTER), in logical pixels. */
+  /** The transparent margin each frame cell carries in this character's sheets (MASCOT_GUTTER), in logical pixels. */
   const GUTTER = character.gutter ?? 0
   /** A marker on the host element the mascot stands on, which makes it the mascot's containing block. */
   const ANCHOR_ATTR = `data-${PREFIX}-anchor` as const
@@ -321,8 +322,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty(`--${PREFIX}-x`, String(sheet.box[0]))
     style.setProperty(`--${PREFIX}-y`, String(sheet.box[1]))
     style.setProperty(`--${PREFIX}-w`, String(sheet.box[2]))
-    // The sprite's height is the one custom property both characters share:
-    // crab.css reads it in the merged sprite rule.
+    // The sprite's height is the one custom property every character shares:
+    // crab.css reads it in its own sprite rule.
     style.setProperty('--dsh-claude-mascot-h', String(sheet.box[3]))
     style.setProperty(`--${PREFIX}-cell-w`, String(cellWidth))
     style.setProperty(`--${PREFIX}-strip-h`, String(cellHeight * Math.ceil(sheet.frames / 8)))

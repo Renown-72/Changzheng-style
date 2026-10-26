@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { BRAND_INK_ACCENT, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRANDS, PALETTE_COLORING_BRAND, PALETTE_COLORING_CUSTOM } from '../../constants'
+import { BRAND_CHANGZHENG, BRAND_INK_ACCENT, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRANDS, PALETTE_COLORING_BRAND, PALETTE_COLORING_CUSTOM } from '../../constants'
 import { PALETTE_CARDS } from 'virtual:dsh-claude-style/generated'
 import { BrandLockup } from './settings-brand-lockup'
 import { withoutTransition } from '../../shared/transition'
@@ -37,7 +37,7 @@ const BRAND_CARDS = BRANDS.map((id) => {
 
 /** The name a card goes by, in the settings page's own language. */
 function cardName(card: Card) {
-  return card.id === 'claude' ? copy('brandClaude') : copy('brandDeepseek')
+  return card.id === BRAND_CHANGZHENG ? copy('brandClaude') : copy('brandDeepseek')
 }
 
 /**

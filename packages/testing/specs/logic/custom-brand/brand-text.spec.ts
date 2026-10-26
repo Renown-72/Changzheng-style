@@ -44,7 +44,7 @@ test('any printable name the reader types is a string the stylesheet draws back 
 })
 
 test('the ink on an accent fill is whichever canvas colour reads better on it', () => {
-  expect(accentInk('#d97757')).toBe(INK_DARK)
+  expect(accentInk('#ff3355')).toBe(INK_DARK)
   expect(accentInk('#1a7f5a')).toBe(INK_LIGHT)
   expect(accentInk('#f2c94c')).toBe(INK_DARK)
   expect(accentInk('#2b2b80')).toBe(INK_LIGHT)

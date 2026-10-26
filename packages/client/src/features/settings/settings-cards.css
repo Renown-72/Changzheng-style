@@ -68,18 +68,17 @@ body[data-dsh-claude-style] .dsh-claude-brand-card-logo {
   background-size: contain;
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="claude"] {
-  background-image: var(--dsh-claude-image-claude-mark-clay);
+body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="changzheng"] {
+  background-image: var(--dsh-claude-image-changzheng-mark);
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="deepseek"] {
-  background-image: var(--dsh-claude-image-deepseek-mark);
+body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="ember"] {
+  background-image: var(--dsh-claude-image-ember-mark);
 }
 
 /* The theme style's card reads left to right: the mark, then the brand's word.
-   Claude's word is the sidebar's own wordmark, masked over the label colour;
-   DeepSeek's lockup carries its whale and its word as one piece, the whale in
-   brand blue on either canvas. */
+   Both cards carry the mark and the word as two pieces, the word masked over
+   the label colour so it follows the palette in force. */
 body[data-dsh-claude-style] .dsh-claude-brand-card {
   flex-direction: row;
   gap: 10px;
@@ -89,7 +88,7 @@ body[data-dsh-claude-style] .dsh-claude-brand-card {
 
 body[data-dsh-claude-style] .dsh-claude-brand-card-word {
   flex: none;
-  width: calc(16px * 512.22 / 121.54);
+  width: calc(16px * 210 / 100);
   height: 16px;
   background-color: currentColor;
 }

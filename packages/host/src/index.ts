@@ -8,25 +8,22 @@
  *      beside the bundle as `model-descriptions.json` and the browser half
  *      fetches it at runtime, so the table grows without a rebuild and the
  *      bundle stays free of copy.
- *   2. Serve the bundled code font (and user-supplied text faces) as webfonts.
- *      The skin's code font stack names 'Anthropic Mono Web' first and
- *      'JetBrains Mono' behind it, and a face renders only when its family
- *      resolves — most systems have never installed either. The JetBrains
- *      files ship in this package (SIL OFL), so the fonts route hands them to
- *      the browser half's @font-face and the code face works with zero system
- *      installs. The Anthropic Sans/Serif/Mono faces are NOT in the npm
- *      package (they remain Anthropic's property), but a user who drops them
- *      into `$DSH_HOME/dsh-claude-style/fonts/` gets the same zero-install
- *      treatment; a missing file simply 404s and the stack falls back to a
- *      system-installed copy, then to the look-alike faces this package does
- *      ship (Inter, Noto Serif, JetBrains Mono — SIL OFL).
+ *   2. Serve the bundled code font and UI sans as webfonts. The skin's stacks
+ *      name 'JetBrains Mono' and 'Inter' by their own family names, and a face
+ *      renders only when its family resolves — most systems have never
+ *      installed either. Both ship in this package (SIL OFL), so the fonts
+ *      route hands them to the browser half's @font-face and the stacks work
+ *      with zero system installs. A user's own copy dropped into
+ *      `$DSH_HOME/dsh-claude-style/fonts/` answers the same name first; a
+ *      missing file simply 404s and the stack falls back to a system-installed
+ *      copy, then to the next family it names.
  *   3. Resolve the OS user once for the browser half. The username route answers
  *      a single GET and the browser caches it; it runs the host's own request
  *      fence first — see refusalOf() in routes.ts.
- *   4. Serve Deepy's animation sheets. The DeepSeek brand's pixel whale plays
- *      more sprite sheets than are worth inlining into the bundle, so they ship
- *      as files beside it and the browser fetches each one the first time its
- *      animation plays.
+ *   4. Serve the routed images. The mascot's sheets, the vendor lockups and the
+ *      brand marks ride the bundle when they are small enough and are written
+ *      beside it otherwise, so the browser fetches each one the first time it
+ *      is wanted.
  *
  * The registrations are defensive. A host without a web server, or with the
  * route prefix already taken, or with the settings service absent, must still

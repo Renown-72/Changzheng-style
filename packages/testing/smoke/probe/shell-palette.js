@@ -476,16 +476,16 @@
             })
             return pressed
           }
-          window.__pushForm({ brand: 'deepseek', paletteColors: 'brand' })
+          window.__pushForm({ brand: 'ember', paletteColors: 'brand' })
           await sleep(120)
           var following = { cards: read(), mark: mark() }
-          window.__pushForm({ paletteColors: 'claude' })
+          window.__pushForm({ paletteColors: 'changzheng' })
           await sleep(120)
           var pinned = { cards: read(), mark: mark() }
           window.__pushForm({ paletteColors: 'custom' })
           await sleep(120)
           var custom = { cards: read(), mark: mark() }
-          window.__pushForm({ brand: 'claude', paletteColors: 'brand' })
+          window.__pushForm({ brand: 'changzheng', paletteColors: 'brand' })
           await sleep(120)
           return { following: following, pinned: pinned, custom: custom }
         })()

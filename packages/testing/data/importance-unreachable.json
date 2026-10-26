@@ -413,8 +413,8 @@
     {
       "reason": "吉祥物：它只在自己的偏好打开且页面空闲时才挂载",
       "selectors": [
-        "body[data-dsh-claude-style] :is(.dsh-claude-crab,.dsh-claude-deepy):not([data-ready])",
-        "body[data-dsh-claude-style] [data-dsh-claude-crab-anchor=panel]>.dsh-claude-crab",
+        "body[data-dsh-claude-style] :is(.dsh-claude-changzheng,.dsh-claude-deepy):not([data-ready])",
+        "body[data-dsh-claude-style] [data-dsh-claude-changzheng-anchor=panel]>.dsh-claude-changzheng",
         "body[data-dsh-claude-style] [data-dsh-claude-deepy-anchor=panel]>.dsh-claude-deepy"
       ]
     },

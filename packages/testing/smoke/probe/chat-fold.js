@@ -262,7 +262,7 @@
       var foldedRow = document.createElement('div')
       foldedRow.setAttribute('data-chat-flow-kind', 'user')
       var foldedBubble = document.createElement('div')
-      foldedBubble.style.background = 'rgb(20, 20, 19)'
+      foldedBubble.style.background = 'rgb(16, 14, 19)'
       // The message arrives before its own words do (the host mounts the row, the
       // fill and the text land after): the box moves once they land, and that is
       // when the fold has to be decided — a long message standing whole through

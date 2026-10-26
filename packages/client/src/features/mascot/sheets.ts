@@ -1,15 +1,14 @@
 /**
  * The mascot sheet tables: which frames each animation holds, the box each
  * frame is cropped to and the frame shown under reduced motion. `scripts/build.mjs`
- * reads them to rebuild every sheet as the vector the browser plays and the
- * host half serves under the assets route, so a face and its animation
- * cannot drift apart.
+ * reads them to rebuild every sheet the browser plays, so a face and its
+ * animation cannot drift apart.
  */
 
 /**
  * Deepy's animations (features/mascot/whale.ts), one sheet each under
  * packages/assets/src/mascot/deepy/. The browser loads a sheet the first time
- * its animation plays and never while another brand is on.
+ * its animation plays and never while the other character is on.
  *
  * The whale is drawn on a 52×52 grid of logical pixels, five device pixels
  * to one in the sheets. A sheet holds its animation's frames eight to a
@@ -57,47 +56,48 @@ export const DEEPY_SHEETS: Record<string, { frames: number, box: number[], still
 }
 
 /**
- * The composer crab's animations (features/mascot/crab.ts), drawn by
- * scripts/draw-crab.py into packages/assets/src/mascot/crab/: one sheet in the
- * crab's colours and one ink mask per animation, inlined by the build as
- * CRAB_SHEET_URLS.
+ * The Long March girl's animations (features/mascot/mascot-character.ts), drawn
+ * by scripts/draw-changzheng.py into packages/assets/src/mascot/changzheng/.
  *
- * The crab is drawn on a 52×36 grid of cells at 2px a cell, feet on the
- * bottom row, the right claw four cells in from the right edge. A sheet
- * holds its animation's frames eight to a row, each cropped to `box` —
- * `[x, y, width, height]` in cells — and every frame lasts CRAB_FRAME_MS,
- * the pace of Claude Code's own crab. `still` is the frame shown for the
- * animation when the reader asks for reduced motion. The keys are Deepy's,
- * so the two share one state machine; `idle-wave` and `idle-laptop` (Claude
- * Code's laptop routine, whole) are the crab's own idle extras.
+ * She is drawn on a 52×36 grid of cells at 2px a cell, feet on the bottom row.
+ * A sheet holds its animation's frames eight to a row, each cropped to `box` —
+ * `[x, y, width, height]` in cells — and every frame lasts MASCOT_FRAME_MS.
+ * `still` is the frame shown for the animation when the reader asks for reduced
+ * motion. The keys are Deepy's, so the two share one state machine;
+ * `idle-wave` and `idle-laptop` are her own idle extras.
+ *
+ * Every animation ships three images: the colour sheet, an accent mask (the
+ * scarf and the skirt, filled with the palette's accent) and an ink mask (the
+ * props, filled with the quiet text ink). Both colour cards therefore share one
+ * drawing.
  */
-export const CRAB_FRAME_MS = 80
+export const MASCOT_FRAME_MS = 80
 /**
- * The transparent margin, in cells, the build lays around every frame of the
- * crab's sheets (gutterCrabSheets in scripts/build.mjs). The art is drawn
- * edge to edge, and at a fractional device scale the window around a frame
- * takes in a sliver of the cell beside it: the neighbouring frame's claw, read
- * on the page as a one-device-pixel line down the crab's left side.
+ * The transparent margin, in cells, the build lays around every frame of her
+ * sheets (gutterMascotSheets in scripts/build.mjs). The art is drawn edge to
+ * edge, and at a fractional device scale the window around a frame takes in a
+ * sliver of the cell beside it: the neighbouring frame's clothes, read on the
+ * page as a one-device-pixel line down her side.
  */
-export const CRAB_GUTTER = 1
-export const CRAB_SHEETS: Record<string, { frames: number, box: number[], still: number }> = {
-  'idle': { frames: 24, box: [24, 20, 24, 16], still: 0 },
-  'idle-look': { frames: 31, box: [24, 20, 24, 16], still: 0 },
-  'idle-wave': { frames: 12, box: [24, 15, 24, 21], still: 0 },
-  'idle-laptop': { frames: 43, box: [14, 13, 34, 23], still: 0 },
-  'thinking': { frames: 32, box: [14, 4, 34, 32], still: 18 },
-  'typing': { frames: 6, box: [15, 22, 28, 14], still: 0 },
-  'music': { frames: 16, box: [22, 1, 30, 35], still: 0 },
-  'conducting': { frames: 24, box: [24, 12, 27, 24], still: 0 },
-  'building': { frames: 6, box: [15, 19, 28, 17], still: 0 },
-  'error': { frames: 24, box: [23, 11, 26, 25], still: 4 },
-  'happy': { frames: 32, box: [18, 6, 34, 30], still: 3 },
-  'notification': { frames: 16, box: [24, 8, 24, 28], still: 0 },
-  'compacting': { frames: 20, box: [21, 20, 30, 16], still: 3 },
-  'sleeping': { frames: 32, box: [23, 3, 29, 33], still: 0 },
-  'waking': { frames: 12, box: [24, 4, 24, 32], still: 11 },
-  'poke-left': { frames: 10, box: [24, 20, 27, 16], still: 0 },
-  'poke-right': { frames: 10, box: [21, 20, 27, 16], still: 0 },
-  'tickle': { frames: 16, box: [23, 18, 26, 18], still: 0 },
-  'drag': { frames: 8, box: [23, 12, 26, 22], still: 0 },
+export const MASCOT_GUTTER = 1
+export const MASCOT_SHEETS: Record<string, { frames: number, box: number[], still: number }> = {
+  'idle': { frames: 24, box: [16, 7, 17, 29], still: 0 },
+  'idle-look': { frames: 31, box: [16, 7, 17, 29], still: 0 },
+  'idle-wave': { frames: 12, box: [16, 7, 19, 29], still: 0 },
+  'idle-laptop': { frames: 40, box: [16, 7, 17, 29], still: 0 },
+  'thinking': { frames: 32, box: [16, 0, 25, 36], still: 18 },
+  'typing': { frames: 6, box: [16, 7, 17, 29], still: 0 },
+  'music': { frames: 16, box: [15, 0, 24, 36], still: 0 },
+  'conducting': { frames: 24, box: [14, 7, 21, 29], still: 0 },
+  'building': { frames: 6, box: [16, 5, 17, 31], still: 0 },
+  'error': { frames: 24, box: [15, 2, 19, 34], still: 4 },
+  'happy': { frames: 32, box: [10, 2, 28, 34], still: 3 },
+  'notification': { frames: 16, box: [16, 0, 18, 36], still: 0 },
+  'compacting': { frames: 20, box: [11, 7, 24, 29], still: 3 },
+  'sleeping': { frames: 32, box: [16, 0, 24, 36], still: 0 },
+  'waking': { frames: 12, box: [14, 2, 21, 34], still: 11 },
+  'poke-left': { frames: 10, box: [16, 7, 20, 29], still: 0 },
+  'poke-right': { frames: 10, box: [13, 7, 20, 29], still: 0 },
+  'tickle': { frames: 16, box: [14, 7, 20, 29], still: 0 },
+  'drag': { frames: 8, box: [13, 4, 23, 30], still: 0 },
 }

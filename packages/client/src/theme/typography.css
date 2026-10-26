@@ -18,41 +18,12 @@
   font-display: swap;
 }
 
-/* The Anthropic faces are not in the npm package, so these registrations resolve
-   only when the user dropped the files into `$DSH_HOME/dsh-claude-style/fonts/`;
-   otherwise the stacks fall back to a system-installed copy. All three are static
-   Regular cuts, so one 400 declaration covers them and the browser synthesizes
-   the heavier weights. */
-@font-face {
-  font-family: 'Anthropic Sans Web Text';
-  src: url('/dsh-claude-style/fonts/AnthropicSansWebText.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Anthropic Serif Web Text';
-  src: url('/dsh-claude-style/fonts/AnthropicSerifWebText.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Anthropic Mono Web';
-  src: url('/dsh-claude-style/fonts/AnthropicMonoWeb.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* The look-alikes the stacks name after the Anthropic faces, for an install with
-   neither the files nor a system copy. They ship in the package (SIL OFL 1.1), cut
-   to the coverage of the Anthropic faces and matched to them in x-height, cap
-   height and lowercase width, so switching between a face and its look-alike does
-   not rewrap text. The family names are the skin's own: a plugin asking for 'Inter'
-   or 'Noto Serif' still gets its own copy. */
+/* The UI sans ships in the package (SIL OFL 1.1), cut to the coverage the HUD
+   lettering needs and matched in x-height, cap height and lowercase width, so
+   switching between the shipped face and a system one does not rewrap text. The
+   family name is the skin's own: a plugin asking for 'Inter' still gets its own
+   copy. The display face is a system condensed one — Bahnschrift on Windows, DIN
+   on macOS — so nothing is registered for it. */
 @font-face {
   font-family: 'Claude Style Inter';
   src: url('/dsh-claude-style/fonts/InterVariable.woff2') format('woff2');
@@ -61,15 +32,7 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: 'Claude Style Noto Serif';
-  src: url('/dsh-claude-style/fonts/NotoSerifVariable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ---------- typography: serif display + sans UI + mono code ---------- */
+/* ---------- typography: condensed display + sans UI + mono code ---------- */
 body[data-dsh-claude-style] {
   font-family: var(--dsw-font-family);
   color: var(--dsw-alias-label-primary);
@@ -77,10 +40,12 @@ body[data-dsh-claude-style] {
 
 /* The body's own canvas; a wallpaper plugin showing one keeps it unpainted
    (theme/wallpaper.css). */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-we-wallpaper]) {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"]:not([data-we-wallpaper]) {
   background-color: var(--dsh-claude-canvas);
 }
 
+/* Display headings: the condensed technical face, a step narrower and tracked
+   in slightly, which is the HUD lettering this skin is drawn after. */
 body[data-dsh-claude-style] :is(h1, h2, h3, h4, [data-dsh-claude-part~="text-headline"], [data-dsh-claude-part~="text-title"]) {
   font-family: var(--dsh-claude-font-serif);
   font-weight: 500;
@@ -95,8 +60,8 @@ body[data-dsh-claude-style] :is(h1, [data-dsh-claude-part~="text-headline"]) {
 }
 
 /* ---------- markdown document prose ---------- */
-/* Conversation prose — body and headings alike — takes the serif face and lets
-   Chinese fall through to a sans CJK; the display rule above stays for headlines. */
+/* Conversation prose takes the UI sans, Chinese included; the display rule above
+   stays for headlines. */
 body[data-dsh-claude-style] [data-dsh-claude-part~="markdown"] {
   font-family: var(--dsh-claude-font-prose);
   line-height: calc(23px + var(--dsh-content-font-delta, 0px));

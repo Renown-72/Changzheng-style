@@ -32,7 +32,7 @@ body[data-dsh-claude-style] .dsh-claude-account-btn[data-open="true"] {
 body[data-dsh-claude-style] .dsh-claude-account-avatar {
   width: 18px;
   height: 18px;
-  background: var(--dsh-claude-image-anthropic-mark) center / contain no-repeat;
+  background: var(--dsh-claude-image-changzheng-mark) center / contain no-repeat;
   flex: none;
   margin-right: 8px;
   /* The host's own avatar is a circle (32px with a 16px radius). Ours is 18px to
@@ -42,10 +42,10 @@ body[data-dsh-claude-style] .dsh-claude-account-avatar {
   corner-shape: round;
   overflow: hidden;
 }
-/* Under the DeepSeek brand the picture with no account behind it is DeepSeek's
-   whale, in its brand blue. */
-body[data-dsh-claude-style][data-dsh-claude-brand="deepseek"] .dsh-claude-account-avatar {
-  background-image: var(--dsh-claude-image-deepseek-mark);
+/* Under the cyan card the picture with no account behind it is that card's own
+   emblem. */
+body[data-dsh-claude-style][data-dsh-claude-brand="ember"] .dsh-claude-account-avatar {
+  background-image: var(--dsh-claude-image-ember-mark);
 }
 /* The reader's own mark takes that place under either brand (D30). Tinted, it
    is a shape in the ink the image-colour choice names on a layer of its own: a
@@ -344,7 +344,7 @@ body[data-dsh-claude-style] [data-dsh-claude-account-menu] {
    under the Claude palette the surface token is rebound so that layer paints
    the same card fill, and its backdrop blur is dropped for the flat skin card.
    Under the host's colours the host's material stands. */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"] [data-dsh-claude-account-menu] {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"] [data-dsh-claude-account-menu] {
   --dsw-menu-surface-fill: var(--dsh-claude-card);
   --dsw-menu-backdrop-filter: none;
 }

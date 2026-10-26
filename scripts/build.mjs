@@ -95,12 +95,20 @@ const ASSETS_MODULE = path.join(ROOT, 'packages', 'assets', 'assets.mjs')
  * copied like the copy document so the source of truth stays in `packages/client/src/` and
  * `lib/` remains generated output.
  *
- * The clay mark is the one that reads on both canvases: an `<img>` cannot
- * inherit `currentColor` the way the inlined brand art does, and the plain
- * mark is black — invisible on the warm-black canvas.
+ * The emblem draws its own colours rather than a `currentColor` shape: an
+ * `<img>` cannot inherit `currentColor` the way the inlined brand art does, so
+ * the file it names has to read on both canvases on its own.
  */
-const ICON_SOURCE = 'claude-mark-clay.svg'
-const ICON_FILE = 'claude-mark.svg'
+const ICON_SOURCE = 'changzheng-mark.svg'
+const ICON_FILE = 'changzheng-mark.svg'
+
+/**
+ * The mascot's sheets: the directory under packages/assets/src/mascot/, and the
+ * three files one animation draws — the colour sheet, the accent mask the
+ * palette in force fills, and the ink mask the quiet text ink fills.
+ */
+const MASCOT_DIR = 'changzheng'
+const MASCOT_SHEET_FILES = (name) => [`${name}.png`, `${name}-accent.png`, `${name}-ink.png`]
 
 /**
  * The stylesheets that belong to no feature, with their place in the
@@ -228,7 +236,7 @@ const CONSTANTS = (() => {
     if (module[name] === undefined) throw new Error(`build: ${file} exports no ${name}`)
     return [name, module[name]]
   }))
-  const { BRAND_ATTR, BRAND_DEEPSEEK, BRANDS, COMPOSER_ATTR, PALETTE_ATTR, PALETTE_CARD_ATTR, PALETTE_CLAUDE, PALETTE_HOST, TYPEFACE_ATTR, TYPEFACE_CLAUDE, TYPEFACE_HOST } = pick(constants, constantsFile, ['BRAND_ATTR', 'BRAND_DEEPSEEK', 'BRANDS', 'COMPOSER_ATTR', 'PALETTE_ATTR', 'PALETTE_CARD_ATTR', 'PALETTE_CLAUDE', 'PALETTE_HOST', 'TYPEFACE_ATTR', 'TYPEFACE_CLAUDE', 'TYPEFACE_HOST'])
+  const { BRAND_ATTR, BRAND_EMBER, BRANDS, COMPOSER_ATTR, PALETTE_ATTR, PALETTE_CARD_ATTR, PALETTE_SKIN, PALETTE_HOST, TYPEFACE_ATTR, TYPEFACE_SKIN, TYPEFACE_HOST } = pick(constants, constantsFile, ['BRAND_ATTR', 'BRAND_EMBER', 'BRANDS', 'COMPOSER_ATTR', 'PALETTE_ATTR', 'PALETTE_CARD_ATTR', 'PALETTE_SKIN', 'PALETTE_HOST', 'TYPEFACE_ATTR', 'TYPEFACE_SKIN', 'TYPEFACE_HOST'])
   return {
     // The gate attributes scripts/css.mjs checks, stamps and writes the token
     // blocks under: who paints the colours and who sets the type (D30), the
@@ -236,13 +244,13 @@ const CONSTANTS = (() => {
     // blocks (D30).
     gates: {
       composer: COMPOSER_ATTR,
-      palette: { attribute: PALETTE_ATTR, claude: PALETTE_CLAUDE, host: PALETTE_HOST },
+      palette: { attribute: PALETTE_ATTR, claude: PALETTE_SKIN, host: PALETTE_HOST },
       paletteCard: { attribute: PALETTE_CARD_ATTR },
-      typeface: { attribute: TYPEFACE_ATTR, claude: TYPEFACE_CLAUDE, host: TYPEFACE_HOST },
-      brand: { attribute: BRAND_ATTR, deepseek: BRAND_DEEPSEEK },
+      typeface: { attribute: TYPEFACE_ATTR, claude: TYPEFACE_SKIN, host: TYPEFACE_HOST },
+      brand: { attribute: BRAND_ATTR, deepseek: BRAND_EMBER },
     },
     brands: BRANDS,
-    ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'CRAB_GUTTER', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER']),
+    ...pick(sheets, sheetsFile, ['MASCOT_SHEETS', 'MASCOT_GUTTER', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER']),
     featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
   }
 })()
@@ -254,19 +262,12 @@ const CONSTANTS = (() => {
  * address, whichever the asset manifest decided).
  */
 const BRAND_MARKS = [
-  'claude-mark.svg',
-  'claude-word.svg',
-  'claude-mark-clay.svg',
-  // The account row's picture when no avatar is behind it, under the Claude
-  // brand: Anthropic's own mark.
-  'anthropic-mark.svg',
-  // The host's own whale mark (ui-primitives FishLogo, FISH_LOGO_PATH), in
-  // DeepSeek's brand blue: a picture where it is painted, a shape where it masks.
-  'deepseek-mark.svg',
-  // The host's own word beside that whale, taken from its frontend bundle: the
-  // settings lockup draws the reader's brand area, so it needs the word the
-  // sidebar shows there.
-  'deepseek-word.svg',
+  // The two cards' emblems: a red-gold star inside its orbit for the crimson
+  // card, the same star lit cold for the cyan one, each with its word.
+  'changzheng-mark.svg',
+  'changzheng-word.svg',
+  'ember-mark.svg',
+  'ember-word.svg',
   // GitHub's own mark, for the settings page's link to the repository.
   'github-mark.svg',
 ]
@@ -306,7 +307,7 @@ function loadCombines(plan, claimed) {
 }
 
 /**
- * Deepy's sheets as the vectors the browser plays
+ * Deepy's sheets as the vectors the browser plays.
  *
  * Each PNG is decoded, held to its animation table's crop box and frame count,
  * and rebuilt as SVG over the sprite's own cell layout. The vector is what the
@@ -342,26 +343,33 @@ function vectorizeDeepySheets(cache) {
 }
 
 /**
- * The crab's sheets laid out again with CRAB_GUTTER of transparency around
- * every frame, the colour sheet and the ink mask alike, under their own paths.
- * A sheet is cached under its bytes, its table entry, the gutter and the code of
- * packages/assets/assets.mjs.
+ * The Long March girl's sheets laid out again with MASCOT_GUTTER of transparency
+ * around every frame, the colour sheet, its accent mask and its ink mask alike,
+ * under their own paths. A sheet is cached under its bytes, its table entry, the
+ * gutter and the code of packages/assets/assets.mjs.
+ *
+ * Three sheets per animation, because the two palettes share one drawing: the
+ * colour sheet carries what the character is made of (hair, skin, eyes, the star
+ * clip), the accent mask carries what the palette in force paints (the scarf and
+ * the skirt), and the ink mask carries what takes the quiet text ink (the
+ * laptop, the thought bubble, letters, notes, the hat). Only the first is drawn
+ * twice; the other two are shapes a stylesheet fills.
  *
  * @param cache - the build cache (scripts/build-cache.mjs).
  * @returns the laid-out sheets, keyed by their path under packages/assets/src/.
  */
-function gutterCrabSheets(cache) {
-  const dir = path.join(ASSETS, 'mascot', 'crab')
+function gutterMascotSheets(cache) {
+  const dir = path.join(ASSETS, 'mascot', MASCOT_DIR)
   const code = fs.readFileSync(ASSETS_MODULE)
   const generated = new Map()
-  for (const [name, sheet] of Object.entries(CONSTANTS.CRAB_SHEETS)) {
-    for (const file of [`${name}.png`, `${name}-ink.png`]) {
+  for (const [name, sheet] of Object.entries(CONSTANTS.MASCOT_SHEETS)) {
+    for (const file of MASCOT_SHEET_FILES(name)) {
       const png = fs.readFileSync(path.join(dir, file))
-      const shape = JSON.stringify({ sheet, gutter: CONSTANTS.CRAB_GUTTER })
-      generated.set(`mascot/crab/${file}`, cache.get('crab-gutter', [code, png, shape], () => {
+      const shape = JSON.stringify({ sheet, gutter: CONSTANTS.MASCOT_GUTTER })
+      generated.set(`mascot/${MASCOT_DIR}/${file}`, cache.get('mascot-gutter', [code, png, shape], () => {
         const image = PNG.sync.read(png)
-        checkSheetPixels('CRAB_SHEETS', name, image, sheet, 1)
-        const laid = layoutCells(image, sheet.box, 1, CONSTANTS.CRAB_GUTTER)
+        checkSheetPixels('MASCOT_SHEETS', name, image, sheet, 1)
+        const laid = layoutCells(image, sheet.box, 1, CONSTANTS.MASCOT_GUTTER)
         const out = new PNG({ width: laid.width, height: laid.height })
         laid.data.copy(out.data)
         return PNG.sync.write(out)
@@ -389,7 +397,7 @@ async function main() {
   // build must leave lib/ as it was.
   const cache = openBuildCache(CACHE_DIR)
   const deepy = vectorizeDeepySheets(cache)
-  const builtSheets = new Map([...deepy.generated, ...gutterCrabSheets(cache)])
+  const builtSheets = new Map([...deepy.generated, ...gutterMascotSheets(cache)])
   const plan = planAssets({ assetsDir: ASSETS, generated: builtSheets, replaced: deepy.replaced })
   const claimed = new Set()
   const images = {}
@@ -401,15 +409,18 @@ async function main() {
   }
   const combines = loadCombines(plan, claimed)
 
-  // The crab's sheets ride the bundle: one pair of data URIs per animation.
-  const crab = {}
-  for (const name of Object.keys(CONSTANTS.CRAB_SHEETS)) {
-    const body = plan.entries.get(`mascot/crab/${name}.png`)
-    const ink = plan.entries.get(`mascot/crab/${name}-ink.png`)
-    if (body === undefined || ink === undefined) throw new Error(`build: CRAB_SHEETS["${name}"] has no sheet pair under packages/assets/src/mascot/crab/`)
-    claimed.add(body.file)
-    claimed.add(ink.file)
-    crab[name] = { body: body.url, ink: ink.url }
+  // The girl's sheets ride the bundle: one colour sheet and two masks per
+  // animation, so the palette in force paints the scarf and the skirt.
+  const mascot = {}
+  for (const name of Object.keys(CONSTANTS.MASCOT_SHEETS)) {
+    const files = MASCOT_SHEET_FILES(name)
+    const entries = files.map((file) => plan.entries.get(`mascot/${MASCOT_DIR}/${file}`))
+    if (entries.some((entry) => entry === undefined)) {
+      throw new Error(`build: MASCOT_SHEETS["${name}"] needs ${files.join(', ')} under packages/assets/src/mascot/${MASCOT_DIR}/`)
+    }
+    for (const entry of entries) claimed.add(entry.file)
+    const [body, accent, ink] = entries
+    mascot[name] = { body: body.url, accent: accent.url, ink: ink.url }
   }
 
   // Deepy's sheets are the vectors the build produced; the addresses are the
@@ -455,7 +466,7 @@ async function main() {
     // The version this client bundle reports wherever the host asks a client
     // for its build: the account Remote carries it on every call.
     CLIENT_VERSION: PACKAGE.version,
-    CRAB_SHEET_URLS: crab,
+    MASCOT_SHEET_URLS: mascot,
     DEEPY_SHEET_URLS: deepyUrls,
     // The motion tokens, by name: the browser half reads the same table the
     // generated token stylesheet carries, so a duration cannot be 200 ms in the

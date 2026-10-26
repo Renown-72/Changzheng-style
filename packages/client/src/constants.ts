@@ -61,7 +61,6 @@ export const REPOSITORY_URL = 'https://github.com/Nwflower/dsh-claude-style'
 
 /** The document attribute the stylesheet switches on. */
 export const BRAND_ATTR = 'data-dsh-claude-brand'
-
 /**
  * The custom brand layer over either brand (D30, packages/client/src/features/brand/brand.ts). Each part stands only while
  * the reader has supplied it: CUSTOM_MARK_ATTR while a mark image is in place,

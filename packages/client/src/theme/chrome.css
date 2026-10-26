@@ -18,7 +18,7 @@ body[data-dsh-claude-style] {
    host" they take the host's own tokens and only the hairline stays. While a
    wallpaper plugin shows one the columns are left unpainted, under the mask
    theme/wallpaper.css lays over it, and only the hairline stays. */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-we-wallpaper]) :is([data-pane="sidebar"], [data-dsh-claude-part~="sidebar-column"], .dshDesktopSidebarSurface) {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"]:not([data-we-wallpaper]) :is([data-pane="sidebar"], [data-dsh-claude-part~="sidebar-column"], .dshDesktopSidebarSurface) {
   --dsw-specific-sidebar-fill: var(--dsh-claude-sidebar-canvas);
   background: var(--dsh-claude-sidebar-canvas);
 }
@@ -31,7 +31,7 @@ body[data-dsh-claude-style] :is([data-pane="sidebar"], [data-dsh-claude-part~="s
   border-right: 0.5px solid var(--dsw-alias-border-l1);
 }
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"]:not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-claude-part~="center-column"]) {
+body[data-dsh-claude-style][data-dsh-claude-palette="skin"]:not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-claude-part~="center-column"]) {
   background: var(--dsh-claude-canvas);
 }
 

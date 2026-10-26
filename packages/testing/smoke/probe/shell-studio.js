@@ -81,11 +81,11 @@
       // back to idle on the browser's animation engine, so no frame wakes a
       // pass. With the animation choice on "reduced" it holds the idle
       // sheet's still frame; a click still plays the poke.
-      var crab = document.querySelector('[data-composer-card] > .dsh-claude-crab')
+      var crab = document.querySelector('[data-composer-card] > .dsh-claude-changzheng')
       r.mascot = { mounted: crab !== null }
       if (crab !== null) {
-        var crabStrip = crab.querySelector('.dsh-claude-crab-strip')
-        var crabHit = crab.querySelector('.dsh-claude-crab-hit')
+        var crabStrip = crab.querySelector('.dsh-claude-changzheng-strip')
+        var crabHit = crab.querySelector('.dsh-claude-changzheng-hit')
         r.mascot.ready = crab.hasAttribute('data-ready')
         r.mascot.animation = crab.getAttribute('data-animation')
         r.mascot.body = getComputedStyle(crabStrip).backgroundImage.indexOf('data:image/png') !== -1
@@ -206,7 +206,7 @@
       heroRoot.remove()
       await sleep(200)
       r.homeHero.offHero = document.querySelector('[data-dsh-claude-home-hero]') !== null
-      r.mascot.afterHero = document.querySelector('.dsh-claude-crab') !== null
+      r.mascot.afterHero = document.querySelector('.dsh-claude-changzheng') !== null
       // The stylesheet alone decides where a panel may draw: under the hero
       // stack's dock it shows, and the moment the host drops the stack's hero
       // class (the first message sent) it is gone, before any pass runs. The

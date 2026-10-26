@@ -1,5 +1,4 @@
 import { readTurnActivity } from '@dsh-claude-style/engine/host'
-import { BRAND_DEEPSEEK } from '../constants'
 import { activityPhrase } from './activity-phrase'
 import { callArgsOf, callString } from './call-args'
 import { fileToolCall } from './file-tool'
@@ -41,7 +40,7 @@ export interface ActivityWords {
   params?: CopyParams
 }
 
-/** The thinking state's copy key, which is also the word a brand waits on while the model thinks (waitingWord). */
+/** The thinking state's copy key: the word the line stands on while the model thinks. */
 export const THINKING_KEY = 'chatWaitThinking'
 /** The model is thinking, and its reasoning says nothing the line can take. */
 export const ACTIVITY_THINKING: ActivityWords = { key: THINKING_KEY }
@@ -51,21 +50,6 @@ export const ACTIVITY_WRITING: ActivityWords = { key: 'chatWaitWriting' }
 export const ACTIVITY_TOOL_CALL: ActivityWords = { key: 'chatWaitToolCall', aboutCall: 'generic' }
 /** The turn's tool calls are running, and the running call says nothing of its own. */
 export const ACTIVITY_TOOLS: ActivityWords = { key: 'chatWaitTools', aboutCall: 'generic' }
-
-/**
- * The one word a wait stands on: what the line says while the model is thinking
- * and what it says where no state can be read at all. The Claude brand says the
- * skin's own word for both; the DeepSeek brand says the host's own word for
- * both, which is the word that brand's own interface shows. One word per brand,
- * so the line never swaps between two words for the same wait.
- *
- * @param brand - the brand in force (core/prefs, `BRAND_ATTR`).
- * @param hostWord - the host's own word for a wait (`hostChatCopy('chat.deepDiving', …)`).
- * @param skinWord - the skin's own word, read from the caller's copy.
- */
-export function waitingWord(brand: string, hostWord: string, skinWord: string) {
-  return brand === BRAND_DEEPSEEK ? hostWord : skinWord
-}
 
 /** Reading, editing and writing one file: the file's own name fills the copy's slot. */
 const ACTIVITY_FILE: Record<FileToolOperation, ActivityWords> = {

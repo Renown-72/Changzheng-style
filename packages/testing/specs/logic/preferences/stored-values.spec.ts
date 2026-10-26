@@ -11,8 +11,8 @@ import { expect, test } from 'vitest'
 import fc from 'fast-check'
 import { resolveMascot } from '@dsh-claude-style/client/pure'
 import {
-  BRAND_CLAUDE, BRAND_DEEPSEEK, BRAND_DEEPSEEK_LEGACY, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX,
-  CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, ONGOING_INDICATOR_RING, PREFS, PREF_DEFAULTS,
+  BRAND_CHANGZHENG, BRAND_EMBER, BRAND_LEGACY_CYAN, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX,
+  CHAT_ANIMATIONS_OFF, MASCOT_CHANGZHENG, MASCOT_DEEPY, MASCOT_OFF, ONGOING_INDICATOR_RING, PREFS, PREF_DEFAULTS,
   PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, STATUS_MOTION_WASH, USERNAME_MAX, clampPrefs,
 } from '@dsh-claude-style/contracts/prefs'
 import { OFFICIAL_MODEL_GROUP } from '@dsh-claude-style/contracts/services'
@@ -80,10 +80,10 @@ test('the caret switch reads the retired explicit-moves tier as on', () => {
   expect(clampPrefs({ caretMotion: 'move' }).caretMotion).toBe(PREF_DEFAULTS.caretMotion)
 })
 
-test('the brand stored under its earlier name lands on its choice, anything else on Claude', () => {
-  expect(clampPrefs({ brand: BRAND_DEEPSEEK }).brand).toBe(BRAND_DEEPSEEK)
-  expect(clampPrefs({ brand: BRAND_DEEPSEEK_LEGACY }).brand).toBe(BRAND_DEEPSEEK)
-  expect(clampPrefs({ brand: 'anthropic' }).brand).toBe(BRAND_CLAUDE)
+test('the brand stored under its earlier name lands on its choice, anything else on the crimson card', () => {
+  expect(clampPrefs({ brand: BRAND_EMBER }).brand).toBe(BRAND_EMBER)
+  expect(clampPrefs({ brand: BRAND_LEGACY_CYAN }).brand).toBe(BRAND_EMBER)
+  expect(clampPrefs({ brand: 'anthropic' }).brand).toBe(BRAND_CHANGZHENG)
 })
 
 test('the hover-open preference takes its earlier boolean shape', () => {
@@ -130,8 +130,8 @@ test('a stored accent moves into the custom card, keeping its colour, and the ca
   expect(clampPrefs({ brandAccent: '#abc' }).customAccent).toBe('')
   expect(clampPrefs({ brandAccent: 'red' }).customAccent).toBe('')
   expect(clampPrefs({}).paletteColors).toBe('brand')
-  expect(clampPrefs({ paletteColors: 'claude' }).paletteColors).toBe('claude')
-  expect(clampPrefs({ paletteColors: 'deepseek' }).paletteColors).toBe('deepseek')
+  expect(clampPrefs({ paletteColors: 'changzheng' }).paletteColors).toBe(BRAND_CHANGZHENG)
+  expect(clampPrefs({ paletteColors: 'ember' }).paletteColors).toBe(BRAND_EMBER)
   expect(clampPrefs({ paletteColors: 'pink' }).paletteColors).toBe('brand')
 })
 
@@ -141,9 +141,10 @@ test('the custom images keep their own colours unless the text colour is chosen'
   expect(clampPrefs({ brandInk: 'mono' }).brandInk).toBe(BRAND_INK_ORIGINAL)
 })
 
-test('"follow the brand" puts the crab under Claude and Deepy under DeepSeek; a fixed choice stands', () => {
-  expect(resolveMascot(clampPrefs({ brand: BRAND_CLAUDE }))).toBe(MASCOT_CRAB)
-  expect(resolveMascot(clampPrefs({ brand: BRAND_DEEPSEEK }))).toBe(MASCOT_DEEPY)
-  expect(resolveMascot(clampPrefs({ brand: BRAND_DEEPSEEK, mascot: MASCOT_CRAB }))).toBe(MASCOT_CRAB)
+test('"follow the brand" puts the girl under the crimson card and Deepy under the cyan one; a fixed choice stands', () => {
+  expect(resolveMascot(clampPrefs({ brand: BRAND_CHANGZHENG }))).toBe(MASCOT_CHANGZHENG)
+  expect(resolveMascot(clampPrefs({ brand: BRAND_EMBER }))).toBe(MASCOT_DEEPY)
+  expect(resolveMascot(clampPrefs({ brand: BRAND_EMBER, mascot: MASCOT_CHANGZHENG }))).toBe(MASCOT_CHANGZHENG)
+  expect(resolveMascot(clampPrefs({ brand: BRAND_CHANGZHENG, mascot: MASCOT_DEEPY }))).toBe(MASCOT_DEEPY)
   expect(resolveMascot(clampPrefs({ mascot: MASCOT_OFF }))).toBe(MASCOT_OFF)
 })

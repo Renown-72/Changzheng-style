@@ -1,15 +1,16 @@
-/* ---------- Claude Code layout: sidebar brand ---------- */
-/* The shipped whale and wordmark give way to the selected brand, each painted as
-   an alpha mask over currentColor so it follows the label colour. The choice is a
-   document attribute, so the settings page flips one attribute and the UI follows.
-   Sizing: an 18px cap height to match the shipped brandName box, the wordmark's
-   width read from that height through the artwork's aspect ratio (its viewBox,
-   512.22 × 121.54, packages/assets/src/brand/claude-word.svg). */
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"]) > * {
+/* ---------- The sidebar brand ---------- */
+/* The shipped whale and wordmark give way to the selected card's emblem, each
+   painted as an alpha mask over currentColor so it follows the label colour. The
+   choice is a document attribute, so the settings page flips one attribute and
+   the UI follows. Sizing: an 18px cap height to match the shipped brandName box,
+   the wordmark's width read from that height through the artwork's aspect ratio
+   (its viewBox, 210 × 100, packages/assets/src/brand/changzheng-word.svg and
+   ember-word.svg). */
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"]) > * {
   display: none !important;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
   content: "";
   display: block;
   flex: none;
@@ -19,40 +20,51 @@ body[data-dsh-claude-style][data-dsh-claude-brand="claude"] :is([data-dsh-claude
   background-size: contain;
 }
 
-/* Claude (default): starburst mark + the Claude wordmark. The mask values are
-   the shared ones (shared/masked.css). */
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
+/* The emblem: the star inside its orbit, a square 18px mark. The mask values
+   are the shared ones (shared/masked.css), one per card. */
+body[data-dsh-claude-style][data-dsh-claude-brand="changzheng"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
   width: 18px;
   height: 18px;
-  -webkit-mask: var(--dsh-claude-mask-claude-mark);
-  mask: var(--dsh-claude-mask-claude-mark);
+  -webkit-mask: var(--dsh-claude-mask-changzheng-mark);
+  mask: var(--dsh-claude-mask-changzheng-mark);
 }
 
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"] > * {
+body[data-dsh-claude-style][data-dsh-claude-brand="ember"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
+  width: 18px;
+  height: 18px;
+  -webkit-mask: var(--dsh-claude-mask-ember-mark);
+  mask: var(--dsh-claude-mask-ember-mark);
+}
+
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"] > * {
   display: none !important;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
   content: "";
   display: block;
   flex: none;
   background-color: currentColor;
-}
-
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
-  width: calc(18px * 512.22 / 121.54);
+  width: calc(18px * 210 / 100);
   max-width: 100%;
   height: 18px;
-  -webkit-mask: var(--dsh-claude-mask-claude-word);
-  mask: var(--dsh-claude-mask-claude-word);
 }
 
-/* DeepSeek: the host's own whale and wordmark in DeepSeek's brand blue, or in
-   the ink the image-colour choice names (features/brand/brand.ts). The
-   expanded brand is a button on most platforms and a plain row on macOS, and the
-   collapsed rail's whale sits in the sidebar toggle, so the art is inked where it
-   sits. */
-body[data-dsh-claude-style][data-dsh-claude-brand="deepseek"] :is([data-dsh-claude-part~="brand-identity"], [data-dsh-claude-part~="rail-mark"]) {
+body[data-dsh-claude-style][data-dsh-claude-brand="changzheng"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+  -webkit-mask: var(--dsh-claude-mask-changzheng-word);
+  mask: var(--dsh-claude-mask-changzheng-word);
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="ember"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+  -webkit-mask: var(--dsh-claude-mask-ember-word);
+  mask: var(--dsh-claude-mask-ember-word);
+}
+
+/* Both cards ink the emblem and the word with the accent, or with the ink the
+   image-colour choice names (features/brand/brand.ts). The expanded brand is a
+   button on most platforms and a plain row on macOS, and the collapsed rail's
+   mark sits in the sidebar toggle, so the art is inked where it sits. */
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) :is([data-dsh-claude-part~="brand-identity"], [data-dsh-claude-part~="rail-mark"]) {
   color: var(--dsh-claude-logo-ink);
 }
 

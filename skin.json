@@ -1,8 +1,8 @@
 {
-  "id": "claude-style",
-  "name": "Claude Code Style",
-  "tagline": "Claude Code Desktop 深度定制化主题",
-  "accent": "#d97757",
+  "id": "changzheng-style",
+  "name": "Long March Style",
+  "tagline": "《The Fire Rises》长征姬霓虹赛博主题",
+  "accent": "#ff3355",
   "bodyAttr": "data-dsh-claude-style",
   "package": "dsh-claude-style",
   "wiring": {

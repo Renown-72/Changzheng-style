@@ -384,18 +384,6 @@
       "prop": "padding-bottom",
       "verdict": "unmatched"
     },
-    "body[data-dsh-claude-style][data-dsh-claude-brand=claude] [data-dsh-claude-part~=hero-mark]>*{display:none!}|display": {
-      "selector": "body[data-dsh-claude-style][data-dsh-claude-brand=claude] [data-dsh-claude-part~=hero-mark]>*",
-      "prop": "display",
-      "verdict": "needed",
-      "state": "hero",
-      "opponents": [
-        {
-          "kind": "inline",
-          "owner": "element"
-        }
-      ]
-    },
     "body[data-dsh-claude-style] [data-dsh-header-band~=title] [data-dsh-header-title]{position:fixed!;top:var(--dsh-header-band-title-top, calc(var(--dsh-windows-titlebar-height, 40px) / 2))!;left:var(--dsh-header-band-left)!;max-width:var(--dsh-header-band-max, none)!;margin:0!;transform:translateY(-50%)!;z-index:var(--dsh-claude-layer-chrome)!;-webkit-app-region:no-drag!}|position": {
       "selector": "body[data-dsh-claude-style] [data-dsh-header-band~=title] [data-dsh-header-title]",
       "prop": "position",
@@ -830,30 +818,6 @@
       "selector": "body[data-dsh-claude-style][data-dsh-claude-composer-active] .dsh-claude-context-stats-skeleton-value",
       "prop": "height",
       "verdict": "transient state"
-    },
-    "body[data-dsh-claude-style][data-dsh-claude-brand=claude] :is([data-dsh-claude-part~=brand-mark],[data-dsh-claude-part~=rail-mark])>*{display:none!}|display": {
-      "selector": "body[data-dsh-claude-style][data-dsh-claude-brand=claude] :is([data-dsh-claude-part~=brand-mark],[data-dsh-claude-part~=rail-mark])>*",
-      "prop": "display",
-      "verdict": "needed",
-      "state": "hero",
-      "opponents": [
-        {
-          "kind": "inline",
-          "owner": "element"
-        }
-      ]
-    },
-    "body[data-dsh-claude-style][data-dsh-claude-brand=claude] [data-dsh-claude-part~=brand-identity]>[data-dsh-claude-part~=brand-name]>*{display:none!}|display": {
-      "selector": "body[data-dsh-claude-style][data-dsh-claude-brand=claude] [data-dsh-claude-part~=brand-identity]>[data-dsh-claude-part~=brand-name]>*",
-      "prop": "display",
-      "verdict": "needed",
-      "state": "hero",
-      "opponents": [
-        {
-          "kind": "inline",
-          "owner": "element"
-        }
-      ]
     },
     "body[data-dsh-claude-style] [data-dsh-claude-part~=layout-frame]:not([data-sidebar-collapsed])>[data-dsh-claude-part~=sidebar-column] button[data-dsh-claude-part~=new-session],body[data-dsh-claude-style] button[data-dsh-claude-part~=panel-row]{display:flex;align-items:center;justify-content:flex-start;text-align:left;width:100%;box-sizing:border-box;height:28px;line-height:28px;padding:0 8px;margin:0 0 6px;border:none!;border-radius:6px;background:transparent;color:var(--dsw-alias-label-primary, #161616);font-family:var(--dsw-font-family);font-size:13px;font-weight:500;gap:6px;cursor:pointer;box-shadow:none;transition:background-color var(--dsh-claude-timing-feedback)}|border": {
       "selector": "body[data-dsh-claude-style] [data-dsh-claude-part~=layout-frame]:not([data-sidebar-collapsed])>[data-dsh-claude-part~=sidebar-column] button[data-dsh-claude-part~=new-session],body[data-dsh-claude-style] button[data-dsh-claude-part~=panel-row]",
@@ -1618,6 +1582,42 @@
       "selector": "body[data-dsh-claude-style][data-dsh-claude-asleep][data-dsh-claude-asleep] *,body[data-dsh-claude-style][data-dsh-claude-asleep][data-dsh-claude-asleep] *:before,body[data-dsh-claude-style][data-dsh-claude-asleep][data-dsh-claude-asleep] *:after",
       "prop": "animation-play-state",
       "verdict": "transient state"
+    },
+    "body[data-dsh-claude-style]:is([data-dsh-claude-brand=changzheng],[data-dsh-claude-brand=ember]) [data-dsh-claude-part~=hero-mark]>*{display:none!}|display": {
+      "selector": "body[data-dsh-claude-style]:is([data-dsh-claude-brand=changzheng],[data-dsh-claude-brand=ember]) [data-dsh-claude-part~=hero-mark]>*",
+      "prop": "display",
+      "verdict": "needed",
+      "state": "hero",
+      "opponents": [
+        {
+          "kind": "inline",
+          "owner": "element"
+        }
+      ]
+    },
+    "body[data-dsh-claude-style]:is([data-dsh-claude-brand=changzheng],[data-dsh-claude-brand=ember]) :is([data-dsh-claude-part~=brand-mark],[data-dsh-claude-part~=rail-mark])>*{display:none!}|display": {
+      "selector": "body[data-dsh-claude-style]:is([data-dsh-claude-brand=changzheng],[data-dsh-claude-brand=ember]) :is([data-dsh-claude-part~=brand-mark],[data-dsh-claude-part~=rail-mark])>*",
+      "prop": "display",
+      "verdict": "needed",
+      "state": "hero",
+      "opponents": [
+        {
+          "kind": "inline",
+          "owner": "element"
+        }
+      ]
+    },
+    "body[data-dsh-claude-style]:is([data-dsh-claude-brand=changzheng],[data-dsh-claude-brand=ember]) [data-dsh-claude-part~=brand-identity]>[data-dsh-claude-part~=brand-name]>*{display:none!}|display": {
+      "selector": "body[data-dsh-claude-style]:is([data-dsh-claude-brand=changzheng],[data-dsh-claude-brand=ember]) [data-dsh-claude-part~=brand-identity]>[data-dsh-claude-part~=brand-name]>*",
+      "prop": "display",
+      "verdict": "needed",
+      "state": "hero",
+      "opponents": [
+        {
+          "kind": "inline",
+          "owner": "element"
+        }
+      ]
     }
   }
 }

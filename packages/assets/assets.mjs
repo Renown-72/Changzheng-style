@@ -20,12 +20,12 @@
  *
  * Deepy's sheets are drawn as PNG but ship as the vector the browser already
  * plays: the same cell layout as the sprite's own geometry — every frame keeps
- * DEEPY_GUTTER of transparency on all four sides, or the downscale that draws
- * it samples the frame above's shadow along the cell's edge — with one path per
+ * a transparent margin on all four sides, or the downscale that draws it
+ * samples the frame above's shadow along the cell's edge — with one path per
  * color, each row's runs extended downwards into rectangles. The PNGs are
  * inputs of the build and never reach `lib/`.
  *
- * The crab's sheets ship as PNG, laid out again with CRAB_GUTTER of
+ * The Long March girl's sheets ship as PNG, laid out again with MASCOT_GUTTER of
  * transparency around every frame: drawn at a fractional device scale, the
  * window around a frame takes in a sliver of the cell beside it.
  *
@@ -33,8 +33,7 @@
  * token claims fails the build, so an image added for one run cannot ship
  * unused. `packages/assets/src/fonts/` stands outside that gate: buildFonts copies the
  * faces and the licences the package ships into `lib/fonts/`, where the host
- * half's font route reads them, and Anthropic's own faces sit one directory
- * down, in `anthropic/`, because they never enter the package.
+ * half's font route reads them.
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -53,14 +52,13 @@ export const FONT_DIR = 'fonts'
 export const PRIVATE_FONT_DIR = 'anthropic'
 /**
  * What `packages/assets/src/fonts/` ships, in the order the build log counts it: the
- * four faces and the one licence file that covers them, which OFL 1.1 requires
+ * three faces and the one licence file that covers them, which OFL 1.1 requires
  * to travel with them.
  */
 const SHIPPED_FONTS = [
   'JetBrainsMonoVariable.ttf',
   'JetBrainsMonoItalicVariable.ttf',
   'InterVariable.woff2',
-  'NotoSerifVariable.woff2',
   'OFL.txt',
 ]
 
@@ -78,9 +76,6 @@ const CONTENT_TYPES = {
  * manifest is not silently missing them.
  */
 export const SOURCE_ONLY = new Set([
-  // scripts/draw-crab.py takes the crab's own laptop frames from these.
-  'mascot/crab/crab-laptop-body.png',
-  'mascot/crab/crab-laptop-ink.png',
   // scripts/fetch-lobe-combines.py composes the openai lockup from this mark.
   'icons/openai.svg',
   // No upstream icon carries Beam's vendor, so its lockup is composed from this
@@ -89,10 +84,11 @@ export const SOURCE_ONLY = new Set([
 ])
 
 /**
- * The file name a mascot sheet may have, matching what the mascot's animation
- * table spells.
+ * The file names a mascot sheet may have, matching what the mascots' animation
+ * tables spell: one image per animation for a character that ships its colour
+ * sheet and its masks apart (`<key>-accent.png`, `<key>-ink.png`).
  */
-const SHEET_FILE = /^[a-z]+(?:-[a-z]+)*\.png$/
+const SHEET_FILE = /^[a-z]+(?:-[a-z]+)*(?:-(?:accent|ink))?\.png$/
 
 /**
  * Hold one mascot's sheet directory to its animation table in packages/client/src/constants.ts.
