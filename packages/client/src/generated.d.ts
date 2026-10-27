@@ -19,6 +19,7 @@ declare module 'virtual:dsh-claude-style/generated' {
   export const DEEPY_SHEET_URLS: Record<string, string>
   /** The packaged Long March portrait, used when no custom mascot image is supplied. */
   export const CHANGZHENG_PORTRAIT_URL: string
+  export const CHANGZHENG_SHEET_URLS: Record<string, string>
   /** The motion tokens, by token name (packages/client/src/theme/tokens.json, D9); read through shared/motion.ts. */
   export const MOTION: Record<string, string>
   /** The colour cards the token sheet resolves (packages/client/src/theme/tokens.json, D30); the settings page's swatches read them. */

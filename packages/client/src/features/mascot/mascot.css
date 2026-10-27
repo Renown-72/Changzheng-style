@@ -154,6 +154,19 @@ body[data-dsh-claude-style] .dsh-claude-changzheng .dsh-claude-mascot-strip {
   background: var(--dsh-claude-mascot-picture, none) no-repeat 50% 100% / contain;
 }
 
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-sheet-art] .dsh-claude-mascot-sprite {
+  inset: auto auto 8px calc((210px - var(--dsh-claude-mascot-w) * var(--dsh-claude-mascot-unit)) / 2);
+  width: calc(var(--dsh-claude-mascot-w) * var(--dsh-claude-mascot-unit));
+  height: calc(var(--dsh-claude-mascot-h) * var(--dsh-claude-mascot-unit));
+  overflow: hidden;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-sheet-art] .dsh-claude-mascot-strip {
+  width: calc(var(--dsh-claude-mascot-cell-w) * 4 * var(--dsh-claude-mascot-unit));
+  height: calc(var(--dsh-claude-mascot-strip-h) * var(--dsh-claude-mascot-unit));
+  background: var(--dsh-claude-mascot-sheet, none) no-repeat 0 0 / 100% 100%;
+}
+
 body[data-dsh-claude-style][data-ds-dark-theme] .dsh-claude-changzheng .dsh-claude-mascot-strip {
   filter: drop-shadow(0 0 10px color-mix(in srgb, var(--dsh-claude-mascot-ring) 30%, transparent));
 }

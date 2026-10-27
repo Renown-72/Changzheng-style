@@ -245,10 +245,15 @@
         window.__pushForm({ mascot: 'off' })
         await sleep(300)
         r.states.off = whaleNow()
-        // The packaged portrait is available without an uploaded picture.
+        // The built-in animation is available without an uploaded picture.
         window.__pushForm({ mascot: 'changzheng' })
+        for (var characterWait = 0; characterWait < 60 && !document.querySelector('.dsh-claude-changzheng[data-ready]'); characterWait++) await sleep(50)
+        var character = document.querySelector('.dsh-claude-changzheng[data-ready]')
+        var characterStrip = character && character.querySelector('.dsh-claude-mascot-strip')
+        var characterFrame = characterStrip && getComputedStyle(characterStrip).transform
         await sleep(300)
-        r.states.changzhengPicked = document.querySelector('.dsh-claude-changzheng') !== null && document.querySelector('.dsh-claude-deepy') === null
+        r.states.changzhengPicked = !!character && document.querySelector('.dsh-claude-deepy') === null
+        r.states.changzhengFrames = !!characterStrip && characterFrame !== getComputedStyle(characterStrip).transform
         window.__pushForm({ mascot: 'crab', mascotScope: 'all' })
         scopeHero.remove()
         await sleep(200)

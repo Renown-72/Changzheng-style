@@ -41,7 +41,7 @@ A mascot stands in the window's bottom-right corner, with a bubble over its head
   </tr>
 </table>
 
-**Long March** uses an included portrait created from the reference image, with breathing, swaying, hopping and other motions for her different states. In Settings › Appearance › Mascot you can upload a picture you may use (PNG, WebP, GIF, SVG or JPG, up to 8 MB; a transparent background works best), or place it at `$DSH_HOME/dsh-claude-style/brand/mascot.png`. Removing a custom picture restores the included portrait.
+**Long March** uses an included animation created from the reference image. She blinks and waves at rest and changes expression while working, waiting, celebrating, encountering an error or responding to interaction, with breathing, swaying and hopping motions. In Settings › Appearance › Mascot you can upload a picture you may use (PNG, WebP, GIF, SVG or JPG, up to 8 MB; a transparent background works best), or place it at `$DSH_HOME/dsh-claude-style/brand/mascot.png`. Removing a custom picture restores the included animation.
 
 <img src="./packages/assets/src/mascot/changzheng/portrait.png" alt="The included Long March character" width="180" />
 

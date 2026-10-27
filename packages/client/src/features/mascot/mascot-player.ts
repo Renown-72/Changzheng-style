@@ -39,6 +39,8 @@ export interface MascotCharacter {
   sheets: Record<string, MascotSheet>
   frameMs: number
   gutter?: number
+  columns?: number
+  sheetArt?: boolean
   /** CSS pixels to a logical pixel of this character's sheets. */
   unit: number
   extras: string[]
@@ -109,6 +111,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   const GUTTER = character.gutter ?? 0
   /** CSS pixels to a logical pixel. */
   const UNIT = character.unit
+  const COLUMNS = character.columns ?? 8
   const SHEETS = character.sheets
   const FRAME_MS = character.frameMs
 
@@ -149,6 +152,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function build() {
     const built = buildElement('span', `dsh-claude-mascot ${PREFIX}`)
     built.setAttribute('aria-hidden', 'true')
+    if (character.sheetArt === true) built.setAttribute('data-sheet-art', '')
     built.style.setProperty('--dsh-claude-mascot-unit', `${UNIT}px`)
     const place = readPlace()
     if (place !== null) {
@@ -262,7 +266,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** The strip translation that puts one frame of a sheet in the window. */
   function frameOffset(sheet: MascotSheet, frame: number) {
     const [cellWidth, cellHeight] = cellSize(sheet)
-    return `translate(${-((frame % 8) * cellWidth + GUTTER) * UNIT}px, ${-(Math.floor(frame / 8) * cellHeight + GUTTER) * UNIT}px)`
+    return `translate(${-((frame % COLUMNS) * cellWidth + GUTTER) * UNIT}px, ${-(Math.floor(frame / COLUMNS) * cellHeight + GUTTER) * UNIT}px)`
   }
 
   /**
@@ -363,7 +367,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty('--dsh-claude-mascot-w', String(sheet.box[2]))
     style.setProperty('--dsh-claude-mascot-h', String(sheet.box[3]))
     style.setProperty('--dsh-claude-mascot-cell-w', String(cellWidth))
-    style.setProperty('--dsh-claude-mascot-strip-h', String(cellHeight * Math.ceil(sheet.frames / 8)))
+    style.setProperty('--dsh-claude-mascot-strip-h', String(cellHeight * Math.ceil(sheet.frames / COLUMNS)))
     setAttributeIfChanged(root, 'data-animation', next.key)
     if (bubble !== null) {
       const words = character.say(next.key)

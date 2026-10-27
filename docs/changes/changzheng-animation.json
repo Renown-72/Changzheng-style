@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 0,
+  "external": false,
+  "at": "2026-10-27",
+  "zh": "新增长征姬待机、工作、等待和互动等状态的动画表情。",
+  "en": "Add animated expressions for Long March at rest, at work, while waiting and during interactions."
+}

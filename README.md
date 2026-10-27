@@ -41,7 +41,7 @@
   </tr>
 </table>
 
-**长征姬**默认使用根据参考图定制的内置立绘，插件会给她加上呼吸、摇摆、蹦跳和摇头等状态动效。在 设置 › 外观 › 看板娘 也可以上传你有权使用的角色图（PNG、WebP、GIF、SVG 或 JPG，不超过 8 MB；透明背景最佳），或将图片放到 `$DSH_HOME/dsh-claude-style/brand/mascot.png`；移除自定义图片后恢复内置形象。
+**长征姬**使用根据参考图定制的内置动画，待机时眨眼、挥手，工作、等待、完成、出错和互动时会变换表情，并配合呼吸、摇摆和蹦跳。在 设置 › 外观 › 看板娘 也可以上传你有权使用的角色图（PNG、WebP、GIF、SVG 或 JPG，不超过 8 MB；透明背景最佳），或将图片放到 `$DSH_HOME/dsh-claude-style/brand/mascot.png`；移除自定义图片后恢复内置动画。
 
 <img src="./packages/assets/src/mascot/changzheng/portrait.png" alt="长征姬的内置形象" width="180" />
 

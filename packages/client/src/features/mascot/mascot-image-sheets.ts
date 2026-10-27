@@ -1,9 +1,8 @@
-import { DEEPY_SHEET_URLS } from 'virtual:dsh-claude-style/generated'
-import { DEEPY_SHEETS } from './sheets'
+import type { MascotSheet } from './mascot-player'
 
 /**
- * 大肥鱼's sheets, as the addresses the sprite paints from. Several animations
- * share a clip (DEEPY_SHEETS), and a clip's sheet is loaded once.
+ * A character's sheets, as the addresses the sprite paints from. Several
+ * animations may share a clip, and a clip's sheet is loaded once.
  *
  * Each sheet is the vector the build produced (packages/assets/assets.mjs), served
  * by the host half under the assets route and named after its own content, so
@@ -15,12 +14,12 @@ import { DEEPY_SHEETS } from './sheets'
  *
  * @param onReady - `onReady(key)`: a sheet became playable; the caller reads the
  *     state again and plays what it asks for.
- * @returns `{ ready, failed, url, dispose }`.
+ * @returns the sheet pipeline used by the mascot player.
  */
-export function createMascotWhaleSheets(onReady: (key: string) => void) {
+export function createMascotImageSheets(onReady: (key: string) => void, table: Record<string, MascotSheet>, urls: Record<string, string>, name: string) {
   /** The clip an animation plays; an animation outside the table is a bug here. */
   const clipOf = (key: string) => {
-    const sheet = DEEPY_SHEETS[key]
+    const sheet = table[key]
     if (sheet === undefined) throw new Error(`dsh-claude-style: no animation "${key}"`)
     return sheet.clip
   }
@@ -37,7 +36,7 @@ export function createMascotWhaleSheets(onReady: (key: string) => void) {
     const clip = clipOf(key)
     const known = sheets.get(clip)
     if (known !== undefined) return known === 'ready'
-    const address = DEEPY_SHEET_URLS[clip]
+    const address = urls[clip]
     // The table and the sheets are one list; a name outside it is a bug here.
     if (address === undefined) throw new Error(`dsh-claude-style: no sheet for "${key}"`)
     sheets.set(clip, 'loading')
@@ -47,7 +46,7 @@ export function createMascotWhaleSheets(onReady: (key: string) => void) {
       if (sheets.get(clip) !== 'loading') return
       sheets.set(clip, ok ? 'ready' : 'failed')
       if (ok && alive) onReady(key)
-      if (!ok) console.warn(`[dsh-claude-style] 大肥鱼's "${clip}" sheet did not load from ${address}; the host half serves it, so restart the host after an update.`)
+      if (!ok) console.warn(`[dsh-claude-style] ${name}'s "${clip}" sheet did not load from ${address}; the host half serves it, so restart the host after an update.`)
     }
     image.decode().then(() => settle(true), () => settle(false))
     return false
@@ -58,9 +57,9 @@ export function createMascotWhaleSheets(onReady: (key: string) => void) {
     return sheets.get(clipOf(key)) === 'failed'
   }
 
-  /** The address a ready sheet plays from. */
-  function url(key: string) {
-    return DEEPY_SHEET_URLS[clipOf(key)]
+  /** Paint the ready sheet on the character. */
+  function paint(style: CSSStyleDeclaration, key: string) {
+    style.setProperty('--dsh-claude-mascot-sheet', `url("${urls[clipOf(key)]}")`)
   }
 
   function dispose() {
@@ -68,5 +67,5 @@ export function createMascotWhaleSheets(onReady: (key: string) => void) {
     sheets.clear()
   }
 
-  return { ready, failed, url, dispose }
+  return { ready, failed, paint, dispose }
 }

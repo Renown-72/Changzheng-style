@@ -87,9 +87,8 @@ export const DEEPY_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntries
 export const DEEPY_EXTRAS = ['idle-bubbles', 'idle-yawn', 'idle-stretch']
 
 /**
- * 长征姬 is the packaged portrait or the reader's `mascot` brand image (D30): one still
- * image, set in motion by the stylesheet per animation (mascot.css keys on
- * `data-animation`). Every animation is one frame of the whole picture.
+ * A reader's `mascot` brand image (D30) is one frame, set in motion by the
+ * stylesheet per animation (mascot.css keys on `data-animation`).
  */
 export const CUSTOM_FRAME_MS = 1000
 export const CUSTOM_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntries(
@@ -99,3 +98,22 @@ export const CUSTOM_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntrie
 
 /** 长征姬's idle extra: a little hop now and then. */
 export const CUSTOM_EXTRAS = ['idle-hop']
+
+/** The built-in portrait's eight-frame sheets, in four columns and two rows. */
+export const CHANGZHENG_CLIPS = ['idle', 'work', 'happy', 'sleep', 'poke', 'error', 'wait', 'wave']
+export const CHANGZHENG_EXTRAS = ['idle-hop', 'idle-wave']
+export const CHANGZHENG_GRID = [384, 512]
+export const CHANGZHENG_COLUMNS = 4
+export const CHANGZHENG_FRAME_MS = 250
+export const CHANGZHENG_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntries(
+  [...Object.keys(CUSTOM_SHEETS), 'idle-wave'].map((key) => {
+    const clip = key === 'sleeping' ? 'sleep'
+      : key === 'idle-wave' ? 'wave'
+      : key === 'happy' || key === 'idle-hop' ? 'happy'
+        : key === 'error' ? 'error'
+          : key === 'notification' ? 'wait'
+            : key === 'poke-left' || key === 'poke-right' || key === 'tickle' ? 'poke'
+        : ['thinking', 'typing', 'music', 'building', 'conducting', 'compacting'].includes(key) ? 'work' : 'idle'
+    return [key, { clip, frames: 8, box: [0, 0, ...CHANGZHENG_GRID], still: clip === 'sleep' ? 7 : 0 }]
+  }),
+)

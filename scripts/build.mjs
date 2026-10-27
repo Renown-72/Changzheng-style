@@ -49,6 +49,7 @@ import path from 'node:path'
 import vm from 'node:vm'
 import { brotliCompressSync } from 'node:zlib'
 import esbuild from 'esbuild'
+import { PNG } from 'pngjs'
 import { buildHostHalf } from './build-host.mjs'
 import { buildFonts, checkClaimed, checkSheets, checkWebpSheet, planAssets, routeText, writeAssets } from '../packages/assets/assets.mjs'
 import { openBuildCache } from './build-cache.mjs'
@@ -242,7 +243,7 @@ const CONSTANTS = (() => {
       brand: { attribute: BRAND_ATTR, deepseek: BRAND_EMBER },
     },
     brands: BRANDS,
-    ...pick(sheets, sheetsFile, ['DEEPY_CLIPS', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER', 'DEEPY_GRID']),
+    ...pick(sheets, sheetsFile, ['DEEPY_CLIPS', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER', 'DEEPY_GRID', 'CHANGZHENG_CLIPS', 'CHANGZHENG_GRID', 'CHANGZHENG_COLUMNS']),
     featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
   }
 })()
@@ -359,6 +360,17 @@ async function main() {
   const portrait = plan.entries.get('mascot/changzheng/portrait.png')
   if (portrait === undefined) throw new Error('build: the Long March mascot portrait is missing')
   claimed.add(portrait.file)
+  const changzhengUrls = {}
+  for (const clip of CONSTANTS.CHANGZHENG_CLIPS) {
+    const entry = plan.entries.get(`mascot/changzheng/${clip}.png`)
+    if (entry === undefined) throw new Error(`build: the Long March mascot sheet ${clip} is missing`)
+    const image = PNG.sync.read(entry.bytes)
+    if (image.width !== CONSTANTS.CHANGZHENG_GRID[0] * CONSTANTS.CHANGZHENG_COLUMNS || image.height !== CONSTANTS.CHANGZHENG_GRID[1] * 2) {
+      throw new Error(`build: the Long March mascot sheet ${clip} has unexpected dimensions`)
+    }
+    claimed.add(entry.file)
+    changzhengUrls[clip] = entry.url
+  }
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -394,6 +406,7 @@ async function main() {
     CLIENT_VERSION: PACKAGE.version,
     DEEPY_SHEET_URLS: deepyUrls,
     CHANGZHENG_PORTRAIT_URL: portrait.url,
+    CHANGZHENG_SHEET_URLS: changzhengUrls,
     // The motion tokens, by name: the browser half reads the same table the
     // generated token stylesheet carries, so a duration cannot be 200 ms in the
     // CSS and 250 ms in a Web Animations call (D9).

@@ -38,8 +38,9 @@ export default {
     check('kept to the home page it stays off the conversation and comes back on the home page',
       crab.backInConversation === true && crab.homeOnly === null && is(crab.homeOnlyHero, 'idle', 'card'),
       JSON.stringify({ back: crab.backInConversation, homeOnly: crab.homeOnly, hero: crab.homeOnlyHero }))
-    check('with the mascot off it leaves; picking 长征姬 shows her packaged portrait',
-      crab.off === null && crab.changzhengPicked === true, JSON.stringify({ off: crab.off, changzheng: crab.changzhengPicked }))
+    check('with the mascot off it leaves; picking 长征姬 plays her packaged animation',
+      crab.off === null && crab.changzhengPicked === true && crab.changzhengFrames === true,
+      JSON.stringify({ off: crab.off, changzheng: crab.changzhengPicked, frames: crab.changzhengFrames }))
     commonChecks(r)
   },
   // The cyan card's whale: its palette, its sheets and its reduced-motion frame.

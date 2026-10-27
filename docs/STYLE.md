@@ -1058,7 +1058,7 @@ still plays its reaction.
 
 | State | Animation | 大肥鱼 clip · still | 长征姬 motion |
 |---|---|---|---|
-| idle; every 20–40 s an extra | `idle`; `idle-bubbles`, `idle-yawn`, `idle-stretch` / `idle-hop` | `idle`; `bubbles`, `yawn`, `stretch` · 0 | breath; a hop |
+| idle; every 20–40 s an extra | `idle`; `idle-bubbles`, `idle-yawn`, `idle-stretch` / `idle-hop`, `idle-wave` | `idle`; `bubbles`, `yawn`, `stretch` · 0 | blink; a hop or wave |
 | the model reasons or has not answered | `thinking` | `thinking` · 12 | a slow sway |
 | the model writes or tools run: 1 / 2 / 3+ sessions | `typing` / `music` / `building` | `working` / `archive` / `archive` · 0 | a bob, quicker for 3+ |
 | subagents running: 2+ | `conducting` | `archive` · 0 | a quick bob |
@@ -1087,14 +1087,18 @@ draws them.
 
 ## 长征姬 · Long March
 
-The package carries a portrait made from the supplied character reference. A
+The package carries eight eight-frame sheets made from the supplied character
+reference: idle, working, celebration, sleep, reaction, failure, waiting and waving.
+The state table selects a sheet, and the stylesheet's motions in the table above
+act on its sprite box. Sheets use four columns and two rows, and are loaded when
+their states are needed. A
 reader can replace it with their own `mascot` brand image (D30), uploaded on the
 settings page's mascot row or placed in `$DSH_HOME/dsh-claude-style/brand/` as
 `mascot.png` (or `.webp`, `.gif`, `.svg`, `.jpg`), up to 8 MB; removing the
-custom image restores the packaged portrait. It stands in a
+custom image restores the packaged animation. It stands in a
 210×260 box, scaled to fit and standing on the box's bottom edge; an animated GIF
-or WebP plays itself. Every state is one frame of it, and the motion is the
-stylesheet's (the last column of the table above), on the sprite's own box so it
+or WebP plays itself. A custom image uses one frame for every state, and the
+motion is the stylesheet's (the last column of the table above), on the sprite's own box so it
 never fights the frame's translation. On the dark canvas the picture takes a
 soft glow of the accent.
 

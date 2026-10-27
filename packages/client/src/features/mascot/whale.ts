@@ -1,6 +1,7 @@
 import { DEEPY_EXTRAS, DEEPY_FRAME_MS, DEEPY_GUTTER, DEEPY_SHEETS } from './sheets'
 import { createMascotPlayer } from './mascot-player'
-import { createMascotWhaleSheets } from './mascot-image-sheets'
+import { createMascotImageSheets } from './mascot-image-sheets'
+import { DEEPY_SHEET_URLS } from 'virtual:dsh-claude-style/generated'
 import { mascotSays } from './copy'
 import type { HostContext } from '@dsh-claude-style/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -36,15 +37,7 @@ export function createMascotWhale(ctx: HostContext, ui: FeatureUi<typeof manifes
     extras: DEEPY_EXTRAS,
     say: mascotSays,
     createSheets(onReady) {
-      const sheets = createMascotWhaleSheets(onReady)
-      return {
-        ready: sheets.ready,
-        failed: sheets.failed,
-        paint(style, key) {
-          style.setProperty('--dsh-claude-mascot-sheet', `url("${sheets.url(key)}")`)
-        },
-        dispose: sheets.dispose,
-      }
+      return createMascotImageSheets(onReady, DEEPY_SHEETS, DEEPY_SHEET_URLS, '大肥鱼')
     },
   })
 }
