@@ -412,6 +412,11 @@ body[data-dsh-claude-style] .dsh-claude-mascot-bubble {
     translate var(--dsh-claude-duration-fade) var(--dsh-claude-ease-out);
 }
 
+body[data-dsh-claude-style] .dsh-claude-changzheng .dsh-claude-mascot-bubble {
+  bottom: calc(100% + 24px);
+  z-index: 1;
+}
+
 body[data-dsh-claude-style]:not([data-ds-dark-theme]) .dsh-claude-mascot-bubble {
   background: color-mix(in srgb, var(--dsw-alias-bg-layer-1, #ffffff) 92%, transparent);
   box-shadow: 0 4px 14px rgb(40 20 60 / 0.12);

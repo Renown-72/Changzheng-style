@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 0,
+  "external": false,
+  "at": "2026-10-27",
+  "zh": "修复长征姬遮挡任务状态提示的问题。",
+  "en": "Fix Long March covering the task status bubble."
+}
