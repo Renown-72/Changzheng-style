@@ -1,6 +1,6 @@
 import { DEEPY_EXTRAS, DEEPY_FRAME_MS, DEEPY_GUTTER, DEEPY_SHEETS } from './sheets'
 import { createMascotPlayer } from './mascot-player'
-import { createMascotWhaleSheets } from './whale-sheets'
+import { createMascotWhaleSheets } from './mascot-image-sheets'
 import { mascotSays } from './copy'
 import type { HostContext } from '@dsh-claude-style/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -21,7 +21,7 @@ const DEEPY_UNIT = 0.6
  * Her animations are the dsh-pet clips (DEEPY_SHEETS): between jobs she blows
  * bubbles, yawns or stretches now and then. The sheets are too large to ride
  * the bundle, so each is fetched from the host half the first time an
- * animation that plays it is wanted (whale-sheets.ts).
+ * animation that plays it is wanted (mascot-image-sheets.ts).
  *
  * @param ui - shared handle table (`ui.composer`).
  * @returns `{ sync, release, onActivity, dispose }`.
