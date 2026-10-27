@@ -79,7 +79,7 @@ function remoteSettingsScenario({ check }) {
       await waitForSkin(remote)
       await dismissOverlays(remote)
       const original = await brandOf(local)
-      const target = original === 'deepseek' ? 'claude' : 'deepseek'
+      const target = original === 'ember' ? 'changzheng' : 'ember'
       const notes = { hostname: await remote.evaluate(() => location.hostname), original, target, remoteAtStart: await brandOf(remote), problems }
       context.notes.remoteSettings = notes
       // The loopback page writes one value; the remote page follows it without

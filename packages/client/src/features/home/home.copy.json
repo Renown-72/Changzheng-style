@@ -1,4 +1,5 @@
 {
+  "homePanelTitle": { "zh": "使用数据", "en": "Usage data" },
   "homeTabOverview": { "zh": "概览", "en": "Overview" },
   "homeTabModels": { "zh": "模型", "en": "Models" },
   "homeRangeAll": { "zh": "全部", "en": "All" },

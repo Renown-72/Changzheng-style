@@ -322,8 +322,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty(`--${PREFIX}-x`, String(sheet.box[0]))
     style.setProperty(`--${PREFIX}-y`, String(sheet.box[1]))
     style.setProperty(`--${PREFIX}-w`, String(sheet.box[2]))
-    // The sprite's height is the one custom property every character shares:
-    // crab.css reads it in its own sprite rule.
+    // Both characters' sprite windows read the same height property.
     style.setProperty('--dsh-claude-mascot-h', String(sheet.box[3]))
     style.setProperty(`--${PREFIX}-cell-w`, String(cellWidth))
     style.setProperty(`--${PREFIX}-strip-h`, String(cellHeight * Math.ceil(sheet.frames / 8)))

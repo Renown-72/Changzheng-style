@@ -63,15 +63,15 @@ export default {
           typeof card.label === 'string' && card.label.length > 0)),
       JSON.stringify(palette))
     check('following the brand presses the brand\'s card with no reset to offer; a picked card paints its own colours while the mark stays, and offers the way back',
-      followingCards.mark?.join() === '青霓' &&
+      followingCards.mark?.join() === 'Ember' &&
         paletteCard(followingCards, 'ember').pressed === 'true' && paletteCard(followingCards, 'changzheng').pressed === 'false' &&
         paletteCard(followingCards, 'ember').reset === null &&
-        pinnedCards.mark?.join() === '青霓' &&
+        pinnedCards.mark?.join() === 'Ember' &&
         paletteCard(pinnedCards, 'changzheng').pressed === 'true' && paletteCard(pinnedCards, 'ember').pressed === 'false' &&
         typeof paletteCard(pinnedCards, 'changzheng').reset === 'string' && paletteCard(pinnedCards, 'changzheng').reset.length > 0,
       JSON.stringify({ following: followingCards, pinned: pinnedCards }))
     check('the reader\'s own card presses itself, keeps the brand\'s tokens under it, and carries the same reset',
-      customCards.mark?.join() === '青霓' &&
+      customCards.mark?.join() === 'Ember' &&
         paletteCard(customCards, 'custom').pressed === 'true' &&
         paletteCard(customCards, 'changzheng').pressed === 'false' && paletteCard(customCards, 'ember').pressed === 'false' &&
         typeof paletteCard(customCards, 'custom').reset === 'string' && paletteCard(customCards, 'custom').reset.length > 0,

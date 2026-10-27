@@ -28,12 +28,12 @@ const SETTINGS_WAIT_MS = bound('settingsRouteDialogWaitMs')
 async function openSkinSettings(page) {
   await page.keyboard.press('Control+Alt+Comma')
   await page.waitForTimeout(MENU_WAIT_MS)
-  const entry = page.locator('[role="menu"] [role="menuitem"]').first()
+  const entry = page.locator('[role="menu"] [role="menuitem"]:visible').first()
   if (await entry.count() > 0) {
     await entry.click({ force: true })
     await page.waitForTimeout(800)
   }
-  await page.getByText('Claude Style', { exact: true }).first().click({ force: true })
+  await page.getByText(/^(长征机风格|Long March Style)$/).first().click({ force: true })
   await page.locator(SETTINGS_PAGE).first().waitFor({ timeout: SETTINGS_WAIT_MS })
 }
 

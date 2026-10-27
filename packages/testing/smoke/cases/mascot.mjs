@@ -5,7 +5,7 @@ export default {
     basicChecks(r)
     const crab = r.states || {}
     const is = (state, animation, place) => !!state && state.animation === animation && state.place === place && state.ready === true
-    check('picked under the Claude brand, the crab stands on the home card idling, from its inlined sheet',
+    check('the Long March girl stands on the home card idling, from her inlined sheet',
       is(crab.home, 'idle', 'card') && /^url\("data:image\/png/.test(crab.home.sheet), JSON.stringify(crab.home))
     check('its frames change on its own node without waking a pass',
       !!crab.idle && crab.idle.before !== crab.idle.after && crab.idle.passes === 0, JSON.stringify(crab.idle))
@@ -18,10 +18,10 @@ export default {
     check('compaction, the celebration when it ends, and the error shake over it',
       is(crab.compacting, 'compacting', 'stack') && is(crab.celebrating, 'happy', 'stack') && is(crab.failed, 'error', 'stack'),
       JSON.stringify({ compacting: crab.compacting, celebrating: crab.celebrating, failed: crab.failed }))
-    // The error sheet's still frame is its fifth: column 4 of 26-cell-wide frames,
+    // The error sheet's still frame is its fifth: column 4 of 19-cell-wide frames,
     // each with a one-cell margin around it, at 2px a cell.
     check('reduced motion holds the error sheet\'s still frame',
-      crab.stillAttr === 'reduced' && !!crab.still && crab.still.before === '-226px -2px' && crab.still.after === '-226px -2px',
+      crab.stillAttr === 'reduced' && !!crab.still && crab.still.before === '-170px -2px' && crab.still.after === '-170px -2px',
       JSON.stringify(crab.still))
     check('it idles after work, sleeps after a quiet minute, and a pointer move wakes it',
       is(crab.afterWork, 'idle', 'stack') && is(crab.asleep, 'sleeping', 'stack') && is(crab.woken, 'waking', 'stack'),
@@ -41,29 +41,30 @@ export default {
       crab.off === null && crab.deepyPicked === true, JSON.stringify({ off: crab.off, deepy: crab.deepyPicked }))
     commonChecks(r)
   },
-  // The DeepSeek brand's whale: its palette, the sheet it plays on the home
-  // card, the sheet a state change switches to, and the motion choice holding a
-  // sheet's still frame. The states it plays on the conversation page are the
-  // crab case's, which walks the mascot feature whole.
+  // The cyan card's whale: its palette, its sheets and its reduced-motion frame.
   deepy(r) {
     basicChecks(r)
     const deepy = r.states || {}
     const is = (state, animation, place) => !!state && state.animation === animation && state.place === place && state.ready === true
-    check('the brand stored as "off" reads as DeepSeek, and the light canvas takes its pale blue-white',
-      deepy.brand === 'deepseek' && deepy.canvas === 'rgb(244, 251, 251)', JSON.stringify({ brand: deepy.brand, canvas: deepy.canvas }))
-    check('the DeepSeek brand turns blue: DeepSeek\'s brand blue for the accent, a blue link, a blue-black dark canvas',
-      deepy.accent === '#4cf0e8' && deepy.link === '#3e57e0' && !!deepy.dark && deepy.dark.canvas === 'rgb(8, 17, 26)' &&
-        deepy.dark.accent === '#4cf0e8' && deepy.dark.card === '#1d2028',
+    check('the brand stored as "off" reads as Ember, with the cyan card\'s light canvas',
+      deepy.brand === 'ember' && deepy.canvas === 'rgb(244, 251, 251)', JSON.stringify({ brand: deepy.brand, canvas: deepy.canvas }))
+    check('the cyan card paints its accent, link and dark canvas',
+      deepy.accent === '#4cf0e8' && deepy.link === '#1fbcb6' && !!deepy.dark && deepy.dark.canvas === 'rgb(8, 17, 26)' &&
+        deepy.dark.accent === '#4cf0e8' && deepy.dark.card === '#111b24',
       JSON.stringify({ accent: deepy.accent, link: deepy.link, dark: deepy.dark }))
-    check('the conversation bubble takes the DeepSeek card\'s light blue rather than the host\'s grey, and its dark plate in the dark scheme',
-      deepy.bubble === '#ecf0ff' && deepy.dark.bubble === '#262b36',
+    check('the conversation bubble takes the cyan card\'s light and dark fills',
+      deepy.bubble === '#d6f7f4' && deepy.dark.bubble === 'rgba(76, 240, 232, .12)',
       JSON.stringify({ light: deepy.bubble, dark: deepy.dark.bubble }))
     // The sheet is the vector the build produced, served from the assets route
     // under the name its own content gives it
     const served = (value) => /^url\("https?:\/\/[^"]*\/dsh-claude-style\/assets\/[0-9a-f]{12}\.svg"\)$/.test(value || '')
-    check('the whale takes the crab\'s place on the home card, idling, playing the vector the build rebuilt from its sheet',
+    check('the whale stands on the home card idling, playing the vector the build rebuilt from its sheet',
       is(deepy.home, 'idle', 'card') && deepy.crab === false && served(deepy.home.sheet),
       JSON.stringify({ home: deepy.home, crab: deepy.crab }))
+    const clip = deepy.home?.clip
+    check('the whale shows one frame inside its window',
+      clip?.overflow === 'hidden' && clip.width > 0 && clip.height > 0 && clip.sheetWidth > clip.width,
+      JSON.stringify(clip))
     check('its frames change on its own node without waking a pass',
       !!deepy.idle && deepy.idle.before !== deepy.idle.after && deepy.idle.passes === 0, JSON.stringify(deepy.idle))
     check('a click on its face pokes it', is(deepy.poke, 'poke-left', 'card'), JSON.stringify(deepy.poke))

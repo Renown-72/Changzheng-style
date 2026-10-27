@@ -1,54 +1,40 @@
 <div align="center">
 
-# DSH Claude Style
+# Long March Style
 
-**A theme plugin that brings the look and feel of Claude Code Desktop to the DeepSeek Harness Web GUI.**
-
-> **Why settle for another Claude Code when your next Claude Code Desktop is here.**
+**A DeepSeek Harness theme inspired by The Fire Rises' Long March girl.**
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md)
 
-[![version](https://img.shields.io/npm/v/dsh-claude-style?style=flat&label=version&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![downloads](https://img.shields.io/npm/dm/dsh-claude-style?style=flat&label=downloads&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![GitHub stars](https://img.shields.io/github/stars/Nwflower/dsh-claude-style?style=flat&label=%E2%98%85&color=08C)](https://github.com/Nwflower/dsh-claude-style)
-[![dsh.so install](https://www.dsh.so/badge/install/dsh-claude-style.svg)](https://www.dsh.so/artifact/dsh-claude-style/)
 [![license](https://img.shields.io/badge/license-MIT%20%2B%20PolyForm%20Shield-2EA44F?style=flat)](LICENSE)
 
 </div>
 
 ## Preview
 
-The settings page switches between the two palettes; light and dark follow the system.
+The interface takes its cues from a Long March command console, with clear navigation, a data panel and a focused composer. Choose the crimson or cyan palette in the plugin settings; light and dark follow the system. The mascot can follow the theme or be selected independently.
 
-### Claude
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-light.png" alt="Claude brand, Studio home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-dark.png" alt="Claude brand, Studio home — dark" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-light.png" alt="Claude brand, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-dark.png" alt="Claude brand, Markdown conversation — dark" /></td>
-  </tr>
-</table>
-
-> Studio home above, Markdown conversation below; light on the left, dark on the right. White canvas `#FFFFFF` with a `#FAFAFA` sidebar, near-black `#191919` with a `#1F1F1F` sidebar, ember orange `#D97757` for every action, and Claude Code's pixel crab on the composer.
-
-### DeepSeek
+### Crimson
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-light.png" alt="DeepSeek brand, Studio home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-dark.png" alt="DeepSeek brand, Studio home — dark" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-light.png" alt="DeepSeek brand, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-dark.png" alt="DeepSeek brand, Markdown conversation — dark" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-light.png" alt="Crimson home, light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-dark.png" alt="Crimson home, dark" /></td>
   </tr>
 </table>
 
-> Pale blue-white canvas `#FBFCFF` with a `#F7F9FF` sidebar, blue-black `#13161D`, DeepSeek blue `#4D6BFE`; Deepy the pixel whale stands on the composer, in eight states:
+The crimson palette shows the Long March girl by default.
+
+### Cyan
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="Cyan home, light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="Cyan home, dark" /></td>
+  </tr>
+</table>
+
+The cyan palette shows Deepy the pixel whale by default. Its animations follow the task's state:
 
 <table>
   <tr>
@@ -69,24 +55,20 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ## Installation
 
-From the official plugin page add the package below, or from a terminal:
-
-```
-dsh-claude-style
-```
+Install the development dependencies, build the project, and add its directory to a DSH profile:
 
 ```bash
-dsh plugin --profile web add dsh-claude-style                    # npm package (recommended)
-dsh plugin --profile web add Nwflower/dsh-claude-style#dist      # GitHub release branch
+npm install
+npm run build
+dsh plugin --profile desktop add "<project-directory>"  # desktop app
+dsh plugin --profile web add "<project-directory>"      # web app
 ```
 
-Also from the [plugin market](https://github.com/dsh-market/dsh-market) or the Skin Center of the dsh-web-all plugin. Keep one theme enabled at a time; dsh ≥ 0.1.7 is required, and a restart of DeepSeek Harness brings the full feature set.
+Choose the profiles you use. Restart DeepSeek Harness and open Long March Style on the plugin page. A local link requires the project directory to remain in place.
 
 ## Fonts
 
-> The Anthropic fonts have no public release; this repository only offers [copies](https://github.com/Nwflower/dsh-claude-style/tree/master/packages/assets/src/fonts/anthropic) for download and study.
-
-To enable them, install the `.ttf` files on your system, or copy them into `$DSH_HOME/dsh-claude-style/fonts/`.
+Inter and JetBrains Mono ship with the plugin. Headings prefer condensed technical fonts installed on the system. To replace a bundled face, put a file with the same name in `$DSH_HOME/dsh-claude-style/fonts/`.
 
 ## Documentation
 
@@ -109,14 +91,9 @@ The Sodium rendering engine is licensed under the [PolyForm Shield License 1.0.0
 - The message navigator follows SherUnlocked-4869's [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav) (MIT).
 - The animation frames of Deepy the pixel whale come from the Deepy whale theme pack drawn by calmly-eating-bugs ([@wp3171216237](https://github.com/wp3171216237)), and ship with the plugin by the author's permission; GIFs of all 20 animations are in [docs/gifs/](docs/gifs/).
 - The enhanced animations in the chat area are modified from [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux) (MIT).
-- Clawd is a character of Anthropic. Its frames are not covered by the MIT license (see [LICENSE](LICENSE)). This plugin is an unofficial fan work, not affiliated with or endorsed by Anthropic.
 
 ## Related projects
 
 > Running several themes at once? Try [dsh-skin-manager](https://github.com/xiaoyangcheng84-svg/dsh-skin-manager) — it switches between all installed themes from a single settings page.
 
 > Want to import your Claude Code / Codex session history into DSH and keep the conversation going? Try the author's other plugin, [dsh-chat-import](https://github.com/Nwflower/dsh-chat-import).
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Nwflower/dsh-claude-style&type=Date)](https://star-history.com/#Nwflower/dsh-claude-style&Date)

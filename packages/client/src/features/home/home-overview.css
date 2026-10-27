@@ -1,27 +1,27 @@
 /* ---------- the usage panel's Overview tab ---------- */
-/* The six stat cells, Claude Code's blue heat grid, and the yardstick line under
+/* The six stat cells, heat grid, and the yardstick line under
    it. The shell (the panel frame, its head and the tab pills) is home-panel.css. */
 
 body[data-dsh-claude-style] .dsh-claude-home-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
+  gap: 6px;
 }
 
-/* A tile sits one tone deeper than the panel wash, not one tone lighter. */
 body[data-dsh-claude-style] .dsh-claude-home-stat {
   display: flex;
   flex-direction: column;
   gap: 2px;
   box-sizing: border-box;
   min-width: 0;
-  padding: 5px 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--dsw-alias-label-primary, #161616) 15%, var(--dsw-alias-bg-layer-2, #ffffff));
+  background: color-mix(in srgb, var(--dsw-alias-label-primary) 5%, var(--dsw-alias-bg-layer-2));
 }
 
 body[data-dsh-claude-style] .dsh-claude-home-stat-label {
-  color: var(--dsw-alias-label-tertiary, #91888a);
+  color: var(--dsw-alias-label-secondary, #70686a);
   font-size: 12px;
   line-height: 16px;
   white-space: nowrap;
@@ -31,21 +31,20 @@ body[data-dsh-claude-style] .dsh-claude-home-stat-label {
 
 body[data-dsh-claude-style] .dsh-claude-home-stat-value {
   color: var(--dsw-alias-label-primary, #161616);
-  /* Claude's tile keeps the figure barely above its own label: 13px bold, which
-     is also what lets a long model id such as deepseek-v4.1-flash sit on one
-     line instead of being cut off. */
-  font-size: 13px;
+  font-family: var(--dsh-claude-font-code);
+  font-size: 15px;
   font-weight: 600;
-  line-height: 18px;
+  line-height: 20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-variant-numeric: tabular-nums;
 }
 
-/* The favourite model is a name, not a figure: Claude Code sets it at the
-   label's own weight. */
+/* Model names need the narrower UI face to fit the cell. */
 body[data-dsh-claude-style] .dsh-claude-home-stat[data-stat="model"] .dsh-claude-home-stat-value {
+  font-family: var(--dsw-font-family);
+  font-size: 13px;
   font-weight: 400;
 }
 
@@ -68,8 +67,7 @@ body[data-dsh-claude-style] .dsh-claude-home-heat {
   position: relative;
 }
 
-/* Claude Code's heat grid is a blue data ramp, not the brand ember: the empty
-   cell stays the neutral base tone, and each level mixes in the data blue by
+/* The empty cell stays neutral, and each level mixes in the data ink by
    its share of the ramp (constants.ts's HOME_HEAT_RAMP; the build writes one
    rule per level, scripts/feature-sheets.mjs). The model chart beside it reads
    the same ink, so both charts tell one story about which model earned a day. */
@@ -81,7 +79,7 @@ body[data-dsh-claude-style] .dsh-claude-home-heat-cell {
   position: relative;
   aspect-ratio: 1;
   border-radius: 3px;
-  background: color-mix(in srgb, var(--dsw-alias-label-primary, #161616) 11%, transparent);
+  background: color-mix(in srgb, var(--dsw-alias-label-primary, #161616) 7%, transparent);
 }
 
 /* Claude Code's day tip: one pill the grid carries, which names the day the

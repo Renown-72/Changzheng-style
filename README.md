@@ -1,54 +1,40 @@
 <div align="center">
 
-# DSH Claude Style
+# 长征机风格 · Long March Style
 
-**为 DeepSeek Harness 复刻 Claude Code Desktop 风格与交互体验的主题插件。**
-
-> **你的下一个 Claude Code Desktop ，何必是Claude Code。**
+**以《The Fire Rises》长征姬视觉为主题的 DeepSeek Harness 插件。**
 
 [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md) [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md)
 
-[![version](https://img.shields.io/npm/v/dsh-claude-style?style=flat&label=version&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![downloads](https://img.shields.io/npm/dm/dsh-claude-style?style=flat&label=downloads&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![GitHub stars](https://img.shields.io/github/stars/Nwflower/dsh-claude-style?style=flat&label=%E2%98%85&color=08C)](https://github.com/Nwflower/dsh-claude-style)
-[![dsh.so install](https://www.dsh.so/badge/install/dsh-claude-style.svg)](https://www.dsh.so/artifact/dsh-claude-style/)
 [![license](https://img.shields.io/badge/license-MIT%20%2B%20PolyForm%20Shield-2EA44F?style=flat)](LICENSE)
 
 </div>
 
 ## 预览
 
-两套主题在插件设置里切换，亮暗跟随系统。
+界面以长征姬指挥终端为视觉线索，使用清晰的侧栏标记、数据面板和输入区域。在插件设置中切换绯红与青霓两套配色；浅色和深色跟随系统。吉祥物可以跟随主题，也可以单独选择长征姬或大肥鱼。
 
-### Claude
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-light.png" alt="Claude 档工作台首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-dark.png" alt="Claude 档工作台首页 —— 暗色" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-light.png" alt="Claude 档 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-dark.png" alt="Claude 档 Markdown 对话 —— 暗色" /></td>
-  </tr>
-</table>
-
-> 工作台首页（上），对话界面（下）；浅色在左，深色在右。
-
-### DeepSeek
+### 绯红
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-light.png" alt="DeepSeek 档工作台首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-dark.png" alt="DeepSeek 档工作台首页 —— 暗色" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-light.png" alt="DeepSeek 档 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-dark.png" alt="DeepSeek 档 Markdown 对话 —— 暗色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-light.png" alt="绯红主题首页，浅色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-dark.png" alt="绯红主题首页，深色" /></td>
   </tr>
 </table>
 
-> 输入框上沿站着宠物小鲸鱼 Deepy，八个状态：
+绯红配色默认显示长征姬。
+
+### 青霓
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="青霓主题首页，浅色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="青霓主题首页，深色" /></td>
+  </tr>
+</table>
+
+青霓配色默认显示大肥鱼 Deepy。它会随任务状态切换动画：
 
 <table>
   <tr>
@@ -67,25 +53,20 @@
 
 ## 安装
 
-官方插件页添加这个包名，或从终端安装：
-
-```
-dsh-claude-style
-```
+在项目目录安装开发依赖并构建，然后把项目目录加入 DSH 配置：
 
 ```bash
-dsh plugin --profile web add dsh-claude-style                    # npm 包（推荐）
-dsh plugin --profile web add Nwflower/dsh-claude-style#dist      # GitHub 发布分支
+npm install
+npm run build
+dsh plugin --profile desktop add "<项目目录>"  # 桌面应用
+dsh plugin --profile web add "<项目目录>"      # 网页应用
 ```
 
-也可从[插件市场](https://github.com/dsh-market/dsh-market)或 dsh-web-all 的皮肤中心安装。同一时刻只启用一个主题，装好后重启 DeepSeek Harness。
+桌面和网页配置按需要选择。安装后重启 DeepSeek Harness，在插件页打开「长征机风格」。本地链接依赖项目目录保持原位。
 
 ## 字体
 
-> Anthropic 没有公开发行这三款字体；本仓库只提供下载与研究的[副本](https://github.com/Nwflower/dsh-claude-style/tree/master/packages/assets/src/fonts/anthropic)。
-
-
-启用时二选一：装进系统，或把 `.ttf` 复制到 `$DSH_HOME/dsh-claude-style/fonts/`。
+插件随包提供 Inter 和 JetBrains Mono；标题优先使用系统中的窄体技术字体。需要替换随包字体时，可将同名字体文件放入 `$DSH_HOME/dsh-claude-style/fonts/`。
 
 ## 文档
 
@@ -108,12 +89,7 @@ dsh plugin --profile web add Nwflower/dsh-claude-style#dist      # GitHub 发布
 - 消息导航参考 SherUnlocked-4869 的 [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav)（MIT）。
 - Deepy 的动画帧图来自 calmly-eating-bugs（[@wp3171216237](https://github.com/wp3171216237)）绘制的 Deepy 小鲸鱼主题包。
 - 聊天区的增强动效改自 [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux)（MIT）。
-- Clawd是 Anthropic 的角色形象。帧图不适用 MIT 许可（见 [LICENSE](LICENSE)）。本插件是非官方爱好者作品，与 Anthropic 没有关联。
 
 ## 友链
 
 > 想把 Claude Code / Codex 等外部代理的会话历史导入 DSH 接着聊？推荐作者的另一个插件 [dsh-chat-import](https://github.com/Nwflower/dsh-chat-import)。
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Nwflower/dsh-claude-style&type=Date)](https://star-history.com/#Nwflower/dsh-claude-style&Date)

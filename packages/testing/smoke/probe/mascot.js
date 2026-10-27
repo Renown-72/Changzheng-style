@@ -24,6 +24,9 @@
         // The frame is the strip's translation: read the computed matrix (a
         // running WAAPI animation has no inline style) as "Xpx Ypx".
         var strip = node.querySelector('.dsh-claude-' + mascotName + '-strip')
+        var view = strip.parentElement
+        var viewBox = view.getBoundingClientRect()
+        var stripBox = strip.getBoundingClientRect()
         var matrix = getComputedStyle(strip).transform
         var offsets = matrix === 'none' ? null : matrix.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*(-?[\d.]+),\s*(-?[\d.]+)\)/)
         return {
@@ -32,6 +35,7 @@
           place: node.parentElement === null ? null : node.parentElement.getAttribute('data-dsh-claude-' + mascotName + '-anchor'),
           frame: offsets === null ? '0px 0px' : offsets[1] + 'px ' + offsets[2] + 'px',
           sheet: getComputedStyle(strip).backgroundImage,
+          clip: { overflow: getComputedStyle(view).overflow, width: viewBox.width, height: viewBox.height, sheetWidth: stripBox.width },
         }
       }
       var wakeDeepyPass = function () {

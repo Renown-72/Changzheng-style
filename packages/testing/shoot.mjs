@@ -28,7 +28,7 @@
  *
  * Usage:
  *   node packages/testing/shoot.mjs --token <launch-token> [--url http://127.0.0.1:3080]
- *     [--brand claude|deepseek] [--scene home|conversation] [--session <title>]
+ *     [--brand changzheng|ember] [--scene home|conversation] [--session <title>]
  *
  * The launch token comes from the `dsh web` banner (GUI URL `/?token=…`) or
  * the DSH_WEB_TOKEN env var. Chrome comes from packages/testing/browser.mjs and
@@ -54,11 +54,11 @@ const DEMO_TITLE = 'Markdown rendering tour'
  * Canvas colors that identify the resolved palette, per brand. Host builtin
  * themes carry empty token maps, so every color comes from the stylesheets
  * branching on `data-ds-dark-theme`: dark tokens are the base, light overrides
- * sit under `:not([data-ds-dark-theme])`, and the DeepSeek brand rewrites both.
+ * sit under `:not([data-ds-dark-theme])`.
  */
 const CANVAS = {
-  claude: { light: 'rgb(255, 255, 255)', dark: 'rgb(25, 25, 25)' },
-  deepseek: { light: 'rgb(255, 255, 255)', dark: 'rgb(8, 17, 26)' },
+  changzheng: { light: 'rgb(247, 244, 251)', dark: 'rgb(15, 10, 26)' },
+  ember: { light: 'rgb(244, 251, 251)', dark: 'rgb(8, 17, 26)' },
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -147,9 +147,9 @@ async function captureOnce(page, options, scheme, outFile) {
  * @returns the two files written.
  */
 async function shoot(options) {
-  const brand = options.brand || 'claude'
+  const brand = options.brand || 'changzheng'
   const scene = options.scene || 'home'
-  if (!CANVAS[brand]) throw new Error(`unknown brand "${brand}" (claude or deepseek)`)
+  if (!CANVAS[brand]) throw new Error(`unknown brand "${brand}" (changzheng or ember)`)
   if (!HEIGHTS[scene]) throw new Error(`unknown scene "${scene}" (home or conversation)`)
   const base = (options.url || 'http://127.0.0.1:3080').replace(/\/+$/, '')
   const out = path.resolve(options.out || path.join(import.meta.dirname, '..', '..', 'docs', 'screenshots'))
@@ -183,7 +183,7 @@ if (import.meta.main) {
   }
   const token = argOf('token') || process.env.DSH_WEB_TOKEN
   if (!token) {
-    console.error('usage: node packages/testing/shoot.mjs --token <launch-token> [--url <base>] [--brand claude|deepseek] [--scene home|conversation] [--session <title>]')
+    console.error('usage: node packages/testing/shoot.mjs --token <launch-token> [--url <base>] [--brand changzheng|ember] [--scene home|conversation] [--session <title>]')
     process.exit(2)
   }
   shoot({ token, url: argOf('url'), out: argOf('out'), brand: argOf('brand'), scene: argOf('scene'), session: argOf('session') })

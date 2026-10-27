@@ -136,7 +136,7 @@ node packages/testing/behaviour.mjs --eval --at <address> "<expression>"        
 node packages/testing/behaviour.mjs --close --at <address>                           # end the session --open started
 node packages/testing/probe.mjs --token <launch-token>          # composer invariants against a running dsh web
 node packages/testing/probe-timing.mjs --token <launch-token>   # startup, catalog readiness, open latency, heap
-node packages/testing/shoot.mjs --token <launch-token> --brand <claude|deepseek> --scene <home|conversation>   # re-shoot one README screenshot pair
+node packages/testing/shoot.mjs --token <launch-token> --brand <changzheng|ember> --scene <home|conversation>   # re-shoot one README screenshot pair
 node packages/testing/dsh-web.mjs                       # boot a scratch dsh web (`$DSH_HOME` under .debug/) with this checkout linked in, and print its URL
 node packages/testing/host-snapshot.mjs                 # re-capture the host's conversation and composer markup for the stand-in page, through the privacy sweep
 node packages/testing/e2e.mjs --scenario <name>[,<name>…] [--headed]   # one scenario; the shots scenario writes its captures to the trace directory

@@ -21,7 +21,7 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
    32px foot is the hero's centred-box treatment; the studio form drops the foot
    and fills the seat, so the context row and the card rest on the bottom edge.
    The composer keeps the 720px column, while the greeting and the dashboard
-   card read as a 480px block against its left edge. */
+   card read as a 552px block against its left edge. */
 body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="composer-stack"][data-dsh-claude-part~="composer-hero"] {
   /* The conversation form's own rule pins this stack to its content height; the
      studio column has to fill the seat for the card to reach the bottom edge.
@@ -65,8 +65,8 @@ body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-clau
      left edge; the free width to its right stays empty. The width is stated
      rather than left to the content, so the head's copy length cannot resize the
      card. */
-  width: 480px;
-  max-width: calc(100% - var(--dsh-composer-side-clearance, 0px));
+  width: 552px;
+  max-width: calc(100% - var(--dsh-composer-side-clearance, 0px) - var(--dsh-composer-side-clearance, 0px));
   margin-right: auto;
 }
 
@@ -110,8 +110,7 @@ body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-clau
   order: 3;
 }
 
-/* Claude Code's home greeting is a 20px sans line with a small brand mark.
-   The serif display rule (theme/typography.css) reaches the headline AND the
+/* The serif display rule (theme/typography.css) reaches the headline AND the
    titleGroup inside it — the class name contains "title" — so both elements
    have to leave it behind, and the extra attribute on the root plus the root
    qualifier carry past the hero's own 44.2px size as well. */
@@ -120,21 +119,20 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
 body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-headline"] [data-dsh-claude-part~="hero-title-group"] > span {
   justify-content: flex-start;
   font-family: var(--dsw-font-family);
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 26px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 30px;
   color: var(--dsw-alias-label-primary, #161616);
 }
 
 body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-headline"] {
-  gap: 8px;
+  gap: 10px;
 }
 
-/* The mark shrinks with the line: Claude's home asterisk stands a hair taller
-   than the greeting's own cap height, not twice it. */
+/* The emblem shares the greeting's line without changing the classic hero. */
 body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-mark"]::before {
-  width: 21px;
-  height: 21px;
+  width: 26px;
+  height: 26px;
 }
 
 /* ---------- the panel ---------- */
@@ -158,11 +156,11 @@ body[data-dsh-claude-style] .dsh-claude-home-panel {
   /* The card inside the stack carries the composer's side clearance; the panel
      takes the same inset so the two read as one column. */
   margin: 0 var(--dsh-composer-side-clearance, 0px);
-  padding: 12px;
+  padding: 16px;
+  border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 12px;
-  /* Claude Code's panel is a flat warm-gray wash with no outline: a whisper of
-     the label tone over the card tone, which flips with the theme on its own. */
-  background: color-mix(in srgb, var(--dsw-alias-label-primary, #161616) 4%, var(--dsw-alias-bg-layer-2, #ffffff));
+  background: color-mix(in srgb, var(--dsw-alias-brand-primary) 3%, var(--dsw-alias-bg-layer-2));
+  box-shadow: inset 0 2px 0 color-mix(in srgb, var(--dsw-alias-brand-primary) 65%, transparent);
   overflow: auto;
   /* Claude Code fades its dashboard into the context row when the window cuts
      it short. The mask's transparent 32px foot hangs below the box at rest, so
@@ -185,6 +183,26 @@ body[data-dsh-claude-style] .dsh-claude-home-panel {
 @keyframes dsh-claude-home-panel-fade {
   from { -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
   to { -webkit-mask-size: 100% calc(100% + 32px); mask-size: 100% calc(100% + 32px); }
+}
+
+body[data-dsh-claude-style] .dsh-claude-home-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: var(--dsw-alias-label-primary);
+  font-family: var(--dsw-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+body[data-dsh-claude-style] .dsh-claude-home-panel-title::before {
+  content: "";
+  width: 4px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--dsw-alias-brand-primary);
 }
 
 body[data-dsh-claude-style] .dsh-claude-home-panel-head {
@@ -231,11 +249,10 @@ body[data-dsh-claude-style] .dsh-claude-home-range:hover:not([data-active]) {
   color: var(--dsw-alias-label-primary, #161616);
 }
 
-/* The active pill is a gray chip one step below the panel's own wash — Claude's
-   Overview reads as gray ground under black text, not a lifted white card. */
+/* Active controls share the card's accent while keeping the normal label ink. */
 body[data-dsh-claude-style] .dsh-claude-home-tab[data-active],
 body[data-dsh-claude-style] .dsh-claude-home-range[data-active] {
-  background: color-mix(in srgb, var(--dsw-alias-label-primary, #161616) 10%, var(--dsw-alias-bg-layer-2, #ffffff));
+  background: color-mix(in srgb, var(--dsw-alias-brand-primary) 16%, var(--dsw-alias-bg-layer-2));
   color: var(--dsw-alias-label-primary, #161616);
 }
 

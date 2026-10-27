@@ -181,6 +181,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         [HOME_REVEALING_ATTR]: reveal === 'revealing' ? '' : undefined,
         'aria-busy': state.computing || !data.known ? 'true' : 'false',
       },
+      React.createElement('h2', { className: 'dsh-claude-home-panel-title' }, copy('homePanelTitle')),
       React.createElement(
         'div',
         { className: 'dsh-claude-home-panel-head' },

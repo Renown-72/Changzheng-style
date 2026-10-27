@@ -21,13 +21,16 @@ const SESSION_NAMES = [
   'Trim bundle size',
   'Markdown rendering tour',
 ]
-const USERNAME = 'Ada'
+const LOCAL_USERNAME = (process.env.USERNAME ?? process.env.USER ?? '').trim()
+if (LOCAL_USERNAME.length < 2) throw new Error('privacy: the local username is too short to identify safely')
+const USERNAME = LOCAL_USERNAME.toLowerCase() === 'ada' ? 'Morgan' : 'Ada'
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 /**
  * LEAK covers the local username, drive paths and quota amounts; PATH and
  * BALANCE cover the two rewrites.
  */
-const USERNAME_RE_SOURCE = 'Nwflower'
+const USERNAME_RE_SOURCE = escapeRegex(LOCAL_USERNAME)
 const PATH_RE_SOURCE = '[A-Z]:[\\\\/][^\\s"\']*'
 const BALANCE_RE_SOURCE = '\u00a5\\s?[0-9][0-9.,]*'
 
@@ -45,6 +48,7 @@ const BALANCE_RE_SOURCE = '\u00a5\\s?[0-9][0-9.,]*'
  */
 const SANITIZE_JS = `(() => {
   const blank = ((document.querySelector('button[class*="newSession"]') || {}).innerText || '').trim().split('\\n')[0]
+  const replacements = []
   const swap = (elements, names) => {
     const standIn = (text) => names.find((name) => text === name || text.endsWith(' · ' + name))
     const used = new Set(elements.map((el) => standIn((el.textContent || '').trim())).filter(Boolean))
@@ -53,7 +57,9 @@ const SANITIZE_JS = `(() => {
     elements.forEach((el, i) => {
       const text = (el.textContent || '').trim()
       if (!text || text === blank || standIn(text)) return
-      el.textContent = spare.length > 0 ? spare.shift() : names[i % names.length]
+      const replacement = spare.length > 0 ? spare.shift() : names[i % names.length]
+      replacements.push([text, replacement])
+      el.textContent = replacement
       swapped++
     })
     return swapped
@@ -61,22 +67,50 @@ const SANITIZE_JS = `(() => {
   let swapped = 0
   swapped += swap([...document.querySelectorAll('[class*="projectRow"] [class*="projectText"]')], ${JSON.stringify(PROJECT_NAMES)})
   swapped += swap([...document.querySelectorAll('[class*="sessionRow"] [class*="title"]')], ${JSON.stringify(SESSION_NAMES)})
-  const shown = ((document.querySelector('.dsh-claude-account-user') || {}).textContent || '').trim()
-  if (shown.length >= 2 && shown !== ${JSON.stringify(USERNAME)}) {
-    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
-    while (walker.nextNode()) {
-      const node = walker.currentNode
-      if ((node.nodeValue || '').includes(shown) && !node.parentElement.closest('.dsh-claude-account-user')) {
-        node.nodeValue = node.nodeValue.split(shown).join(${JSON.stringify(USERNAME)})
+  const shown = ((document.querySelector('.dsh-claude-account-user, [data-dsh-claude-account-host-row]') || {}).textContent || '').trim()
+  const names = [shown, ${JSON.stringify(LOCAL_USERNAME)}].filter((name) => name.length >= 2)
+  const username = ['Ada', 'Morgan', 'Riley', 'Casey'].find((candidate) =>
+    names.every((name) => !candidate.toLowerCase().includes(name.toLowerCase())))
+  if (!username) throw new Error('privacy: no neutral account name is available')
+  if (shown.length >= 2 && shown !== username) replacements.push([shown, username])
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+  while (walker.nextNode()) {
+    const node = walker.currentNode
+    for (const [original, replacement] of replacements) {
+      if ((node.nodeValue || '').includes(original)) {
+        node.nodeValue = node.nodeValue.split(original).join(replacement)
         swapped++
       }
     }
   }
+  // Keep the nodes the live skin rewrites hidden and show a static copy.
+  document.querySelectorAll('[data-dsh-claude-part~="hero-title-group"]').forEach((group) => {
+    const original = [...group.children].find((child) => !(child.getAttribute('class') || '').includes('previewBadge'))
+    if (!original) return
+    const rep = original.cloneNode(true)
+    original.style.display = 'none'
+    original.after(rep)
+    swapped++
+  })
+  document.querySelectorAll('[data-dsh-claude-account-host-row]').forEach((row) => {
+    const labels = document.createTreeWalker(row, NodeFilter.SHOW_TEXT)
+    let node = labels.nextNode()
+    while (node !== null && !(node.nodeValue || '').trim()) node = labels.nextNode()
+    if (node === null) return
+    const hidden = document.createElement('span')
+    hidden.style.display = 'none'
+    node.replaceWith(hidden)
+    hidden.append(node)
+    const rep = document.createElement('span')
+    rep.textContent = username
+    hidden.after(rep)
+    swapped++
+  })
   document.querySelectorAll('.dsh-claude-account-user').forEach((el) => {
     const rep = document.createElement('span')
     rep.className = 'dsh-claude-account-you'
     rep.style.cssText = 'font-weight:500;color:var(--dsw-alias-label-primary);'
-    rep.textContent = ${JSON.stringify(USERNAME)}
+    rep.textContent = username
     el.replaceWith(rep)
     swapped++
   })
@@ -84,15 +118,15 @@ const SANITIZE_JS = `(() => {
     const rep = document.createElement('div')
     rep.className = 'dsh-claude-account-popover-name-static'
     rep.style.cssText = 'font-size:14px;font-weight:600;line-height:18px;color:var(--dsw-alias-label-primary);'
-    rep.textContent = ${JSON.stringify(USERNAME)}
+    rep.textContent = username
     el.replaceWith(rep)
     swapped++
   })
-  return swapped
+  return { swapped, username, originals: replacements.map(([original]) => original) }
 })()`
 
 /** Rewrite any surviving username / drive-path / quota text; report what was caught. */
-const SWEEP_JS = `(() => {
+const SWEEP_JS = `((username) => {
   const userRe = new RegExp(${JSON.stringify(USERNAME_RE_SOURCE)}, 'gi')
   const pathRe = new RegExp(${JSON.stringify(PATH_RE_SOURCE)}, 'g')
   const balRe = new RegExp(${JSON.stringify(BALANCE_RE_SOURCE)}, 'g')
@@ -105,17 +139,18 @@ const SWEEP_JS = `(() => {
     if (userRe.test(text) || pathRe.test(text) || balRe.test(text)) {
       caught.push(text.trim().slice(0, 80))
       node.nodeValue = text
-        .replace(userRe, ${JSON.stringify(USERNAME)})
+        .replace(userRe, username)
         .replace(pathRe, '…')
         .replace(balRe, '\u00a5\u2022\u2022')
     }
   }
   return caught
-})()`
+})`
 
 /** The palette must not contain personal data anywhere in its visible text. */
-function assertClean(visibleText) {
-  const leak = new RegExp(`${USERNAME_RE_SOURCE}|${PATH_RE_SOURCE}|${BALANCE_RE_SOURCE}`, 'i')
+function assertClean(visibleText, originals = []) {
+  const names = originals.filter((name) => name.length >= 2).map(escapeRegex)
+  const leak = new RegExp([USERNAME_RE_SOURCE, ...names, PATH_RE_SOURCE, BALANCE_RE_SOURCE].join('|'), 'i')
   const found = leak.exec(visibleText)
   if (found !== null) throw new Error(`sensitive text still visible after sanitize: ${JSON.stringify(found[0].slice(0, 60))}`)
 }
@@ -128,14 +163,14 @@ function assertClean(visibleText) {
  * @returns the replaced node count, what the sweep caught, and the visible text.
  */
 async function sanitizePage(run) {
-  const swapped = await run(SANITIZE_JS)
-  const caught = await run(SWEEP_JS)
+  const { swapped, username, originals } = await run(SANITIZE_JS)
+  const caught = await run(`${SWEEP_JS}(${JSON.stringify(username)})`)
   const visibleText = await run('document.body.innerText')
-  assertClean(visibleText)
+  assertClean(visibleText, originals)
   return { swapped, caught, visibleText }
 }
 
-if (!new RegExp(`${USERNAME_RE_SOURCE}|${PATH_RE_SOURCE}`, 'i').test('C:\\Users\\Nwflower\\tmp')) {
+if (!new RegExp(USERNAME_RE_SOURCE, 'i').test(LOCAL_USERNAME) || !new RegExp(PATH_RE_SOURCE, 'i').test('C:\\Users\\Example\\folder')) {
   throw new Error('leak regex failed self-test')
 }
 

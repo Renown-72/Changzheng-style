@@ -69,10 +69,8 @@ body[data-dsh-claude-style] .dsh-claude-home-chart-label {
   font-variant-numeric: tabular-nums;
 }
 
-/* The ramp: the biggest spender is the darkest data blue, and the walk down fades
-   toward the card's own fill, ending in the warm grey that stands for every model
-   past the list. Every step is the one data ink at its own opacity, so the chart
-   and the heat grid read off one colour and either card's fill shows through. */
+/* Each rank uses the selected card's data ink at a different opacity; the final
+   grey stands for models beyond the coloured ranks. */
 body[data-dsh-claude-style] .dsh-claude-home-chart-seg[data-rank="0"],
 body[data-dsh-claude-style] .dsh-claude-home-model-swatch[data-rank="0"] {
   background: var(--dsh-claude-data-ink);

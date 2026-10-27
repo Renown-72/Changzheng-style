@@ -1,10 +1,10 @@
 {
   "name": "dsh-claude-style",
-  "description": "Claude Code Desktop theme for DeepSeek Harness (dsh) web GUI — visual & interaction overhaul",
+  "description": "The Fire Rises Long March theme for the DeepSeek Harness (dsh) web GUI",
   "version": "0.19.4",
   "type": "module",
   "main": "lib/host/index.js",
-  "icon": "lib/claude-mark.svg",
+  "icon": "lib/changzheng-mark.svg",
   "workspaces": [
     "packages/*"
   ],

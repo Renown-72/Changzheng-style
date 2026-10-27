@@ -17,7 +17,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import Ajv2020 from 'ajv/dist/2020.js'
-import { parse, converter, formatHex, formatRgb } from 'culori'
+import { parse, converter, formatHex, formatRgb, wcagContrast } from 'culori'
 
 /** The token document's place in the source tree: also the sheet list's marker for the generated sheet. */
 export const TOKEN_SHEET = 'theme/tokens.json'
@@ -82,7 +82,7 @@ function tokenValue(spec, card, scheme, tones) {
   if (spec.literal !== undefined) return spec.literal[scheme]
   if (spec.alias !== undefined) return `var(${spec.alias})`
   if (spec.tone !== undefined) return tones.get(tokenTone(spec, card))
-  if (spec.card === 'logoInk') return card.logoInk === 'ink' ? tones.get('ink') : card.accent
+  if (spec.card === 'logoInk') return card.logoInk === 'ink' ? tones.get('ink') : scheme === 'light' ? tones.get('link') : card.accent
   if (spec.card === 'code') return card.code[scheme]
   if (spec.card === 'sidebar') return card.sidebar?.[scheme]
   if (spec.card === 'bubble') return card.bubble?.[scheme]
@@ -100,6 +100,17 @@ export function resolvePalette(doc) {
       for (const spec of doc.palette.tokens) {
         const value = tokenValue(spec, card, scheme, tones)
         if (value !== undefined) values.set(spec.token, value)
+      }
+      const ink = values.get('--dsw-alias-label-primary-foreground')
+      for (const token of ['--dsw-alias-button-primary-fill', '--dsw-alias-button-primary-hover']) {
+        const ratio = wcagContrast(ink, values.get(token))
+        if (!Number.isFinite(ratio) || ratio < 4.5) {
+          throw new Error(`build: ${card.id} ${scheme} ${token} does not give its foreground text 4.5:1 contrast`)
+        }
+      }
+      const logoContrast = wcagContrast(values.get('--dsh-claude-logo-ink'), card.sidebar?.[scheme] ?? card.canvas[scheme])
+      if (!Number.isFinite(logoContrast) || logoContrast < 4.5) {
+        throw new Error(`build: ${card.id} ${scheme} brand art does not have 4.5:1 contrast against its sidebar`)
       }
       schemes.set(scheme, values)
     }
@@ -320,7 +331,7 @@ function tableCell(value) {
 /** One tone step as a cell: the lightness step, its chroma, hue shift and alpha. */
 function toneCell(step) {
   if (step === undefined) return '—'
-  const parts = [`Δl ${step.dl === undefined ? 0 : step.dl > 0 ? `+${step.dl}` : step.dl}`]
+  const parts = [step.l === undefined ? `Δl ${step.dl === undefined ? 0 : step.dl > 0 ? `+${step.dl}` : step.dl}` : `l ${step.l}`]
   if (step.c !== undefined) parts.push(`C ${step.c}`)
   if (step.dc !== undefined) parts.push(`ΔC ${step.dc > 0 ? `+${step.dc}` : step.dc}`)
   if (step.m !== undefined) parts.push(`C ×${step.m}`)
@@ -359,7 +370,11 @@ function tokenTable(doc) {
     tableCell(card.code.light),
     tableCell(card.code.dark),
   ]))
-  const toneRows = doc.palette.tones.map((tone) => row([`\`${tone.id}\``, tone.seed, toneCell(tone.light), toneCell(tone.dark)]))
+  const toneRows = doc.palette.tones.map((tone) => {
+    const light = tone.light?.seed ?? '—'
+    const dark = tone.dark?.seed ?? '—'
+    return row([`\`${tone.id}\``, light === dark ? light : `${light} / ${dark}`, toneCell(tone.light), toneCell(tone.dark)])
+  })
   const schemeHeader = cards.flatMap((card) => [`${card.id} light`, `${card.id} dark`])
   const tokenRows = doc.palette.tokens.map((spec) => {
     const source = spec.tone !== undefined ? `\`${spec.tone}\`${spec.flat === undefined ? '' : ` / \`${spec.flat}\``}` : spec.literal !== undefined ? 'literal' : spec.alias !== undefined ? `\`${spec.alias}\`` : `card \`${spec.card}\``

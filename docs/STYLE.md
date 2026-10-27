@@ -8,8 +8,9 @@ Rises*' Long March girl.
 Every look is a **colour card**: an accent, a canvas, a sidebar and the reader's
 bubble per scheme, an inline-code ink and, when its prose links keep a family of
 their own, a link per scheme. The first card is the default look. A card's dark
-outlines are drawn either as a lit highlight or as a flat surface step, and its
-brand art takes its colour from the ink or the accent (D30).
+outlines are drawn either as a lit highlight or as a flat surface step. Brand
+art uses the card's ink or accent, with the link tone in light mode for readable
+small lettering (D30).
 
 The colour every token paints is a **tone** of one of those seeds: a lightness
 step from the seed, an absolute chroma or a multiple of the seed's, an optional
@@ -39,16 +40,16 @@ Rules:
   its own canvas, so a conversation bubble reads as the card that painted it.
 - Accent usage stays under ~10% of visible elements.
 - Literal colours stay outside the ladder: the selection ring, the ripple's
-  front, the peak and off-peak badges, the data ramp and the popover shadow.
+  front, the peak and off-peak badges, and the popover shadow.
 
 **The two cards** are the same HUD lit two ways. The **crimson card** (the
 default) is the character's own palette: the neon crimson `#FF3355` of her scarf
 and of the panels behind her, on the deep violet hologram canvas. The **cyan
 card** swaps the channel: the neon cyan `#4CF0E8` of the HUD's second light, on a
-near-black teal canvas. Both draw their outlines as flat surface steps rather
-than highlights, because a HUD panel is a raised plate with a lit contour of its
-own; both ink their brand art with the accent. The star gold `#FFD54A` is the
-ladder's third colour, kept literal where it paints a badge.
+near-black teal canvas. The crimson card draws highlighted outlines and the cyan
+card draws flat surface steps. Their brand art uses the accent in dark mode and
+the card's link tone in light mode. The star gold `#FFD54A` is the ladder's third
+colour, kept literal where it paints a badge.
 
 The tables below are generated from `packages/client/src/theme/tokens.json` by `npm run build`;
 edit the JSON, not the tables. A token's row names the tone it reads and the
@@ -58,52 +59,52 @@ card leaves unset.
 <!-- generated:tokens (packages/client/src/theme/tokens.json) -->
 | Card | Accent | Canvas light | Canvas dark | Sidebar light | Sidebar dark | Bubble light | Bubble dark | Link light | Link dark | Edges | Logo ink | Code light | Code dark |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| changzheng (default) | `#ff3355` | `#f7f4fb` | `#0f0a1a` | `#efeaf7` | `#0a0614` | `#ffe4ea` | `rgba(255, 51, 85, 0.12)` | `#bf1f45` | `#ff8fa8` | surface | accent | `#a3122f` | `#ff9fb2` |
+| changzheng (default) | `#ff3355` | `#f7f4fb` | `#0f0a1a` | `#efeaf7` | `#0a0614` | `#ffe4ea` | `rgba(255, 51, 85, 0.12)` | `#bf1f45` | `#ff8fa8` | highlight | accent | `#a3122f` | `#ff9fb2` |
 | ember | `#4cf0e8` | `#f4fbfb` | `#08111a` | `#eaf6f8` | `#050c14` | `#d6f7f4` | `rgba(76, 240, 232, 0.12)` | `#0d7d78` | `#79f7ef` | surface | accent | `#0a5f5d` | `#8ff8f2` |
 
 | Tone | Seed | Light | Dark |
 | --- | --- | --- | --- |
-| `canvas` |  | `Δl 0` | `Δl 0` |
-| `surface-1` |  | `Δl 0` | `Δl +0.036` |
-| `surface-2` |  | `Δl 0` | `Δl +0.065` |
-| `surface-3` |  | `Δl +0.002` | `Δl +0.104` |
-| `overlay` |  | `Δl +0.01 · C 0` | `Δl +0.065` |
-| `code-block` |  | `Δl +0.01 · C 0` | `Δl +0.036` |
-| `inset` |  | `Δl +0.01 · C 0` | `Δl -0.024` |
-| `card` |  | `Δl 0` | `Δl +0.044` |
-| `table-head` |  | `Δl -0.034` | `Δl +0.065` |
-| `hover-plate` |  | `Δl -0.034` | `Δl +0.104` |
-| `selector` |  | `Δl -0.004` | `Δl +0.104` |
-| `chip` |  | `Δl -0.019` | `Δl 0` |
-| `sidebar` |  | `Δl -0.002 · ΔC +0.002` | `Δl 0` |
-| `ink` |  | `Δl -0.801` | `Δl +0.781` |
-| `ink-2` |  | `Δl -0.474 · ΔC +0.01` | `Δl +0.571 · ΔC +0.009` |
-| `ink-3` |  | `Δl -0.365 · ΔC +0.011` | `Δl +0.458 · ΔC +0.012` |
-| `ink-4` |  | `Δl -0.251 · ΔC +0.007` | `Δl +0.336 · ΔC +0.01` |
-| `bubble` |  | `Δl -0.037 · ΔC +0.002` | `Δl +0.09 · α 0.06` |
-| `bubble-flat` |  | — | `Δl +0.088 · ΔC +0.006` |
-| `border-1` |  | `Δl -0.067` | `Δl +0.026 · α 0.09` |
-| `border-2` |  | `Δl -0.098` | `Δl +0.026 · α 0.18` |
-| `border-3` |  | `Δl -0.144` | `Δl +0.026 · α 0.3` |
-| `border-1-flat` |  | — | `Δl +0.069` |
-| `border-2-flat` |  | — | `Δl +0.108` |
-| `border-3-flat` |  | — | `Δl +0.161` |
-| `divider` |  | `Δl 0 · α 0.05` | `Δl +0.026 · α 0.06` |
-| `scrollbar` |  | `Δl -0.128 · α 0.9` | `Δl -0.63 · α 0.9` |
-| `scrollbar-hover` |  | `Δl -0.368 · α 0.8` | `Δl -0.446 · α 0.9` |
-| `on-accent` |  | `Δl 0` | `Δl +0.775` |
-| `inverse-ink` |  | `Δl +0.011` | `Δl -0.011` |
-| `hover-wash` |  | `Δl -0.081 · α 0.08` | `Δl +0.026 · α 0.08` |
-| `code-wash` |  | `Δl -0.081 · α 0.05` | `Δl +0.026 · α 0.05` |
-| `shimmer` |  | `Δl 0` | `Δl 0` |
-| `accent` |  | `Δl 0 · C ×1` | `Δl 0 · C ×1` |
-| `accent-hover` |  | `Δl -0.063 · C ×1.01` | `Δl +0.071 · C ×0.91 · h +2` |
-| `accent-active` |  | `Δl +0.068 · C ×1.1 · h +1 · α 0.26` | `Δl 0 · C ×1 · α 0.3` |
-| `accent-tint` |  | `Δl 0 · C 0.028` | `Δl 0 · C 0.055` |
-| `ui-link` |  | `Δl -0.15 · C ×0.9` | `Δl +0.1 · C ×0.72` |
-| `ui-link-hover` |  | `Δl -0.2 · C ×0.85` | `Δl +0.19 · C ×0.7` |
-| `link` |  | `Δl 0 · C ×1` | `Δl 0 · C ×1` |
-| `link-underline` |  | `Δl 0 · C ×1 · α 0.6` | `Δl 0 · C ×1 · α 0.6` |
+| `canvas` | canvas | `Δl 0` | `Δl 0` |
+| `surface-1` | canvas | `Δl 0` | `Δl +0.036` |
+| `surface-2` | canvas | `Δl 0` | `Δl +0.065` |
+| `surface-3` | canvas | `Δl +0.002` | `Δl +0.104` |
+| `overlay` | canvas | `Δl +0.01 · C 0` | `Δl +0.065` |
+| `code-block` | canvas | `Δl +0.01 · C 0` | `Δl +0.036` |
+| `inset` | canvas | `Δl +0.01 · C 0` | `Δl -0.024` |
+| `card` | canvas | `Δl 0` | `Δl +0.044` |
+| `table-head` | canvas | `Δl -0.034` | `Δl +0.065` |
+| `hover-plate` | canvas | `Δl -0.034` | `Δl +0.104` |
+| `selector` | canvas | `Δl -0.004` | `Δl +0.104` |
+| `chip` | canvas | `Δl -0.019` | `Δl 0` |
+| `sidebar` | canvas | `Δl -0.002 · ΔC +0.002` | `Δl 0` |
+| `ink` | canvas | `Δl -0.801` | `Δl +0.781` |
+| `ink-2` | canvas | `Δl -0.474 · ΔC +0.01` | `Δl +0.571 · ΔC +0.009` |
+| `ink-3` | canvas | `Δl -0.365 · ΔC +0.011` | `Δl +0.458 · ΔC +0.012` |
+| `ink-4` | canvas | `Δl -0.251 · ΔC +0.007` | `Δl +0.336 · ΔC +0.01` |
+| `bubble` | canvas / ink | `Δl -0.037 · ΔC +0.002` | `Δl +0.09 · α 0.06` |
+| `bubble-flat` | — / canvas | — | `Δl +0.088 · ΔC +0.006` |
+| `border-1` | canvas / ink | `Δl -0.067` | `Δl +0.026 · α 0.09` |
+| `border-2` | canvas / ink | `Δl -0.098` | `Δl +0.026 · α 0.18` |
+| `border-3` | canvas / ink | `Δl -0.144` | `Δl +0.026 · α 0.3` |
+| `border-1-flat` | — / canvas | — | `Δl +0.069` |
+| `border-2-flat` | — / canvas | — | `Δl +0.108` |
+| `border-3-flat` | — / canvas | — | `Δl +0.161` |
+| `divider` | ink | `Δl 0 · α 0.05` | `Δl +0.026 · α 0.06` |
+| `scrollbar` | canvas / ink | `Δl -0.128 · α 0.9` | `Δl -0.63 · α 0.9` |
+| `scrollbar-hover` | canvas / ink | `Δl -0.368 · α 0.8` | `Δl -0.446 · α 0.9` |
+| `on-accent` | accent | `l 0.215 · C 0` | `l 0.215 · C 0` |
+| `inverse-ink` | canvas | `Δl +0.011` | `Δl -0.011` |
+| `hover-wash` | ink | `Δl -0.081 · α 0.08` | `Δl +0.026 · α 0.08` |
+| `code-wash` | ink | `Δl -0.081 · α 0.05` | `Δl +0.026 · α 0.05` |
+| `shimmer` | ink | `Δl 0` | `Δl 0` |
+| `accent` | accent | `Δl 0 · C ×1` | `Δl 0 · C ×1` |
+| `accent-hover` | accent | `Δl +0.04 · C ×1.01` | `Δl +0.071 · C ×0.91 · h +2` |
+| `accent-active` | accent | `Δl +0.068 · C ×1.1 · h +1 · α 0.26` | `Δl 0 · C ×1 · α 0.3` |
+| `accent-tint` | accent | `l 0.918 · C 0.028` | `l 0.31 · C 0.055` |
+| `ui-link` | accent | `Δl -0.15 · C ×0.9` | `Δl +0.1 · C ×0.72` |
+| `ui-link-hover` | accent | `Δl -0.2 · C ×0.85` | `Δl +0.19 · C ×0.7` |
+| `link` | link | `Δl 0 · C ×1` | `Δl 0 · C ×1` |
+| `link-underline` | link | `Δl 0 · C ×1 · α 0.6` | `Δl 0 · C ×1 · α 0.6` |
 
 | Token | Tone | changzheng light | changzheng dark | ember light | ember dark | Host alias | Use |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -112,19 +113,20 @@ card leaves unset.
 | `--dsw-alias-bg-layer-2` | `surface-2` | `#f7f4fb` | `#1e192a` | `#f4fbfb` | `#16202a` | host's own |  |
 | `--dsw-alias-bg-layer-3` | `surface-3` | `#f8f5fc` | `#272234` | `#f5fcfc` | `#1f2933` | host's own |  |
 | `--dsw-alias-bg-overlay` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
-| `--dsw-alias-border-l1` | `border-1` / `border-1-flat` | — | `#1e192b` | — | `#17212b` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
-| `--dsw-alias-border-l2` | `border-2` / `border-2-flat` | — | `#282335` | — | `#202a34` | host's own |  |
-| `--dsw-alias-border-l3` | `border-3` / `border-3-flat` | — | `#353043` | — | `#2d3842` | host's own |  |
+| `--dsw-alias-border-l1` | `border-1` / `border-1-flat` | `#e1dee5` | `rgba(247, 241, 255, 0.09)` | — | `#17212b` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
+| `--dsw-alias-border-l2` | `border-2` / `border-2-flat` | `#d7d4db` | `rgba(247, 241, 255, 0.18)` | — | `#202a34` | host's own |  |
+| `--dsw-alias-border-l3` | `border-3` / `border-3-flat` | `#c8c5cc` | `rgba(247, 241, 255, 0.3)` | — | `#2d3842` | host's own |  |
 | `--dsh-claude-divider` | `divider` | `rgba(16, 14, 19, 0.05)` | `rgba(247, 241, 255, 0.06)` | `rgba(14, 19, 19, 0.05)` | `rgba(237, 251, 255, 0.06)` | `var(--dsw-alias-border-l1)` | a line that only separates: foot areas, settings rows, menu separators, the transcript's rule |
 | `--dsw-alias-brand-primary` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own | the single accent: checks, focus rings, selected marks |
-| `--dsw-alias-brand-text` | `on-accent` | `#f7f4fb` | `#ece6fe` | `#f4fbfb` | `#e2f0fd` | host's own |  |
+| `--dsw-alias-brand-text` | `on-accent` | `#191919` | `#191919` | `#191919` | `#191919` | host's own |  |
+| `--dsw-alias-label-primary-foreground` | `on-accent` | `#191919` | `#191919` | `#191919` | `#191919` | host's own | text on the accent fill |
 | `--dsw-alias-button-primary-fill` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own |  |
-| `--dsw-alias-button-primary-hover` | `accent-hover` | `#e80042` | `#ff5f6a` | `#25dbd4` | `#7cffff` | host's own |  |
+| `--dsw-alias-button-primary-hover` | `accent-hover` | `#ff4360` | `#ff5f6a` | `#5bfef5` | `#7cffff` | host's own |  |
 | `--dsw-alias-button-elevated-fill` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
 | `--dsw-alias-button-floating-fill` | `overlay` | `#f9f9f9` | `#1e192a` | `#fdfdfd` | `#16202a` | host's own |  |
 | `--dsw-alias-button-floating-hover` | `surface-3` | `#f8f5fc` | `#272234` | `#f5fcfc` | `#1f2933` | host's own |  |
 | `--dsw-alias-button-info-fill` | `accent` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | host's own |  |
-| `--dsw-alias-button-info-hover` | `accent-hover` | `#e80042` | `#ff5f6a` | `#25dbd4` | `#7cffff` | host's own |  |
+| `--dsw-alias-button-info-hover` | `accent-hover` | `#ff4360` | `#ff5f6a` | `#5bfef5` | `#7cffff` | host's own |  |
 | `--dsw-alias-interactive-bg-active` | `accent-active` | `rgba(255, 61, 95, 0.26)` | `rgba(255, 51, 85, 0.3)` | `rgba(77, 255, 255, 0.26)` | `rgba(76, 240, 232, 0.3)` | host's own |  |
 | `--dsh-claude-hover-bg` | `hover-wash` | `rgba(3, 2, 4, 0.08)` | `rgba(247, 241, 255, 0.08)` | `rgba(2, 4, 4, 0.08)` | `rgba(237, 251, 255, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
 | `--dsh-claude-field-ring` | literal | `#4cf0e8` | `#4cf0e8` | `#4cf0e8` | `#4cf0e8` | `var(--dsw-alias-brand-primary)` | the ring around a field the reader is renaming in: the session title's own editor, drawn from the HUD's cyan |
@@ -159,12 +161,12 @@ card leaves unset.
 | `--dsh-claude-inverse-ink` | `inverse-ink` | `#fbf8ff` | `#0d0817` | `#f8ffff` | `#060f17` | `var(--dsw-alias-label-primary)` | the model picker's group label ink |
 | `--dsh-claude-table-head` | `table-head` | `#ece9f0` | `#1e192a` | `#e9f0f0` | `#16202a` | `var(--dsw-alias-bg-layer-2)` | table header row |
 | `--dsh-claude-ripple-ink` | `ink-3` | `#857f8c` | `#88809f` | `#798989` | `#7a8c9f` | `var(--dsw-alias-label-secondary, #8a8a85)` | the new-conversation page's glyph field, and the wake a ripple leaves in it |
-| `--dsh-claude-data-ink` | literal | `#c2183f` | `#ff5c7a` | `#c2183f` | `#ff5c7a` | `var(--dsw-alias-link, #c2183f)` | the home page's data ink: the deepest step of the model chart's ramp and the ink the heat grid's levels are mixed from |
+| `--dsh-claude-data-ink` | `link` | `#bf1f45` | `#ff8fa8` | `#0d7d78` | `#79f7ef` | `var(--dsw-alias-link, #c2183f)` | the home page's data ink: the deepest step of the model chart's ramp and the ink the heat grid's levels are mixed from |
 | `--dsh-claude-ripple-wave` | literal | `#ff3355` | `#4cf0e8` | `#ff3355` | `#4cf0e8` | `var(--dsw-alias-link, #ff3355)` | the front of a ripple in the new-conversation page's glyph field |
 | `--dsh-claude-scrollbar` | `scrollbar` | `rgba(205, 202, 209, 0.9)` | `rgba(51, 46, 63, 0.9)` | `rgba(202, 209, 209, 0.9)` | `rgba(42, 53, 63, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
 | `--dsh-claude-scrollbar-hover` | `scrollbar-hover` | `rgba(130, 128, 134, 0.8)` | `rgba(100, 95, 114, 0.9)` | `rgba(128, 134, 134, 0.8)` | `rgba(91, 103, 114, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
 | `--dsh-claude-link-hover` | `ui-link-hover` | `#a90026` | `#ff9ca2` | `#14aba5` | `#b2ffff` | `var(--dsw-alias-link)` | text link under the pointer |
-| `--dsh-claude-logo-ink` | card `logoInk` | `#ff3355` | `#ff3355` | `#4cf0e8` | `#4cf0e8` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
+| `--dsh-claude-logo-ink` | card `logoInk` | `#bf1f45` | `#ff3355` | `#0d7d78` | `#4cf0e8` | `var(--dsw-alias-label-primary)` | sidebar and hero brand art: the emblem and the wordmark |
 | `--dsw-specific-menu` | `overlay` | `#f9f9f9` | — | `#fdfdfd` | — | host's own |  |
 | `--dsw-specific-bubble` | card `bubble` | `#ffe4ea` | `rgba(255, 51, 85, 0.12)` | `#d6f7f4` | `rgba(76, 240, 232, 0.12)` | host's own | user message bubble |
 | `--dsh-claude-chip` | `chip` | `#f1eef5` | — | `#eef5f5` | — | `var(--dsw-specific-selector)` | segmented control and switch at rest |
@@ -300,8 +302,9 @@ and scrolls to its end.
 - Radius: 4 / 8 / 16 px; 12px for a popover card and 6px for its rows (the
   popover table below); pills for CTAs (`9999px`). A shape copied from a host
   control keeps that control's own geometry rather than the scale above: the
-  composer card's 18px (the host's 22px less 4), the inline composer's 14px and
-  11px, the permission and workspace segments' 7px, the view tabs' 5px, the
+  composer card's 18px (the host's 22px less 4), the inline composer's 10px,
+  attachment frame's 14px and thumbnail's 11px, the permission and workspace
+  segments' 7px, the view tabs' 5px, the
   peak-rate and file pills' 999px.
 - Borders: 1px, and in dark not a colour but a highlight. The three border
   tokens are one translucent white at `.09` / `.18` / `.30`, so a card, a panel,
@@ -918,12 +921,12 @@ inside `…_composerStack …_composerHero` — so only the arrangement differs.
 
 | | Classic | Studio |
 |---|---|---|
-| greeting | centred, 44.2px condensed display, brand mark on its line | top left, one fixed line naming the user ("What's up next, …?") in the 20px sans UI face, a 21px brand mark on its line |
+| greeting | centred, 44.2px condensed display, brand mark on its line | top left, one fixed line naming the user ("What's up next, …?") in the 22px sans UI face, a 26px brand mark on its line |
 | composer card | vertically centred in the scroll body | the conversation's single-line inline form, resting on the window's bottom edge (16px foot) |
 | between them | — | the usage panel |
 | permission control | the segment group | the conversation's trigger and its card |
 | workspace / preset row | the card's footer tray | hairline chips directly above the card |
-| column width | the hero's centred box | a 720px composer column; the greeting and the panel form a 480px block against its left edge |
+| column width | the hero's centred box | a 720px composer column; the greeting and the panel form a 552px block against its left edge |
 
 The studio composer is stamped `data-composer-variant="inline"` (composer.ts's
 pass reads the same preference), so the home card is drawn by the conversation's
@@ -952,19 +955,13 @@ picker. In the studio form the ring sits on the single-line input box itself
 trigger fills the card's empty mode strip on the preset a new session starts in
 — disabled, like the rest of the card's controls.
 
-The panel is the dashboard's own shape: a flat violet wash (a
-`color-mix` of the label tone at 4% over the card tone, which flips with the
-theme on its own), an Overview/Models tab pair on the left of its head, and the
-All/30d/7d range pills on the right. The active tab and range pill are a gray
-chip one step below that wash — half the radius the 20px control would round to,
-so it reads as a rounded rectangle rather than a full pill. Overview carries six
-stat cells in a 3×2 grid under its own names (Sessions, Messages, Total
-tokens, Active days, Peak hour, Favorite model) whose tiles sit one clear step
-deeper than the panel (15% of the label tone) and set a 12px label over a 13px
-bold figure — the figure stays barely above its own label, which is also what
-lets a long model id such as deepseek-v4.1-flash sit on one line; the favourite
-model is a name, not a figure, and keeps the regular weight. Messages are the
-settled calls. Once the picked range's total passes one
+The panel has a fine outline, a tinted surface, an accent line along its top and
+a localized usage-data heading. Its Overview/Models tabs sit on the left of the head and the All/30d/7d range
+controls on the right; active controls share a restrained accent tint. Overview
+carries six outlined stat cells in a 3×2 grid (Sessions, Messages, Total tokens,
+Active days, Peak hour, Favorite model), with a 12px label above a 15px monospaced
+figure. Model names use the smaller UI face so longer names can fit. Messages are
+the settled calls. Once the picked range's total passes one
 book, the yardstick line appears under the grid: sixty-five books from Tao Te
 Ching (7.6k tokens) to In Search of Lost Time (1.6M), the public-domain ones
 measured by feeding their full text to the o200k_base tokenizer (the English
@@ -977,8 +974,9 @@ hero, and a range that has not reached it steps down to the longest book it has
 passed, so the range pills keep the same book whenever the totals allow. The heat
 grid takes one
 equal column per week (twenty-six weeks), square cells from a 3px gutter, in
-the crimson data ramp (`#c2183f` mixed in at the shares `HOME_HEAT_RAMP`
-in `packages/client/src/constants.ts` lists, over the neutral empty cell); because the columns are fractions of the panel's own width, the newest
+the selected card's data ramp (the link tone mixed in at the shares
+`HOME_HEAT_RAMP` in `packages/client/src/constants.ts` lists, over the neutral
+empty cell); because the columns are fractions of the panel's own width, the newest
 week can never fall past the edge. Hovering a cell raises the day tip
 after a short rest: a solid pill in the label ink with the canvas tone for text
 (so it inverts with the theme), 13px medium, reading the day in the shell's
@@ -1032,7 +1030,7 @@ stand-in rows — and the heat grid's empty cell **is** the zero step, so "no da
 and "a day with no usage" stay different things: a missing value draws a
 placeholder, a zero day draws the grid's own base tone.
 
-## The mascot · 输入卡片上的长征姬
+## Long March girl · 输入卡片上的长征姬
 
 The pixel Long March girl is the mascot on the composer. She stands on the
 composer card's top edge on both home layouts, and on the input area or the panel
@@ -1063,6 +1061,14 @@ each state holds its still frame; a click or a pull still plays its reaction.
 | a turn or a compaction finished (5.2 s): hops, arms up | `happy` | 3 |
 | a quiet minute / the next pointer move or key | `sleeping` / `waking` | 0 / 11 |
 | a click on the left / right half, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | 0 |
+
+## Big Fish · 输入卡片上的大肥鱼
+
+Deepy is the cyan card's default mascot and can also be selected independently.
+The whale stands on the composer and follows the same activity and motion
+preferences as the Long March girl. Its 52×52 logical grid is drawn at 2px per
+cell. The source sheets contain five pixels per cell; the build reconstructs
+them as vectors so they remain legible at different display scales.
 
 ## Implementation notes
 

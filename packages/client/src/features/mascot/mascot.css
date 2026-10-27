@@ -49,11 +49,13 @@ body[data-dsh-claude-style] [data-dsh-claude-changzheng-anchor="panel"] > .dsh-c
   bottom: calc(100% - 7px);
 }
 
-/* The sprite's window: the crop box's height, under the custom property the
-   player writes. */
-body[data-dsh-claude-style] .dsh-claude-changzheng-sprite {
+/* Both characters show one frame through the crop box the player writes. */
+body[data-dsh-claude-style] :is(.dsh-claude-changzheng-sprite, .dsh-claude-deepy-sprite) {
   height: calc(var(--dsh-claude-mascot-h, 0) * 2px);
   overflow: hidden;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng-sprite {
   position: absolute;
   left: calc(var(--dsh-claude-changzheng-x, 0) * 2px);
   top: calc(var(--dsh-claude-changzheng-y, 0) * 2px);
