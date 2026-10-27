@@ -18,16 +18,9 @@
  * decompresses it for one that does not, so the package carries the sheets
  * once, small.
  *
- * Deepy's sheets are drawn as PNG but ship as the vector the browser already
- * plays: the same cell layout as the sprite's own geometry — every frame keeps
- * a transparent margin on all four sides, or the downscale that draws it
- * samples the frame above's shadow along the cell's edge — with one path per
- * color, each row's runs extended downwards into rectangles. The PNGs are
- * inputs of the build and never reach `lib/`.
- *
- * The Long March girl's sheets ship as PNG, laid out again with MASCOT_GUTTER of
- * transparency around every frame: drawn at a fractional device scale, the
- * window around a frame takes in a sliver of the cell beside it.
+ * 大肥鱼's sheets ship as the WebP files scripts/import-dafeiyu.py writes:
+ * every frame already keeps its transparent gutter, so the build only holds
+ * each sheet's size to its clip's entry (checkWebpSheet) and routes it.
  *
  * The manifest is also the gate: a file under `packages/assets/src/` that no table or
  * token claims fails the build, so an image added for one run cannot ship
@@ -88,7 +81,7 @@ export const SOURCE_ONLY = new Set([
  * tables spell: one image per animation for a character that ships its colour
  * sheet and its masks apart (`<key>-accent.png`, `<key>-ink.png`).
  */
-const SHEET_FILE = /^[a-z]+(?:-[a-z]+)*(?:-(?:accent|ink))?\.png$/
+const SHEET_FILE = /^[a-z]+(?:-[a-z]+)*\.(?:png|webp)$/
 
 /**
  * Hold one mascot's sheet directory to its animation table in packages/client/src/constants.ts.
@@ -148,6 +141,52 @@ export function checkSheetPixels(table, name, image, sheet, scale) {
     throw new Error(`build: ${table}["${name}"]: ${cells} holds ${columns * rows} frames, fewer than the ${sheet.frames} the table names`)
   }
   return { columns, rows }
+}
+
+/**
+ * The canvas size a WebP file declares, read from its header: the extended
+ * format's VP8X chunk (every sheet with alpha), or the simple lossy and
+ * lossless chunks.
+ *
+ * @param bytes - the file.
+ * @returns `{ width, height }`, or null when the bytes are not a WebP file.
+ */
+export function webpSize(bytes) {
+  if (bytes.length < 30 || bytes.toString('latin1', 0, 4) !== 'RIFF' || bytes.toString('latin1', 8, 12) !== 'WEBP') return null
+  const chunk = bytes.toString('latin1', 12, 16)
+  if (chunk === 'VP8X') return { width: 1 + bytes.readUIntLE(24, 3), height: 1 + bytes.readUIntLE(27, 3) }
+  if (chunk === 'VP8 ') return { width: bytes.readUInt16LE(26) & 0x3fff, height: bytes.readUInt16LE(28) & 0x3fff }
+  if (chunk === 'VP8L') {
+    const bits = bytes.readUInt32LE(21)
+    return { width: 1 + (bits & 0x3fff), height: 1 + ((bits >> 14) & 0x3fff) }
+  }
+  return null
+}
+
+/**
+ * Hold a WebP sheet to its clip's entry: eight cells across, each cell the crop
+ * box plus the gutter on both sides at the sheet's scale, and enough rows for
+ * every frame. A sheet imported for another box would play a wrong slice of itself.
+ *
+ * @param table - the table's name, for diagnostics.
+ * @param name - the clip.
+ * @param bytes - the sheet file.
+ * @param sheet - the clip's entry (`{ frames, box }`).
+ * @param scale - sheet pixels to a logical pixel.
+ * @param gutter - the transparent margin around each frame, in logical pixels.
+ */
+export function checkWebpSheet(table, name, bytes, sheet, scale, gutter) {
+  const size = webpSize(bytes)
+  if (size === null) throw new Error(`build: ${table}["${name}"]: the sheet is not a WebP file`)
+  const cellWidth = (sheet.box[2] + gutter * 2) * scale
+  const cellHeight = (sheet.box[3] + gutter * 2) * scale
+  if (!Number.isInteger(cellWidth) || !Number.isInteger(cellHeight)) {
+    throw new Error(`build: ${table}["${name}"]: a cell is ${cellWidth}×${cellHeight} sheet pixels; box plus gutters must be a whole number of sheet pixels`)
+  }
+  const rows = Math.ceil(sheet.frames / 8)
+  if (size.width !== cellWidth * 8 || size.height !== cellHeight * rows) {
+    throw new Error(`build: ${table}["${name}"]: the sheet is ${size.width}×${size.height}, the table asks for 8×${rows} cells of ${cellWidth}×${cellHeight}`)
+  }
 }
 
 /** One run's color: an opaque pixel keeps its hex, a translucent one its alpha. */

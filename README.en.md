@@ -12,46 +12,36 @@
 
 ## Preview
 
-The interface takes its cues from a Long March command console, with clear navigation, a data panel and a focused composer. Choose the crimson or cyan palette in the plugin settings; light and dark follow the system. The mascot can follow the theme or be selected independently.
+The interface takes the Long March girl's command terminal as its cue: a deep violet canvas, an accent aurora and a faint grid behind the home page, a gradient greeting and a composer card that lights up when it holds focus. Switch between the crimson and cyan palettes in the plugin settings; light and dark follow the system.
 
-### Crimson
+### The corner mascot
 
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-light.png" alt="Crimson home, light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-dark.png" alt="Crimson home, dark" /></td>
-  </tr>
-</table>
+A mascot stands in the window's bottom-right corner, with a bubble over its head saying what the agent is doing; drag it anywhere and it keeps its place. It can follow the theme (crimson → Long March, cyan → Big Fish), or be chosen on its own.
 
-The crimson palette shows the Long March girl by default.
-
-### Cyan
+**Big Fish** is the blue-haired whale-tail maid, acting out the task's state:
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="Cyan home, light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="Cyan home, dark" /></td>
+    <td align="center" width="25%"><img src="./docs/gifs/idle.gif" width="150" alt="Idle" /><br />Idle</td>
+    <td align="center" width="25%"><img src="./docs/gifs/thinking.gif" width="150" alt="Thinking" /><br />Thinking</td>
+    <td align="center" width="25%"><img src="./docs/gifs/typing.gif" width="150" alt="Answering and calling tools" /><br />Answering and calling tools</td>
+    <td align="center" width="25%"><img src="./docs/gifs/conducting.gif" width="150" alt="Several sessions / subagents" /><br />Several sessions / subagents</td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="./docs/gifs/notification.gif" width="150" alt="Waiting on you" /><br />Waiting on you</td>
+    <td align="center" width="25%"><img src="./docs/gifs/compacting.gif" width="150" alt="Compacting context" /><br />Compacting context</td>
+    <td align="center" width="25%"><img src="./docs/gifs/error.gif" width="150" alt="Failed" /><br />Failed</td>
+    <td align="center" width="25%"><img src="./docs/gifs/happy.gif" width="150" alt="Finished" /><br />Finished</td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="150" alt="Drowsy" /><br />Drowsy</td>
+    <td align="center" width="25%"><img src="./docs/gifs/poke.gif" width="150" alt="Poked" /><br />Poked</td>
+    <td align="center" width="25%"><img src="./docs/gifs/tickle.gif" width="150" alt="Tickled" /><br />Tickled</td>
+    <td align="center" width="25%"><img src="./docs/gifs/drag.gif" width="150" alt="Dragged" /><br />Dragged</td>
   </tr>
 </table>
 
-The cyan palette shows Deepy the pixel whale by default. Its animations follow the task's state:
-
-<table>
-  <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/idle.gif" width="120" alt="Idle" /><br />Idle</td>
-    <td align="center" width="25%"><img src="./docs/gifs/thinking.gif" width="120" alt="Thinking" /><br />Thinking</td>
-    <td align="center" width="25%"><img src="./docs/gifs/typing.gif" width="120" alt="Answering and calling tools" /><br />Answering and calling tools</td>
-    <td align="center" width="25%"><img src="./docs/gifs/conducting.gif" width="120" alt="Conducting subagents" /><br />Conducting subagents</td>
-  </tr>
-  <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/notification.gif" width="120" alt="Waiting on you" /><br />Waiting on you</td>
-    <td align="center" width="25%"><img src="./docs/gifs/error.gif" width="120" alt="Failed" /><br />Failed</td>
-    <td align="center" width="25%"><img src="./docs/gifs/happy.gif" width="120" alt="Finished" /><br />Finished</td>
-    <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="120" alt="Asleep" /><br />Asleep</td>
-  </tr>
-</table>
-
-> The workspaces, sessions, usage figures and nickname in the screenshots are sample data.
+**Long March** shows the picture you upload: in Settings › Appearance › Mascot choose "Upload a picture" (PNG, WebP, GIF, SVG or JPG, up to 8 MB; a transparent background works best, and an animated image plays itself), or drop it at `$DSH_HOME/dsh-claude-style/brand/mascot.png`. The plugin sets her in motion — breathing, swaying, hopping, a shake on a failure. The plugin ships no picture of her: use one you may use. Until there is one, Big Fish stands in.
 
 ## Installation
 
@@ -89,7 +79,7 @@ The Sodium rendering engine is licensed under the [PolyForm Shield License 1.0.0
 
 - "Sodium" (钠) is named after Minecraft's [Sodium](https://github.com/CaffeineMC/sodium) rendering mod; this plugin is not affiliated with it.
 - The message navigator follows SherUnlocked-4869's [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav) (MIT).
-- The animation frames of Deepy the pixel whale come from the Deepy whale theme pack drawn by calmly-eating-bugs ([@wp3171216237](https://github.com/wp3171216237)), and ship with the plugin by the author's permission; GIFs of all 20 animations are in [docs/gifs/](docs/gifs/).
+- Big Fish's animations come from PC2005-cloud's [dsh-pet](https://github.com/PC2005-cloud/dsh-pet) (MIT), as re-encoded into frame sequences by QCYTSN's [dsh-dafeiyu](https://github.com/QCYTSN/dsh-dafeiyu); this is an unofficial fan-made plugin, not affiliated with DeepSeek.
 - The enhanced animations in the chat area are modified from [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux) (MIT).
 
 ## Related projects

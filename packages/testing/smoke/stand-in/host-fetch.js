@@ -28,7 +28,7 @@
       // serve (packages/testing/smoke.cjs), since the page loads them as images.
       return Promise.resolve(jsonResponse(CASE === 'custom-brand'
         ? { ok: true, mark: { type: 'image/png', version: '1-1' }, wordmark: { type: 'image/svg+xml', version: '1-1' } }
-        : { ok: true, mark: null, wordmark: null }))
+        : { ok: true, mark: null, wordmark: null, mascot: null }))
     }
     if (url === '/dsh-claude-style/hdsl') {
       // Three launcher cases: the player's own atlas, a built-in figure (no

@@ -54,6 +54,9 @@ export const BRAND_MARK_PATH = `${ROUTE_PREFIX}/brand/mark`
 /** The custom wordmark's bytes, answered the same three ways as the mark. */
 export const BRAND_WORDMARK_PATH = `${ROUTE_PREFIX}/brand/wordmark`
 
+/** The mascot picture's bytes (长征姬 in the window's corner), answered the same three ways as the mark. */
+export const BRAND_MASCOT_PATH = `${ROUTE_PREFIX}/brand/mascot`
+
 /**
  * The model peak / off-peak catalog the host half keeps. `GET` answers the
  * document it holds; `POST` makes it fetch the source first, so the browser

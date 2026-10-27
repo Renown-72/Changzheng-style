@@ -611,3 +611,122 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-enter-
 body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-precise] .dsh-claude-motion-word:not(:last-child) {
   visibility: hidden;
 }
+
+/* ---------- The mascot row: one card per character, and 长征姬's picture seat ---------- */
+/* Each character's card shows the character itself: 大肥鱼's resting frame
+   from her idle sheet, 长征姬's own picture (the crimson mark while she has
+   none); "follow the brand" shows both marks, "off" an empty stage. Under the
+   cards, the seat that uploads, replaces or removes 长征姬's picture and puts
+   a dragged mascot back in its corner (features/mascot/mascot.settings.ts). */
+body[data-dsh-claude-style] .dsh-claude-mascot-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: stretch;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-card {
+  padding-top: 10px;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-thumb {
+  display: block;
+  width: 64px;
+  height: 76px;
+  background-position: 50% 100%;
+  background-repeat: no-repeat;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-thumb[data-empty] {
+  background: var(--dsh-claude-image-changzheng-mark) no-repeat 50% 60% / 40px 40px;
+  opacity: 0.55;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-thumb[data-auto] {
+  background:
+    var(--dsh-claude-image-changzheng-mark) no-repeat 22% 55% / 30px 30px,
+    var(--dsh-claude-image-ember-mark) no-repeat 78% 55% / 30px 30px;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-thumb[data-off] {
+  width: 44px;
+  background: radial-gradient(closest-side, transparent 62%, var(--dsw-alias-border-l2) 64% 70%, transparent 72%) no-repeat 50% 92% / 44px 12px;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-card-label {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--dsw-alias-label-secondary);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-card[data-active] .dsh-claude-mascot-card-label {
+  color: var(--dsw-alias-label-primary);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px dashed var(--dsw-alias-border-l2);
+  border-radius: 12px;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-text {
+  flex: 1;
+  min-width: 0;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-title {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-primary);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-desc {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-error {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--dsw-alias-state-error-primary, #c0392b);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-button {
+  appearance: none;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--dsw-alias-brand-primary);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--dsw-alias-brand-primary) 14%, transparent);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color var(--dsh-claude-timing-feedback), border-color var(--dsh-claude-timing-feedback);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-button[data-quiet] {
+  border-color: var(--dsw-alias-border-l2);
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--dsw-alias-brand-primary) 24%, transparent);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot-seat-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

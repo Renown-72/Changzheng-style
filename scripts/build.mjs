@@ -11,7 +11,7 @@
  *   packages/client/src/entry.ts                 apply(): the FEATURES table, the deferred features installed from their chunks (D72)
  *   packages/client/src/constants.ts             constants; also evaluated here for the stylesheet gates
  *   scripts/chunks.mjs                           the deferred features' chunks (D72), routed like the assets
- *   scripts/build-cache.mjs                      the vectors and brotli payloads kept between runs in .debug/build-cache/
+ *   scripts/build-cache.mjs                      the brotli payloads kept between runs in .debug/build-cache/
  *   packages/client/src/core/ packages/client/src/shared/ packages/client/src/features/<name>/   the modules, TypeScript, strict
  *   packages/client/src/features/<dir>/<main>.manifest.ts   each feature's manifest (D72), read by scripts/shared/read-manifests.mjs
  *   packages/client/src/theme/*.css and the feature stylesheets   concatenated by rank (THEME_SHEETS and the manifests),
@@ -49,9 +49,8 @@ import path from 'node:path'
 import vm from 'node:vm'
 import { brotliCompressSync } from 'node:zlib'
 import esbuild from 'esbuild'
-import { PNG } from 'pngjs'
 import { buildHostHalf } from './build-host.mjs'
-import { buildFonts, checkClaimed, checkSheetPixels, checkSheets, layoutCells, planAssets, routeText, vectorizeSheet, writeAssets } from '../packages/assets/assets.mjs'
+import { buildFonts, checkClaimed, checkSheets, checkWebpSheet, planAssets, routeText, writeAssets } from '../packages/assets/assets.mjs'
 import { openBuildCache } from './build-cache.mjs'
 import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkScrollOwner, checkTypes } from './build-checks.mjs'
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
@@ -83,8 +82,6 @@ const LIB = path.join(ROOT, 'lib')
 const OUT = path.join(LIB, 'client.js')
 /** The slow steps' results between runs (scripts/build-cache.mjs). */
 const CACHE_DIR = path.join(ROOT, '.debug', 'build-cache')
-/** The code that checks and vectorizes a sheet: part of every vector's cache key. */
-const ASSETS_MODULE = path.join(ROOT, 'packages', 'assets', 'assets.mjs')
 
 /**
  * The plugin icon the 0.1.7 plugin manifest reads.
@@ -101,14 +98,6 @@ const ASSETS_MODULE = path.join(ROOT, 'packages', 'assets', 'assets.mjs')
  */
 const ICON_SOURCE = 'changzheng-mark.svg'
 const ICON_FILE = 'changzheng-mark.svg'
-
-/**
- * The mascot's sheets: the directory under packages/assets/src/mascot/, and the
- * three files one animation draws — the colour sheet, the accent mask the
- * palette in force fills, and the ink mask the quiet text ink fills.
- */
-const MASCOT_DIR = 'changzheng'
-const MASCOT_SHEET_FILES = (name) => [`${name}.png`, `${name}-accent.png`, `${name}-ink.png`]
 
 /**
  * The stylesheets that belong to no feature, with their place in the
@@ -134,6 +123,9 @@ const THEME_SHEETS = [
   { file: 'theme/hero.css', rank: 70 },
   { file: 'theme/sidebar.css', rank: 110 },
   { file: 'theme/third-party.css', rank: 300 },
+  // The neon finish over every feature's own paint: the accent glows, the
+  // home page's aurora and grid (after the composer card it refines).
+  { file: 'theme/neon.css', rank: 390 },
   // Last: the page on a wallpaper restates what the features paint on the shell
   { file: 'theme/wallpaper.css', rank: 400 },
 ]
@@ -250,7 +242,7 @@ const CONSTANTS = (() => {
       brand: { attribute: BRAND_ATTR, deepseek: BRAND_EMBER },
     },
     brands: BRANDS,
-    ...pick(sheets, sheetsFile, ['MASCOT_SHEETS', 'MASCOT_GUTTER', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER']),
+    ...pick(sheets, sheetsFile, ['DEEPY_CLIPS', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER', 'DEEPY_GRID']),
     featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
   }
 })()
@@ -307,76 +299,22 @@ function loadCombines(plan, claimed) {
 }
 
 /**
- * Deepy's sheets as the vectors the browser plays.
- *
- * Each PNG is decoded, held to its animation table's crop box and frame count,
- * and rebuilt as SVG over the sprite's own cell layout. The vector is what the
- * asset plan ships under the sheet's name; the PNG is an input of the build.
- *
- * A vector is cached under the PNG's bytes, its table entry, the scale, the
- * gutter and the code of packages/assets/assets.mjs: a hit stands for a sheet
- * that already passed checkSheetPixels with exactly these inputs.
- *
- * @param cache - the build cache (scripts/build-cache.mjs).
- * @returns the vectors to ship, keyed by their path under packages/assets/src/, and the
- *     PNGs they take the place of.
+ * 大肥鱼's sheets, held to their clip table before they ship: every clip an
+ * animation plays has its WebP sheet under packages/assets/src/mascot/deepy/,
+ * every sheet is a clip's, and each sheet's size matches its clip's crop box,
+ * gutter and frame count (checkWebpSheet). The sheets ship as they are.
  */
-function vectorizeDeepySheets(cache) {
+function checkDeepySheets() {
   const dir = path.join(ASSETS, 'mascot', 'deepy')
-  const sheets = CONSTANTS.DEEPY_SHEETS
-  checkSheets('DEEPY_SHEETS', sheets, [52, 52], dir, (name) => [`${name}.png`])
-  const code = fs.readFileSync(ASSETS_MODULE)
-  const generated = new Map()
-  const replaced = new Set()
-  for (const [name, sheet] of Object.entries(sheets)) {
-    const png = fs.readFileSync(path.join(dir, `${name}.png`))
-    const shape = JSON.stringify({ sheet, scale: CONSTANTS.DEEPY_SCALE, gutter: CONSTANTS.DEEPY_GUTTER })
-    const svg = cache.get('deepy-vector', [code, png, shape], () => {
-      const image = PNG.sync.read(png)
-      checkSheetPixels('DEEPY_SHEETS', name, image, sheet, CONSTANTS.DEEPY_SCALE)
-      return Buffer.from(vectorizeSheet(image, sheet.box, CONSTANTS.DEEPY_SCALE, CONSTANTS.DEEPY_GUTTER).svg, 'utf8')
-    }).toString('utf8')
-    generated.set(`mascot/deepy/${name}.svg`, svg)
-    replaced.add(`mascot/deepy/${name}.png`)
+  const clips = Object.fromEntries(Object.entries(CONSTANTS.DEEPY_CLIPS).map(([name, clip]) => [name, { ...clip, still: 0 }]))
+  checkSheets('DEEPY_CLIPS', clips, CONSTANTS.DEEPY_GRID, dir, (name) => [`${name}.webp`])
+  for (const [key, sheet] of Object.entries(CONSTANTS.DEEPY_SHEETS)) {
+    if (clips[sheet.clip] === undefined) throw new Error(`build: DEEPY_SHEETS["${key}"] plays "${sheet.clip}", which DEEPY_CLIPS does not carry`)
+    if (!Number.isInteger(sheet.still) || sheet.still < 0 || sheet.still >= sheet.frames) throw new Error(`build: DEEPY_SHEETS["${key}"] needs a still frame inside its clip`)
   }
-  return { generated, replaced }
-}
-
-/**
- * The Long March girl's sheets laid out again with MASCOT_GUTTER of transparency
- * around every frame, the colour sheet, its accent mask and its ink mask alike,
- * under their own paths. A sheet is cached under its bytes, its table entry, the
- * gutter and the code of packages/assets/assets.mjs.
- *
- * Three sheets per animation, because the two palettes share one drawing: the
- * colour sheet carries what the character is made of (hair, skin, eyes, the star
- * clip), the accent mask carries what the palette in force paints (the scarf and
- * the skirt), and the ink mask carries what takes the quiet text ink (the
- * laptop, the thought bubble, letters, notes, the hat). Only the first is drawn
- * twice; the other two are shapes a stylesheet fills.
- *
- * @param cache - the build cache (scripts/build-cache.mjs).
- * @returns the laid-out sheets, keyed by their path under packages/assets/src/.
- */
-function gutterMascotSheets(cache) {
-  const dir = path.join(ASSETS, 'mascot', MASCOT_DIR)
-  const code = fs.readFileSync(ASSETS_MODULE)
-  const generated = new Map()
-  for (const [name, sheet] of Object.entries(CONSTANTS.MASCOT_SHEETS)) {
-    for (const file of MASCOT_SHEET_FILES(name)) {
-      const png = fs.readFileSync(path.join(dir, file))
-      const shape = JSON.stringify({ sheet, gutter: CONSTANTS.MASCOT_GUTTER })
-      generated.set(`mascot/${MASCOT_DIR}/${file}`, cache.get('mascot-gutter', [code, png, shape], () => {
-        const image = PNG.sync.read(png)
-        checkSheetPixels('MASCOT_SHEETS', name, image, sheet, 1)
-        const laid = layoutCells(image, sheet.box, 1, CONSTANTS.MASCOT_GUTTER)
-        const out = new PNG({ width: laid.width, height: laid.height })
-        laid.data.copy(out.data)
-        return PNG.sync.write(out)
-      }))
-    }
+  for (const [name, clip] of Object.entries(CONSTANTS.DEEPY_CLIPS)) {
+    checkWebpSheet('DEEPY_CLIPS', name, fs.readFileSync(path.join(dir, `${name}.webp`)), clip, CONSTANTS.DEEPY_SCALE, CONSTANTS.DEEPY_GUTTER)
   }
-  return generated
 }
 
 async function main() {
@@ -396,9 +334,8 @@ async function main() {
   // yet: the plan is read by everything below, and a refusal anywhere in this
   // build must leave lib/ as it was.
   const cache = openBuildCache(CACHE_DIR)
-  const deepy = vectorizeDeepySheets(cache)
-  const builtSheets = new Map([...deepy.generated, ...gutterMascotSheets(cache)])
-  const plan = planAssets({ assetsDir: ASSETS, generated: builtSheets, replaced: deepy.replaced })
+  checkDeepySheets()
+  const plan = planAssets({ assetsDir: ASSETS })
   const claimed = new Set()
   const images = {}
   for (const file of BRAND_MARKS) {
@@ -409,27 +346,13 @@ async function main() {
   }
   const combines = loadCombines(plan, claimed)
 
-  // The girl's sheets ride the bundle: one colour sheet and two masks per
-  // animation, so the palette in force paints the scarf and the skirt.
-  const mascot = {}
-  for (const name of Object.keys(CONSTANTS.MASCOT_SHEETS)) {
-    const files = MASCOT_SHEET_FILES(name)
-    const entries = files.map((file) => plan.entries.get(`mascot/${MASCOT_DIR}/${file}`))
-    if (entries.some((entry) => entry === undefined)) {
-      throw new Error(`build: MASCOT_SHEETS["${name}"] needs ${files.join(', ')} under packages/assets/src/mascot/${MASCOT_DIR}/`)
-    }
-    for (const entry of entries) claimed.add(entry.file)
-    const [body, accent, ink] = entries
-    mascot[name] = { body: body.url, accent: accent.url, ink: ink.url }
-  }
-
-  // Deepy's sheets are the vectors the build produced; the addresses are the
-  // route's, one per sheet, and only the played ones are ever fetched.
+  // 大肥鱼's sheets are routed, one per clip, and only the played ones are
+  // ever fetched.
   const deepyUrls = {}
-  for (const name of Object.keys(CONSTANTS.DEEPY_SHEETS)) {
-    const entry = plan.entries.get(`mascot/deepy/${name}.svg`)
-    // vectorizeDeepySheets built every one of them, so absence is a bug here.
-    if (entry === undefined) throw new Error(`build: DEEPY_SHEETS["${name}"] has no vector; the sheets and the table disagree`)
+  for (const name of Object.keys(CONSTANTS.DEEPY_CLIPS)) {
+    const entry = plan.entries.get(`mascot/deepy/${name}.webp`)
+    // checkDeepySheets found every one of them, so absence is a bug here.
+    if (entry === undefined) throw new Error(`build: DEEPY_CLIPS["${name}"] has no sheet; the sheets and the table disagree`)
     claimed.add(entry.file)
     deepyUrls[name] = entry.url
   }
@@ -466,7 +389,6 @@ async function main() {
     // The version this client bundle reports wherever the host asks a client
     // for its build: the account Remote carries it on every call.
     CLIENT_VERSION: PACKAGE.version,
-    MASCOT_SHEET_URLS: mascot,
     DEEPY_SHEET_URLS: deepyUrls,
     // The motion tokens, by name: the browser half reads the same table the
     // generated token stylesheet carries, so a duration cannot be 200 ms in the

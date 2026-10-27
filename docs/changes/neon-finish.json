@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 1,
+  "external": false,
+  "at": "2026-10-27",
+  "zh": "改善霓虹质感：首页背景加入强调色极光与淡网格，问候语改为强调色渐变，输入卡片聚焦时边框随配色发光，选中会话与发送按钮在深色下带光晕；侧栏与首页徽记的星弧改为半透明分层，单色描绘时不再与五角星糊在一起。",
+  "en": "Improve the neon finish: an accent aurora and a faint grid behind the home page, the greeting in an accent gradient, the composer card's rim lit in the palette's accent while it holds focus, and a glow on the selected session and the send button in the dark theme; the emblem's orbit is now a translucent layer, so a single-colour rendering no longer merges it with the star."
+}

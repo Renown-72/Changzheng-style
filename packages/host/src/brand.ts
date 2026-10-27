@@ -10,7 +10,7 @@
  */
 import { BRAND_IMAGE_KINDS, BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-claude-style/contracts/brand'
 import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-claude-style/contracts/brand'
-import { BRAND_MARK_PATH, BRAND_PATH, BRAND_WORDMARK_PATH } from '@dsh-claude-style/contracts/routes'
+import { BRAND_MARK_PATH, BRAND_MASCOT_PATH, BRAND_PATH, BRAND_WORDMARK_PATH } from '@dsh-claude-style/contracts/routes'
 import { mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-claude-style/engine/node/dsh'
@@ -18,7 +18,7 @@ import { pluginPath } from './harness-home.js'
 import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-claude-style/engine/node/http'
 
 /** Each image's route. */
-const IMAGE_PATHS: Record<BrandImageKind, string> = { mark: BRAND_MARK_PATH, wordmark: BRAND_WORDMARK_PATH }
+const IMAGE_PATHS: Record<BrandImageKind, string> = { mark: BRAND_MARK_PATH, wordmark: BRAND_WORDMARK_PATH, mascot: BRAND_MASCOT_PATH }
 
 /**
  * Headers on every image answer. An SVG is a document that can carry script:
@@ -35,6 +35,8 @@ const IMAGE_HEADERS = {
 const SIGNATURES: Readonly<Record<string, readonly { offset: number, bytes: Buffer }[]>> = {
   'image/png': [{ offset: 0, bytes: Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]) }],
   'image/webp': [{ offset: 0, bytes: Buffer.from('RIFF', 'latin1') }, { offset: 8, bytes: Buffer.from('WEBP', 'latin1') }],
+  'image/gif': [{ offset: 0, bytes: Buffer.from('GIF8', 'latin1') }],
+  'image/jpeg': [{ offset: 0, bytes: Buffer.from([0xff, 0xd8, 0xff]) }],
 }
 
 /** One image file found on disk. */
@@ -63,7 +65,7 @@ function createBrandStore(ctx: DshContext) {
     return null
   }
 
-  const answer = (): BrandAnswer => ({ ok: true, mark: find('mark')?.state ?? null, wordmark: find('wordmark')?.state ?? null })
+  const answer = (): BrandAnswer => ({ ok: true, mark: find('mark')?.state ?? null, wordmark: find('wordmark')?.state ?? null, mascot: find('mascot')?.state ?? null })
 
   /**
    * Replace one image. The bytes land through a temporary file and a rename, so

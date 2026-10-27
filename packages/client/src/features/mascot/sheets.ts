@@ -1,103 +1,101 @@
 /**
- * The mascot sheet tables: which frames each animation holds, the box each
+ * The mascot animation tables: which frames each animation holds, the box each
  * frame is cropped to and the frame shown under reduced motion. `scripts/build.mjs`
- * reads them to rebuild every sheet the browser plays, so a face and its
+ * reads them to check every sheet the browser plays, so a sheet and its
  * animation cannot drift apart.
+ *
+ * Both characters share one state machine (mascot-stage.ts), so both tables
+ * carry every animation key it names: the work states, the moments, sleep, the
+ * reader's pokes, tickle and drag, and each character's own idle extras.
  */
 
-/**
- * Deepy's animations (features/mascot/whale.ts), one sheet each under
- * packages/assets/src/mascot/deepy/. The browser loads a sheet the first time
- * its animation plays and never while the other character is on.
- *
- * The whale is drawn on a 52×52 grid of logical pixels, five device pixels
- * to one in the sheets. A sheet holds its animation's frames eight to a
- * row, each cropped to `box` — `[x, y, width, height]` in logical pixels,
- * the smallest box that holds every frame — and every frame lasts
- * DEEPY_FRAME_MS. `still` is the frame shown for the animation when the
- * reader asks for reduced motion.
- */
-export const DEEPY_FRAME_MS = 50
-/** Deepy's sheets' resolution: device pixels to a logical pixel (packages/assets/assets.mjs rebuilds them). */
-export const DEEPY_SCALE = 5
-/**
- * The transparent margin, in logical pixels, that every frame keeps on all
- * four sides in the vector the build produces (packages/assets/assets.mjs).
- *
- * The sheets stack their frames edge to edge, and the browser draws the
- * rebuilt vector scaled down — from five pixels a logical pixel in the
- * sheet to two on the sprite. That downscale samples a little way past a
- * frame's edge, and the pixel it finds there is the bottom row of the
- * frame above: the soft tail of the whale's shadow. On the page it reads
- * as a one-device-pixel grey line across the top of the frame. A margin
- * wide enough for that reach leaves the sampling nothing but transparency,
- * and a whole logical pixel keeps every strip offset a whole CSS pixel.
- */
-export const DEEPY_GUTTER = 1
-export const DEEPY_SHEETS: Record<string, { frames: number, box: number[], still: number }> = {
-  'idle': { frames: 48, box: [12, 26, 36, 24], still: 0 },
-  'idle-look': { frames: 68, box: [11, 11, 37, 39], still: 0 },
-  'idle-spout': { frames: 64, box: [8, 17, 39, 33], still: 0 },
-  'thinking': { frames: 48, box: [0, 6, 47, 44], still: 20 },
-  'typing': { frames: 48, box: [0, 17, 52, 33], still: 16 },
-  'music': { frames: 32, box: [2, 10, 48, 40], still: 0 },
-  'conducting': { frames: 48, box: [1, 0, 51, 50], still: 6 },
-  'building': { frames: 48, box: [2, 0, 50, 50], still: 0 },
-  'error': { frames: 48, box: [4, 17, 45, 33], still: 24 },
-  'happy': { frames: 52, box: [0, 5, 52, 45], still: 44 },
-  'notification': { frames: 32, box: [3, 7, 47, 43], still: 12 },
-  'compacting': { frames: 56, box: [2, 14, 46, 36], still: 20 },
-  'sleeping': { frames: 64, box: [2, 2, 44, 48], still: 10 },
-  'waking': { frames: 30, box: [8, 4, 44, 46], still: 29 },
-  'poke-left': { frames: 40, box: [1, 16, 50, 34], still: 0 },
-  'poke-right': { frames: 40, box: [8, 16, 44, 34], still: 0 },
-  'tickle': { frames: 48, box: [9, 17, 43, 33], still: 0 },
-  'drag': { frames: 24, box: [10, 4, 41, 46], still: 0 },
+/** One animation: the clip it plays, the clip's frame count and crop box, and its still frame. */
+export interface MascotSheetEntry {
+  clip: string
+  frames: number
+  box: number[]
+  still: number
 }
 
 /**
- * The Long March girl's animations (features/mascot/mascot-character.ts), drawn
- * by scripts/draw-changzheng.py into packages/assets/src/mascot/changzheng/.
+ * 大肥鱼's clips, one WebP sheet each under packages/assets/src/mascot/deepy/,
+ * imported from the MIT-licensed dsh-pet animation set by
+ * scripts/import-dafeiyu.py (docs/THIRD_PARTY_NOTICES.md).
  *
- * She is drawn on a 52×36 grid of cells at 2px a cell, feet on the bottom row.
- * A sheet holds its animation's frames eight to a row, each cropped to `box` —
- * `[x, y, width, height]` in cells — and every frame lasts MASCOT_FRAME_MS.
- * `still` is the frame shown for the animation when the reader asks for reduced
- * motion. The keys are Deepy's, so the two share one state machine;
- * `idle-wave` and `idle-laptop` are her own idle extras.
- *
- * Every animation ships three images: the colour sheet, an accent mask (the
- * scarf and the skirt, filled with the palette's accent) and an ink mask (the
- * props, filled with the quiet text ink). Both colour cards therefore share one
- * drawing.
+ * A logical pixel is one pixel of the 412×344 source frame. A sheet holds its
+ * clip's frames eight to a row, each cropped to `box` — `[x, y, width, height]`
+ * in logical pixels — with DEEPY_GUTTER logical pixels of transparency around
+ * it, scaled by DEEPY_SCALE; every frame lasts DEEPY_FRAME_MS. The browser
+ * loads a sheet the first time an animation that plays it is wanted.
  */
-export const MASCOT_FRAME_MS = 80
-/**
- * The transparent margin, in cells, the build lays around every frame of her
- * sheets (gutterMascotSheets in scripts/build.mjs). The art is drawn edge to
- * edge, and at a fractional device scale the window around a frame takes in a
- * sliver of the cell beside it: the neighbouring frame's clothes, read on the
- * page as a one-device-pixel line down her side.
- */
-export const MASCOT_GUTTER = 1
-export const MASCOT_SHEETS: Record<string, { frames: number, box: number[], still: number }> = {
-  'idle': { frames: 24, box: [16, 7, 17, 29], still: 0 },
-  'idle-look': { frames: 31, box: [16, 7, 17, 29], still: 0 },
-  'idle-wave': { frames: 12, box: [16, 7, 19, 29], still: 0 },
-  'idle-laptop': { frames: 40, box: [16, 7, 17, 29], still: 0 },
-  'thinking': { frames: 32, box: [16, 0, 25, 36], still: 18 },
-  'typing': { frames: 6, box: [16, 7, 17, 29], still: 0 },
-  'music': { frames: 16, box: [15, 0, 24, 36], still: 0 },
-  'conducting': { frames: 24, box: [14, 7, 21, 29], still: 0 },
-  'building': { frames: 6, box: [16, 5, 17, 31], still: 0 },
-  'error': { frames: 24, box: [15, 2, 19, 34], still: 4 },
-  'happy': { frames: 32, box: [10, 2, 28, 34], still: 3 },
-  'notification': { frames: 16, box: [16, 0, 18, 36], still: 0 },
-  'compacting': { frames: 20, box: [11, 7, 24, 29], still: 3 },
-  'sleeping': { frames: 32, box: [16, 0, 24, 36], still: 0 },
-  'waking': { frames: 12, box: [14, 2, 21, 34], still: 11 },
-  'poke-left': { frames: 10, box: [16, 7, 20, 29], still: 0 },
-  'poke-right': { frames: 10, box: [13, 7, 20, 29], still: 0 },
-  'tickle': { frames: 16, box: [14, 7, 20, 29], still: 0 },
-  'drag': { frames: 8, box: [13, 4, 23, 30], still: 0 },
+export const DEEPY_FRAME_MS = 84
+/** Sheet pixels to a logical pixel; a cell (box plus gutters) is a multiple of eight logical pixels, so it is whole in the sheet. */
+export const DEEPY_SCALE = 5 / 8
+/** The transparent margin, in logical pixels, around every frame of a sheet, so the downscale never samples the neighbouring frame. */
+export const DEEPY_GUTTER = 8
+/** The source frame, in logical pixels: the stage the boxes are placed on. */
+export const DEEPY_GRID = [412, 344]
+export const DEEPY_CLIPS: Record<string, { frames: number, box: number[] }> = {
+  'idle': { frames: 40, box: [109, 58, 232, 272] },
+  'thinking': { frames: 44, box: [82, 44, 256, 288] },
+  'working': { frames: 40, box: [83, 3, 256, 328] },
+  'waiting': { frames: 40, box: [84, 36, 248, 296] },
+  'archive': { frames: 42, box: [110, 58, 224, 272] },
+  'eat': { frames: 53, box: [40, 53, 360, 280] },
+  'drag': { frames: 24, box: [103, 21, 248, 280] },
+  'success': { frames: 71, box: [70, 9, 304, 328] },
+  'error': { frames: 59, box: [57, 43, 272, 288] },
+  'poke': { frames: 29, box: [108, 36, 224, 296] },
+  'tickle': { frames: 31, box: [104, 52, 232, 280] },
+  'bubbles': { frames: 36, box: [84, 55, 248, 280] },
+  'yawn': { frames: 51, box: [104, 51, 232, 280] },
+  'stretch': { frames: 36, box: [111, 51, 224, 280] },
 }
+
+/**
+ * Which clip each animation plays, and its still frame. Several states share
+ * a clip: the stage's words (the status bubble, mascot.copy.json) tell them
+ * apart.
+ */
+const DEEPY_PLAYS: Record<string, [string, number]> = {
+  'idle': ['idle', 0],
+  'idle-bubbles': ['bubbles', 0],
+  'idle-yawn': ['yawn', 0],
+  'idle-stretch': ['stretch', 0],
+  'thinking': ['thinking', 12],
+  'typing': ['working', 0],
+  'music': ['archive', 0],
+  'building': ['archive', 0],
+  'conducting': ['archive', 0],
+  'notification': ['waiting', 0],
+  'compacting': ['eat', 20],
+  'error': ['error', 30],
+  'happy': ['success', 30],
+  'sleeping': ['idle', 0],
+  'waking': ['stretch', 18],
+  'poke-left': ['poke', 0],
+  'poke-right': ['poke', 0],
+  'tickle': ['tickle', 0],
+  'drag': ['drag', 0],
+}
+
+export const DEEPY_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntries(
+  Object.entries(DEEPY_PLAYS).map(([key, [clip, still]]) => [key, { clip, ...DEEPY_CLIPS[clip], still }]),
+)
+
+/** 大肥鱼's idle extras: now and then, between jobs. */
+export const DEEPY_EXTRAS = ['idle-bubbles', 'idle-yawn', 'idle-stretch']
+
+/**
+ * 长征姬 is the reader's own picture (the `mascot` brand image, D30): one still
+ * image, set in motion by the stylesheet per animation (mascot.css keys on
+ * `data-animation`). Every animation is one frame of the whole picture.
+ */
+export const CUSTOM_FRAME_MS = 1000
+export const CUSTOM_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntries(
+  [...Object.keys(DEEPY_PLAYS), 'idle-hop'].filter(key => !key.startsWith('idle-') || key === 'idle-hop')
+    .map(key => [key, { clip: 'custom', frames: 1, box: [0, 0, 1, 1], still: 0 }]),
+)
+
+/** 长征姬's idle extra: a little hop now and then. */
+export const CUSTOM_EXTRAS = ['idle-hop']

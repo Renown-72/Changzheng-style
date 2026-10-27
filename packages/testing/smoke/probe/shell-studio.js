@@ -76,20 +76,25 @@
           react.states = null
         }
       }
-      // The crab rides the hero card, idling, drawn from its inlined sheet and
-      // ink mask. A click on its left half pokes it, and the poke plays out
-      // back to idle on the browser's animation engine, so no frame wakes a
-      // pass. With the animation choice on "reduced" it holds the idle
-      // sheet's still frame; a click still plays the poke.
-      var crab = document.querySelector('[data-composer-card] > .dsh-claude-changzheng')
+      // The mascot stands in the window's corner while the hero page is up:
+      // under the crimson card without a picture of 长征姬 that is 大肥鱼,
+      // idling, drawn from her routed sheet. A click on her left half pokes
+      // her, and the poke plays out back to idle on the browser's animation
+      // engine, so no frame wakes a pass. With the animation choice on
+      // "reduced" she holds the idle sheet's still frame; a click still pokes.
+      for (var mascotWait = 0; mascotWait < 60; mascotWait++) {
+        var waiting = document.querySelector('body > .dsh-claude-mascot')
+        if (waiting !== null && waiting.hasAttribute('data-ready')) break
+        await sleep(50)
+      }
+      var crab = document.querySelector('body > .dsh-claude-mascot')
       r.mascot = { mounted: crab !== null }
       if (crab !== null) {
-        var crabStrip = crab.querySelector('.dsh-claude-changzheng-strip')
-        var crabHit = crab.querySelector('.dsh-claude-changzheng-hit')
+        var crabStrip = crab.querySelector('.dsh-claude-mascot-strip')
+        var crabHit = crab.querySelector('.dsh-claude-mascot-hit')
         r.mascot.ready = crab.hasAttribute('data-ready')
         r.mascot.animation = crab.getAttribute('data-animation')
-        r.mascot.body = getComputedStyle(crabStrip).backgroundImage.indexOf('data:image/png') !== -1
-        r.mascot.ink = getComputedStyle(crabStrip, '::after').maskImage.indexOf('data:image/png') !== -1
+        r.mascot.body = /\.webp"\)$/.test(getComputedStyle(crabStrip).backgroundImage)
         // A real press has to reach the crab: nothing on the page may cover it.
         crab.scrollIntoView({ block: 'center' })
         var crabBox = crabHit.getBoundingClientRect()
@@ -107,7 +112,8 @@
         await sleep(300)
         r.mascot.poked = crab.getAttribute('data-animation')
         var passesBefore = window.__passes
-        await sleep(1150)
+        // The poke clip runs 29 frames of 84 ms.
+        await sleep(2700)
         r.mascot.afterPoke = crab.getAttribute('data-animation')
         r.mascot.passesDuring = window.__passes - passesBefore
         // The choice is pushed through the host form, which is what the
@@ -120,7 +126,7 @@
         pokeCrab()
         await sleep(150)
         r.mascot.reducedClick = crab.getAttribute('data-animation')
-        await sleep(1300)
+        await sleep(2600)
         window.__pushForm({ motion: 'full' })
       }
       // The cold start screen: no session yet, so the host renders no dock
@@ -206,7 +212,7 @@
       heroRoot.remove()
       await sleep(200)
       r.homeHero.offHero = document.querySelector('[data-dsh-claude-home-hero]') !== null
-      r.mascot.afterHero = document.querySelector('.dsh-claude-changzheng') !== null
+      r.mascot.afterHero = document.querySelector('.dsh-claude-mascot') !== null
       // The stylesheet alone decides where a panel may draw: under the hero
       // stack's dock it shows, and the moment the host drops the stack's hero
       // class (the first message sent) it is gone, before any pass runs. The

@@ -1,11 +1,11 @@
 import { BRAND_IMAGE_KINDS } from '@dsh-claude-style/contracts/brand'
 import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-claude-style/contracts/brand'
-import { BRAND_MARK_ROUTE, BRAND_ROUTE, BRAND_WORDMARK_ROUTE } from '../constants'
+import { BRAND_MARK_ROUTE, BRAND_MASCOT_ROUTE, BRAND_ROUTE, BRAND_WORDMARK_ROUTE } from '../constants'
 import { notifyAll } from '@dsh-claude-style/engine/notify'
 
 /**
  * The reader's own brand images as the page paints them (D30): which of the
- * mark and the wordmark the host half holds, each with an address that changes
+ * mark, the wordmark and the mascot picture the host half holds, each with an address that changes
  * with its bytes and its width over its height. The brand feature paints them
  * (packages/client/src/features/brand/brand.ts) and the settings page replaces
  * and removes them; both follow this one state.
@@ -19,9 +19,9 @@ export interface BrandImage {
 
 export type BrandImages = Record<BrandImageKind, BrandImage | null>
 
-const ROUTES: Record<BrandImageKind, string> = { mark: BRAND_MARK_ROUTE, wordmark: BRAND_WORDMARK_ROUTE }
+const ROUTES: Record<BrandImageKind, string> = { mark: BRAND_MARK_ROUTE, wordmark: BRAND_WORDMARK_ROUTE, mascot: BRAND_MASCOT_ROUTE }
 
-let images: BrandImages = { mark: null, wordmark: null }
+let images: BrandImages = { mark: null, wordmark: null, mascot: null }
 let requested = false
 /** Bumped by every read, so an answer that arrives after a newer one is dropped. */
 let generation = 0
@@ -58,7 +58,7 @@ export function loadBrandImages() {
 export function resetBrandImages() {
   requested = false
   generation++
-  images = { mark: null, wordmark: null }
+  images = { mark: null, wordmark: null, mascot: null }
 }
 
 /**
@@ -67,9 +67,10 @@ export function resetBrandImages() {
  * not take a good mark down with it (D12).
  */
 function adopt(answer: BrandAnswer, at: number) {
-  return Promise.all(BRAND_IMAGE_KINDS.map(kind => measure(kind, answer[kind]))).then(([mark, wordmark]) => {
+  // An older host half answers without the mascot picture: none in place.
+  return Promise.all(BRAND_IMAGE_KINDS.map(kind => measure(kind, answer[kind] ?? null))).then(([mark, wordmark, mascot]) => {
     if (at !== generation) return
-    images = { mark, wordmark }
+    images = { mark, wordmark, mascot }
     notifyAll(listeners, images)
   })
 }

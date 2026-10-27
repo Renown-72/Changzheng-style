@@ -11,14 +11,16 @@ export default {
   prefValues: [MASCOT_BRAND, MASCOT_CHANGZHENG, MASCOT_DEEPY],
   stylesheets: [
     { file: 'mascot.css', rank: 350 },
-    { file: 'whale.css', rank: 360 },
   ],
   settingsRows: [{
+    // The choice as cards, with 长征姬's own picture seat under them
+    // (mascot.settings.ts).
     tab: 'appearance',
     rank: 30,
     pref: 'mascot',
     title: 'mascotTitle',
     desc: 'mascotDesc',
+    control: 'mascot-picker',
     choiceLabels: {
       [MASCOT_BRAND]: 'mascotBrand',
       [MASCOT_CHANGZHENG]: 'mascotChangzheng',

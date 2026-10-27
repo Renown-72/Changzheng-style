@@ -1,5 +1,6 @@
 import { MASCOT_CHANGZHENG, MASCOT_DEEPY, MASCOT_SCOPE_ALL } from '../../constants'
 import { readPrefs, resolveMascot } from '../../core/prefs'
+import { loadBrandImages, readBrandImages, subscribeBrandImages } from '../../shared/custom-brand'
 import { createMascotCharacter } from './mascot-character'
 import { createMascotWhale } from './whale'
 import type { HostContext } from '@dsh-claude-style/engine/host'
@@ -7,25 +8,28 @@ import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * The mascot on the composer: the pixel Long March girl
- * (packages/client/src/features/mascot/mascot-character.ts) or Deepy, the pixel
- * whale (packages/client/src/features/mascot/whale.ts), both played by the
- * agent's state (packages/client/src/features/mascot/mascot-player.ts).
+ * The mascot in the window's bottom-right corner: 长征姬, the reader's own
+ * picture (packages/client/src/features/mascot/mascot-character.ts), or
+ * 大肥鱼, the whale-tail maid (packages/client/src/features/mascot/whale.ts),
+ * both played by the agent's state (packages/client/src/features/mascot/mascot-player.ts).
  *
  * Which one is out is the mascot preference, resolved onto <body> as
- * MASCOT_ATTR: "follow the brand" puts the girl under the crimson card and the
- * fish under the cyan one, and the reader may pick either, or none. Where it
- * stands is the "where it appears" preference: the home page alone, or the home
- * page and the conversation. The other character is released, so only one
- * mascot is ever on the page.
+ * MASCOT_ATTR: "follow the brand" puts 长征姬 under the crimson card and
+ * 大肥鱼 under the cyan one, and the reader may pick either, or none. 长征姬
+ * needs her picture: until the reader has uploaded one, 大肥鱼 stands in. When
+ * it is out is the "where it appears" preference: the home page alone, or the
+ * home page and the conversation. The other character is released, so only
+ * one mascot is ever on the page.
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   const character = createMascotCharacter(ctx, ui)
   const whale = createMascotWhale(ctx, ui)
+  loadBrandImages()
 
   function sync() {
     const prefs = readPrefs()
-    const mascot = resolveMascot(prefs)
+    let mascot = resolveMascot(prefs)
+    if (mascot === MASCOT_CHANGZHENG && readBrandImages().mascot === null) mascot = MASCOT_DEEPY
     const conversation = prefs.mascotScope === MASCOT_SCOPE_ALL
     if (mascot === MASCOT_CHANGZHENG) character.sync(conversation)
     else character.release()
@@ -38,9 +42,17 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     whale.onActivity()
   }
 
+  // A picture uploaded, replaced or removed: the character changes at once,
+  // and a replaced picture is painted again.
+  const off = subscribeBrandImages(() => {
+    character.release()
+    sync()
+  })
+
   ui.mascot = { sync, onActivity }
 
   return () => {
+    off()
     character.dispose()
     whale.dispose()
     delete ui.mascot

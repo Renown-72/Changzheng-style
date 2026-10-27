@@ -1,115 +1,455 @@
-/* ── The composer mascot, the pixel Long March girl ─────────────────────────
-   She is drawn on a 52×36 grid of cells at 2px a cell (104×72px): feet on the
-   bottom row, on the top edge of what she stands on; the room a lean, a note or
-   a sparkle takes stays on the right. The player writes the sheet and the
-   sprite's crop box as custom properties when an animation starts; each frame
-   is a translation of the strip inside the sprite's window, played by the
-   browser's animation engine (packages/client/src/features/mascot/mascot-player.ts),
-   eight frames to a sheet row.
+/* ── The mascot in the window's bottom-right corner ─────────────────────────
+   One stage for both characters (features/mascot/mascot-player.ts): the root
+   is fixed to the corner, the reader can drag it elsewhere (the player writes
+   `right` / `bottom` inline and keeps them), and only the character's body
+   takes the pointer.
 
-   Three layers make one frame, because the two colour cards share one drawing:
-   the strip paints her colour sheet (hair, skin, eyes, the star clip), its
-   ::before fills the accent mask with the palette's accent (the scarf and the
-   skirt), and its ::after fills the ink mask with the tertiary label ink (the
-   laptop, the thought bubble, letters, notes, the hat). Only she takes the
-   pointer. */
+   大肥鱼 plays sprite sheets: the player writes the crop box and the cell in
+   logical pixels (one pixel of the 412×344 source frame) and the CSS pixels a
+   logical pixel stands as (`--dsh-claude-mascot-unit`); each frame is a
+   translation of the strip inside the sprite's window, played by the browser's
+   animation engine. 长征姬 is the reader's own picture, one frame, and the
+   motion is this sheet's, keyed on `data-animation` below.
 
-/* Her spacing on the home page's single-line card: 8px inside the card's right
-   edge, so the feet stand where the 18px corner starts to round. */
-body[data-dsh-claude-style] .dsh-claude-changzheng {
-  position: absolute;
-  right: 0;
-  /* Feet on the card's edge: the card draws its outline inside its own box. */
-  bottom: 100%;
-  z-index: 1;
-  width: 104px;
-  height: 72px;
+   A status bubble over the head says what the agent is doing; a neon ring at
+   the feet holds the character to the corner. */
+
+body[data-dsh-claude-style] .dsh-claude-mascot {
+  --dsh-claude-mascot-ring: var(--dsw-alias-brand-primary, #ff3355);
+  position: fixed;
+  right: 20px;
+  bottom: 14px;
+  z-index: var(--dsh-claude-layer-mascot);
   pointer-events: none;
+  transform-origin: 100% 100%;
+  animation: dsh-claude-mascot-enter var(--dsh-claude-duration-enter) var(--dsh-claude-ease-enter) both;
+}
+
+body[data-dsh-claude-style] .dsh-claude-deepy {
+  width: calc(412 * var(--dsh-claude-mascot-unit, 0.6px));
+  height: calc(344 * var(--dsh-claude-mascot-unit, 0.6px));
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng {
+  width: 210px;
+  height: 260px;
 }
 
 /* Hidden until the first sheet has drawn a frame: a host half that predates
    the sheets leaves no empty box to click on. */
-body[data-dsh-claude-style] .dsh-claude-changzheng:not([data-ready]) {
+body[data-dsh-claude-style] .dsh-claude-mascot:not([data-ready]) {
   visibility: hidden;
 }
 
-/* A conversation's input area and the panels that take its card's place span
-   the whole column, so she is set in from the edge of the card they centre;
-   those panels start 6–8px above their card. */
-body[data-dsh-claude-style] :is([data-dsh-claude-changzheng-anchor="stack"], [data-dsh-claude-changzheng-anchor="panel"]) {
-  position: relative;
+/* A narrow window gives the conversation's input area the corner: the mascot
+   stands smaller there, still clear of the send button in most layouts. */
+@media (max-width: 1180px) {
+  body[data-dsh-claude-style] .dsh-claude-mascot {
+    scale: 0.72;
+  }
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-changzheng-anchor="stack"] > .dsh-claude-changzheng {
-  right: max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2);
+@media (max-width: 860px) {
+  body[data-dsh-claude-style] .dsh-claude-mascot[data-place="stack"],
+  body[data-dsh-claude-style] .dsh-claude-mascot[data-place="panel"] {
+    display: none;
+  }
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-changzheng-anchor="panel"] > .dsh-claude-changzheng {
-  right: max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2);
-  bottom: calc(100% - 7px);
+@keyframes dsh-claude-mascot-enter {
+  from {
+    opacity: 0;
+    translate: 0 var(--dsh-claude-distance-rise);
+  }
 }
 
-/* Both characters show one frame through the crop box the player writes. */
-body[data-dsh-claude-style] :is(.dsh-claude-changzheng-sprite, .dsh-claude-deepy-sprite) {
-  height: calc(var(--dsh-claude-mascot-h, 0) * 2px);
-  overflow: hidden;
-}
-
-body[data-dsh-claude-style] .dsh-claude-changzheng-sprite {
+/* The neon ring the character stands on: the palette's accent, glowing on the
+   dark canvas and a soft shadow on the light one. */
+body[data-dsh-claude-style] .dsh-claude-mascot::before {
+  content: "";
   position: absolute;
-  left: calc(var(--dsh-claude-changzheng-x, 0) * 2px);
-  top: calc(var(--dsh-claude-changzheng-y, 0) * 2px);
-  width: calc(var(--dsh-claude-changzheng-w, 0) * 2px);
+  left: 50%;
+  bottom: 2px;
+  width: 62%;
+  height: 16px;
+  translate: -50% 0;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--dsh-claude-mascot-ring) 70%, transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--dsh-claude-mascot-ring) 30%, transparent), transparent);
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--dsh-claude-mascot-ring) 45%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--dsh-claude-mascot-ring) 35%, transparent);
+  animation: dsh-claude-mascot-ring var(--dsh-claude-period-breathe) var(--dsh-claude-ease-harmonic) infinite alternate;
+}
+
+body[data-dsh-claude-style]:not([data-ds-dark-theme]) .dsh-claude-mascot::before {
+  border-color: color-mix(in srgb, var(--dsh-claude-mascot-ring) 45%, transparent);
+  background: radial-gradient(closest-side, rgb(40 20 60 / 0.16), transparent);
+  box-shadow: none;
+}
+
+/* 大肥鱼's sheets centre her a little left of the frame's middle. */
+body[data-dsh-claude-style] .dsh-claude-deepy::before {
+  left: 54%;
+  width: 50%;
+}
+
+@keyframes dsh-claude-mascot-ring {
+  from {
+    opacity: 0.6;
+    scale: 0.94;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* ── 大肥鱼: the sheet window ── */
+
+body[data-dsh-claude-style] .dsh-claude-deepy .dsh-claude-mascot-sprite {
+  position: absolute;
+  left: calc(var(--dsh-claude-mascot-x, 0) * var(--dsh-claude-mascot-unit));
+  top: calc(var(--dsh-claude-mascot-y, 0) * var(--dsh-claude-mascot-unit));
+  width: calc(var(--dsh-claude-mascot-w, 0) * var(--dsh-claude-mascot-unit));
+  height: calc(var(--dsh-claude-mascot-h, 0) * var(--dsh-claude-mascot-unit));
+  overflow: hidden;
 }
 
 /* The strip carries the whole sheet and is translated frame to frame: a
    transform composites, where a background-position would repaint. Its box is
-   the sheet's own box — `--dsh-claude-changzheng-cell-w` is one frame cell, the
-   crop box with the transparent margin the build lays around it (MASCOT_GUTTER,
-   features/mascot/sheets.ts). The art is one pixel a cell, scaled to 2px:
-   whole multiples, so `pixelated` keeps every cell square. */
-body[data-dsh-claude-style] .dsh-claude-changzheng-strip {
-  position: relative;
+   the sheet's own: eight cells across, the cell being the crop box plus the
+   transparent gutter (DEEPY_GUTTER). The painted frames are soft illustration,
+   so the browser's own smooth scaling draws them. */
+body[data-dsh-claude-style] .dsh-claude-deepy .dsh-claude-mascot-strip {
   display: block;
-  width: calc(var(--dsh-claude-changzheng-cell-w, 0) * 16px);
-  height: calc(var(--dsh-claude-changzheng-strip-h, 0) * 2px);
+  width: calc(var(--dsh-claude-mascot-cell-w, 0) * 8 * var(--dsh-claude-mascot-unit));
+  height: calc(var(--dsh-claude-mascot-strip-h, 0) * var(--dsh-claude-mascot-unit));
   background-image: var(--dsh-claude-mascot-sheet, none);
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  image-rendering: pixelated;
 }
 
-/* The scarf and the skirt: the accent mask, so both colour cards share the
-   drawing and the palette in force decides the colour. */
-body[data-dsh-claude-style] .dsh-claude-changzheng-strip::before {
-  content: "";
+/* Her body at rest: logical columns 130–310, rows 70–330. */
+body[data-dsh-claude-style] .dsh-claude-deepy .dsh-claude-mascot-hit {
   position: absolute;
-  inset: 0;
-  background: var(--dsw-alias-brand-primary);
-  -webkit-mask: var(--dsh-claude-mascot-accent, none) no-repeat 0 0 / 100% 100%;
-  mask: var(--dsh-claude-mascot-accent, none) no-repeat 0 0 / 100% 100%;
-  image-rendering: pixelated;
-}
-
-/* The props: the ink mask, filled with the tertiary label ink so it stays a
-   quiet grey on either canvas. */
-body[data-dsh-claude-style] .dsh-claude-changzheng-strip::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--dsw-alias-label-tertiary);
-  -webkit-mask: var(--dsh-claude-mascot-ink, none) no-repeat 0 0 / 100% 100%;
-  mask: var(--dsh-claude-mascot-ink, none) no-repeat 0 0 / 100% 100%;
-  image-rendering: pixelated;
-}
-
-/* The resting body: columns 24–47, rows 20–35. */
-body[data-dsh-claude-style] .dsh-claude-changzheng-hit {
-  position: absolute;
-  left: 48px;
-  top: 40px;
-  width: 48px;
-  height: 32px;
+  left: calc(130 * var(--dsh-claude-mascot-unit));
+  top: calc(70 * var(--dsh-claude-mascot-unit));
+  width: calc(180 * var(--dsh-claude-mascot-unit));
+  height: calc(260 * var(--dsh-claude-mascot-unit));
   pointer-events: auto;
   touch-action: none;
+  cursor: grab;
+}
+
+/* ── 长征姬: the reader's picture, set in motion here ── */
+
+body[data-dsh-claude-style] .dsh-claude-changzheng .dsh-claude-mascot-sprite {
+  position: absolute;
+  inset: 0 0 8px;
+  transform-origin: 50% 100%;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng .dsh-claude-mascot-strip {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--dsh-claude-mascot-picture, none) no-repeat 50% 100% / contain;
+}
+
+body[data-dsh-claude-style][data-ds-dark-theme] .dsh-claude-changzheng .dsh-claude-mascot-strip {
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--dsh-claude-mascot-ring) 30%, transparent));
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng .dsh-claude-mascot-hit {
+  position: absolute;
+  left: 18%;
+  top: 12%;
+  width: 64%;
+  height: 84%;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot[data-carried] .dsh-claude-mascot-hit {
+  cursor: grabbing;
+}
+
+/* At rest she breathes; asleep, slower and dimmer. */
+body[data-dsh-claude-style] .dsh-claude-changzheng:is([data-animation="idle"], [data-animation="sleeping"]) .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-breathe var(--dsh-claude-period-breathe) var(--dsh-claude-ease-harmonic) infinite alternate;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="sleeping"] .dsh-claude-mascot-sprite {
+  filter: saturate(0.75) brightness(0.92);
+  animation-duration: var(--dsh-claude-period-wash-drift);
+}
+
+@keyframes dsh-claude-mascot-breathe {
+  to {
+    scale: 1 1.018;
+  }
+}
+
+/* Thinking: a slow sway, head tilted from side to side. */
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="thinking"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-sway var(--dsh-claude-period-breathe) var(--dsh-claude-ease-in-out) infinite alternate;
+}
+
+@keyframes dsh-claude-mascot-sway {
+  from {
+    rotate: -2.5deg;
+  }
+
+  to {
+    rotate: 2.5deg;
+  }
+}
+
+/* Working: a quick bob, faster the more sessions are busy. */
+body[data-dsh-claude-style] .dsh-claude-changzheng:is([data-animation="typing"], [data-animation="music"], [data-animation="building"], [data-animation="conducting"]) .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-bob var(--dsh-claude-period-dot-bounce) var(--dsh-claude-ease-in-out) infinite alternate;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng:is([data-animation="building"], [data-animation="conducting"]) .dsh-claude-mascot-sprite {
+  animation-duration: var(--dsh-claude-duration-flight);
+}
+
+@keyframes dsh-claude-mascot-bob {
+  to {
+    translate: 0 calc(var(--dsh-claude-distance-nudge) * -1);
+  }
+}
+
+/* Waiting on the reader: a hop now and then, to be noticed. */
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="notification"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-call var(--dsh-claude-period-pulse) var(--dsh-claude-ease-out) infinite;
+}
+
+@keyframes dsh-claude-mascot-call {
+  0%,
+  60%,
+  100% {
+    translate: 0 0;
+  }
+
+  70% {
+    translate: 0 calc(var(--dsh-claude-distance-rise) * -1);
+  }
+
+  80% {
+    translate: 0 0;
+  }
+
+  88% {
+    translate: 0 calc(var(--dsh-claude-distance-nudge) * -1);
+  }
+}
+
+/* A compaction squashes her. */
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="compacting"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-squash var(--dsh-claude-period-hold) var(--dsh-claude-ease-in-out) infinite alternate;
+}
+
+@keyframes dsh-claude-mascot-squash {
+  to {
+    scale: 1.05 0.93;
+  }
+}
+
+/* A failure: a shake, then still. */
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="error"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-shake var(--dsh-claude-duration-step) var(--dsh-claude-ease-in-out) 3;
+  filter: saturate(0.8);
+}
+
+@keyframes dsh-claude-mascot-shake {
+  20% {
+    translate: calc(var(--dsh-claude-distance-nudge) * -1) 0;
+  }
+
+  40% {
+    translate: var(--dsh-claude-distance-nudge) 0;
+  }
+
+  60% {
+    translate: calc(var(--dsh-claude-distance-nudge) * -0.5) 0;
+  }
+
+  80% {
+    translate: calc(var(--dsh-claude-distance-nudge) * 0.5) 0;
+  }
+}
+
+/* Done: she hops for joy. */
+body[data-dsh-claude-style] .dsh-claude-changzheng:is([data-animation="happy"], [data-animation="idle-hop"]) .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-hop var(--dsh-claude-period-landed) var(--dsh-claude-ease-out) infinite;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="idle-hop"] .dsh-claude-mascot-sprite {
+  animation-iteration-count: 1;
+}
+
+@keyframes dsh-claude-mascot-hop {
+  0%,
+  100% {
+    translate: 0 0;
+    scale: 1 1;
+  }
+
+  12% {
+    translate: 0 0;
+    scale: 1.04 0.95;
+  }
+
+  35% {
+    translate: 0 calc(var(--dsh-claude-distance-rise) * -1.6);
+    scale: 0.98 1.03;
+  }
+
+  60% {
+    translate: 0 0;
+    scale: 1.03 0.97;
+  }
+
+  72% {
+    scale: 1 1;
+  }
+}
+
+/* Waking: a stretch upwards. */
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="waking"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-stretch var(--dsh-claude-duration-clear) var(--dsh-claude-ease-settle) both;
+}
+
+@keyframes dsh-claude-mascot-stretch {
+  40% {
+    scale: 0.97 1.06;
+  }
+}
+
+/* The reader's hand: a poke tips her away, a tickle wiggles, a lift tilts. */
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="poke-left"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-tip-right var(--dsh-claude-duration-step) var(--dsh-claude-ease-spring) both;
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="poke-right"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-tip-left var(--dsh-claude-duration-step) var(--dsh-claude-ease-spring) both;
+}
+
+@keyframes dsh-claude-mascot-tip-right {
+  40% {
+    rotate: 5deg;
+  }
+}
+
+@keyframes dsh-claude-mascot-tip-left {
+  40% {
+    rotate: -5deg;
+  }
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="tickle"] .dsh-claude-mascot-sprite {
+  animation: dsh-claude-mascot-wiggle var(--dsh-claude-period-hold) var(--dsh-claude-ease-in-out) both;
+}
+
+@keyframes dsh-claude-mascot-wiggle {
+  20%,
+  60% {
+    rotate: -3deg;
+    scale: 1.02 0.98;
+  }
+
+  40%,
+  80% {
+    rotate: 3deg;
+    scale: 0.98 1.02;
+  }
+}
+
+body[data-dsh-claude-style] .dsh-claude-changzheng[data-animation="drag"] .dsh-claude-mascot-sprite {
+  rotate: -6deg;
+  scale: 1.04;
+}
+
+/* ── The status bubble ── */
+
+body[data-dsh-claude-style] .dsh-claude-mascot-bubble {
+  position: absolute;
+  right: 22%;
+  bottom: calc(100% - 26px);
+  max-width: 180px;
+  padding: 5px 11px;
+  border: 1px solid color-mix(in srgb, var(--dsh-claude-mascot-ring) 60%, transparent);
+  border-radius: 12px 12px 4px 12px;
+  background: color-mix(in srgb, var(--dsw-alias-bg-layer-1, #160f26) 88%, transparent);
+  color: var(--dsw-alias-label-primary);
+  font-family: var(--dsh-claude-font-mono, monospace);
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--dsh-claude-mascot-ring) 12%, transparent),
+    0 0 14px color-mix(in srgb, var(--dsh-claude-mascot-ring) 30%, transparent);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  translate: 0 var(--dsh-claude-distance-nudge);
+  transition:
+    opacity var(--dsh-claude-duration-fade) var(--dsh-claude-ease-out),
+    translate var(--dsh-claude-duration-fade) var(--dsh-claude-ease-out);
+}
+
+body[data-dsh-claude-style]:not([data-ds-dark-theme]) .dsh-claude-mascot-bubble {
+  background: color-mix(in srgb, var(--dsw-alias-bg-layer-1, #ffffff) 92%, transparent);
+  box-shadow: 0 4px 14px rgb(40 20 60 / 0.12);
+}
+
+/* A leading pulse dot in the accent, like a terminal's live light. */
+body[data-dsh-claude-style] .dsh-claude-mascot-bubble::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  vertical-align: 1px;
+  border-radius: 50%;
+  background: var(--dsh-claude-mascot-ring);
+  box-shadow: 0 0 6px var(--dsh-claude-mascot-ring);
+  animation: dsh-claude-mascot-live var(--dsh-claude-period-blink) var(--dsh-claude-ease-in-out) infinite alternate;
+}
+
+@keyframes dsh-claude-mascot-live {
+  from {
+    opacity: 0.35;
+  }
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot[data-saying] .dsh-claude-mascot-bubble {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* The failure's and the finish's words take the matching state colour. */
+body[data-dsh-claude-style] .dsh-claude-mascot[data-animation="error"] .dsh-claude-mascot-bubble {
+  --dsh-claude-mascot-ring: var(--dsw-alias-state-error-primary, #ff5c7a);
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot[data-animation="happy"] .dsh-claude-mascot-bubble {
+  --dsh-claude-mascot-ring: #ffd54a;
+}
+
+body[data-dsh-claude-style] .dsh-claude-mascot[data-animation="sleeping"] .dsh-claude-mascot-bubble::before {
+  animation: none;
+  opacity: 0.4;
+}
+
+/* The reduced animation choice (theme/chrome.css) reaches the skin's elements,
+   not their pseudo-elements: the ring and the bubble's light hold still here. */
+body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-mascot::before,
+body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-mascot-bubble::before {
+  animation: none;
 }

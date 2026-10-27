@@ -1,0 +1,8 @@
+{
+  "group": "new",
+  "order": 0,
+  "external": false,
+  "at": "2026-10-27",
+  "zh": "新增右下角看板娘：吉祥物从输入卡片上沿移到窗口右下角并放大，头顶状态气泡说明当前在做什么，可拖到别处并记住位置；大肥鱼换成二次元蓝发鲸尾女仆（dsh-pet，MIT）的 14 套动作；长征姬改为显示你在设置页上传的立绘，带呼吸、摇摆、蹦跳等动效，未上传时由大肥鱼代班。",
+  "en": "Add the corner mascot: it moves from the composer's top edge to the window's bottom-right corner at a larger size, with a status bubble over its head, and can be dragged elsewhere, keeping its place; Big Fish becomes the blue-haired whale-tail maid from dsh-pet (MIT) with 14 animation clips; Long March shows the picture you upload in Settings, set in motion with breathing, sway and hops, and Big Fish stands in until there is one."
+}

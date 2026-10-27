@@ -74,6 +74,34 @@
 
 - `docs/STYLE.md`：调色板叙述、「两套配色归属」、排版、等待行、首页数据色、实现说明全部改成长征机口吻；生成的三张表由构建重写。**吉祥物章节目前合成了一节**，而你要两个，这一节需要拆回「长征姬」与「大肥鱼」两节。
 
+## 第二轮（2026-10-27）：右下角看板娘与霓虹精修
+
+### 做了什么
+
+- **吉祥物挪到窗口右下角并放大**（`features/mascot/`）：根节点挂在 `document.body`，`position: fixed`，层级是新令牌 `--dsh-claude-layer-mascot`（50）。头顶状态气泡（`copy.ts` 的 `mascotSays`），可拖动并记住位置（`localStorage` 的 `dsh-claude-style:mascot-place`），设置页可"放回右下角"。窄窗口缩到 72%，860px 以下对话页不显示。原来的锚点标记（`data-dsh-claude-*-anchor`）去掉了，改为根节点上的 `data-place`。
+- **大肥鱼换成 dsh-pet 的蓝发鲸尾女仆**（MIT，经 QCYTSN/dsh-dafeiyu 转成 WebP 帧）：`scripts/import-dafeiyu.py <dsh-dafeiyu>/assets/pet` 自动找循环窗口、12fps、按包围盒裁剪、8px 透明边、5/8 缩放，输出 14 张 WebP 精灵表到 `packages/assets/src/mascot/deepy/`（约 4.8 MB，按需加载）。`sheets.ts` 拆成 `DEEPY_CLIPS`（每张表）和 `DEEPY_SHEETS`（每个状态播放哪张表）。构建里的矢量化步骤删掉了，改为 `checkWebpSheet` 校验尺寸。
+- **长征姬改为读取用户上传的立绘**：品牌图片存储新增 `mascot` 种类（`contracts/src/brand.ts`、`host/src/brand.ts`、`shared/custom-brand.ts`），支持 PNG/WebP/GIF/SVG/JPG，上限 8 MB。设置页的看板娘一行是自定义控件（`mascot.settings.ts`），带角色卡片和上传入口。立绘只有一帧，动效全在 `mascot.css` 里按 `data-animation` 处理。没有立绘时由大肥鱼代班。像素长征姬的三层精灵表和 `draw-changzheng.py` 已删除。
+- **霓虹精修**：新增 `theme/neon.css`（rank 390），包括首页极光加网格、问候语渐变、输入卡片聚焦发光、发送按钮和选中会话的光晕。两张 mark 的星弧加了 `stroke-opacity="0.55"`，用作单色遮罩时能分出两层。
+- 文档：`docs/STYLE.md` 新增"右下角看板娘 / 大肥鱼 / 长征姬 / 霓虹质感"四节；`docs/THIRD_PARTY_NOTICES.md` 补上 dsh-pet 的 MIT 许可；双语 README 的预览与鸣谢已更新，`docs/gifs/` 换成新动画；新增两条 `docs/changes/` 记录。
+
+### 没能在云端验证的
+
+这一轮的云端环境连不上 npm，`npm run build`、单元测试、smoke 都**没有跑过**。已经做过的检查：所有改动过的 TS 都能被 TypeScript 6 正常解析，全量 `tsc` 没有新增错误（剩余错误都是缺少 React 类型导致的）；JS 和 JSON 语法检查通过；用 Playwright 渲染了一个用新 CSS 拼的静态样例页，四套配色下看板娘、气泡、极光和网格都显示正常。
+
+需要在本机确认：
+
+```sh
+npm run build      # 重点看：checkWebpSheet、样式表 rank、令牌表、未认领资源
+npm test
+npm run smoke      # mascot / crab-states / deepy / stats 用例已按新结构改写，静帧坐标按 0.6px 单位计算
+npm run lint
+npm run checks:numbers   # smoke 用例的判定数字变了，重新生成 packages/testing/data/check-numbers.json
+```
+
+- `specs/behaviour/mascot/sprite-edge.spec.mjs` 已删除：它检查的是像素画最近邻采样的串帧问题，平滑缩放的插画不适用。
+- smoke 的 `crab-states` 用例现在走的是大肥鱼（测试宿主里没有立绘），结尾改为验证"选长征姬但没有立绘时由大肥鱼代班"。
+- `docs/screenshots/` 仍是 Claude 时期的旧图，README 已不再引用。构建后用 `node packages/testing/e2e.mjs --scenario shots` 重拍。
+
 ## 当前状态与阻塞
 
 - **`npm run build` 最后一次是通过的**，产物已生成（`lib/client.js`、`lib/assets/`、`lib/host/`）。但在那之后我又改了 `tokens.json` 的 `edges` 和测试期望，`lib/` 现在相对源码是**旧的**，需要重新构建。

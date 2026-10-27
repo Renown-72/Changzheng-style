@@ -23,7 +23,7 @@ const ROUTES = {
 }
 
 /** One step past the host half's size limit (packages/contracts/src/brand.ts). */
-const OVERSIZED_BYTES = 2 * 1024 * 1024 + 1
+const OVERSIZED_BYTES = 8 * 1024 * 1024 + 1
 
 /** Drive the routes from the page: uploads, refusals, and the status after each. */
 const driveRoutes = (page) => page.evaluate(async ({ routes, oversized }) => {

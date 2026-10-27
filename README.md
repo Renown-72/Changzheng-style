@@ -12,44 +12,36 @@
 
 ## 预览
 
-界面以长征姬指挥终端为视觉线索，使用清晰的侧栏标记、数据面板和输入区域。在插件设置中切换绯红与青霓两套配色；浅色和深色跟随系统。吉祥物可以跟随主题，也可以单独选择长征姬或大肥鱼。
+界面以长征姬指挥终端为视觉线索：深紫黑画布、首页的强调色极光与淡网格、渐变问候语、聚焦时发光的输入卡片。在插件设置中切换绯红与青霓两套配色；浅色和深色跟随系统。
 
-### 绯红
+### 右下角看板娘
 
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-light.png" alt="绯红主题首页，浅色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/changzheng-home-dark.png" alt="绯红主题首页，深色" /></td>
-  </tr>
-</table>
+窗口右下角站着一位看板娘，头顶气泡实时说明 Agent 在做什么；按住可以拖到任意位置，位置会被记住。吉祥物可以跟随主题（绯红→长征姬，青霓→大肥鱼），也可以单独选择。
 
-绯红配色默认显示长征姬。
-
-### 青霓
+**大肥鱼**是蓝发鲸尾女仆，随任务状态切换动作：
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="青霓主题首页，浅色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="青霓主题首页，深色" /></td>
+    <td align="center" width="25%"><img src="./docs/gifs/idle.gif" width="150" alt="待机" /><br />待机</td>
+    <td align="center" width="25%"><img src="./docs/gifs/thinking.gif" width="150" alt="思考" /><br />思考</td>
+    <td align="center" width="25%"><img src="./docs/gifs/typing.gif" width="150" alt="写回答、调用工具" /><br />写回答、调用工具</td>
+    <td align="center" width="25%"><img src="./docs/gifs/conducting.gif" width="150" alt="多任务 / 指挥子代理" /><br />多任务 / 指挥子代理</td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="./docs/gifs/notification.gif" width="150" alt="等你操作" /><br />等你操作</td>
+    <td align="center" width="25%"><img src="./docs/gifs/compacting.gif" width="150" alt="整理上下文" /><br />整理上下文</td>
+    <td align="center" width="25%"><img src="./docs/gifs/error.gif" width="150" alt="失败" /><br />失败</td>
+    <td align="center" width="25%"><img src="./docs/gifs/happy.gif" width="150" alt="完成" /><br />完成</td>
+  </tr>
+  <tr>
+    <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="150" alt="犯困" /><br />犯困</td>
+    <td align="center" width="25%"><img src="./docs/gifs/poke.gif" width="150" alt="被戳" /><br />被戳</td>
+    <td align="center" width="25%"><img src="./docs/gifs/tickle.gif" width="150" alt="被挠痒" /><br />被挠痒</td>
+    <td align="center" width="25%"><img src="./docs/gifs/drag.gif" width="150" alt="被拖动" /><br />被拖动</td>
   </tr>
 </table>
 
-青霓配色默认显示大肥鱼 Deepy。它会随任务状态切换动画：
-
-<table>
-  <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/idle.gif" width="120" alt="空闲" /><br />空闲</td>
-    <td align="center" width="25%"><img src="./docs/gifs/thinking.gif" width="120" alt="思考" /><br />思考</td>
-    <td align="center" width="25%"><img src="./docs/gifs/typing.gif" width="120" alt="写回答、调用工具" /><br />写回答、调用工具</td>
-    <td align="center" width="25%"><img src="./docs/gifs/conducting.gif" width="120" alt="指挥子代理" /><br />指挥子代理</td>
-  </tr>
-  <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/notification.gif" width="120" alt="等你操作" /><br />等你操作</td>
-    <td align="center" width="25%"><img src="./docs/gifs/error.gif" width="120" alt="失败" /><br />失败</td>
-    <td align="center" width="25%"><img src="./docs/gifs/happy.gif" width="120" alt="完成" /><br />完成</td>
-    <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="120" alt="睡着" /><br />睡着</td>
-  </tr>
-</table>
+**长征姬**显示你自己上传的立绘：在 设置 › 外观 › 看板娘 里点「上传立绘」（PNG、WebP、GIF、SVG 或 JPG，不超过 8 MB，透明背景最佳；动图会自己播放），或者直接把图片放到 `$DSH_HOME/dsh-claude-style/brand/mascot.png`。插件会给她加上呼吸、摇摆、蹦跳、摇头等状态动效。插件本身不附带长征姬的图片，请使用你有权使用的图；没有上传时由大肥鱼代班。
 
 ## 安装
 
@@ -87,7 +79,7 @@ dsh plugin --profile web add "<项目目录>"      # 网页应用
 
 - 「钠 / Sodium」取名自 Minecraft 的 [Sodium](https://github.com/CaffeineMC/sodium) 渲染优化模组，本插件与它没有关联。
 - 消息导航参考 SherUnlocked-4869 的 [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav)（MIT）。
-- Deepy 的动画帧图来自 calmly-eating-bugs（[@wp3171216237](https://github.com/wp3171216237)）绘制的 Deepy 小鲸鱼主题包。
+- 大肥鱼的动画来自 PC2005-cloud 的 [dsh-pet](https://github.com/PC2005-cloud/dsh-pet)（MIT），经 QCYTSN 的 [dsh-dafeiyu](https://github.com/QCYTSN/dsh-dafeiyu) 整理为帧序列；本插件为非官方同人作品，与 DeepSeek 无关。
 - 聊天区的增强动效改自 [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux)（MIT）。
 
 ## 友链

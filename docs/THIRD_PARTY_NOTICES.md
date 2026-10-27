@@ -34,6 +34,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## dsh-pet
+
+大肥鱼's animation sheets (`packages/assets/src/mascot/deepy/`, routed into `lib/assets/`) are made by `scripts/import-dafeiyu.py` from the whale-tail maid animation set of dsh-pet (AI-generated green-screen clips matted to transparency), as re-encoded into 24 fps WebP frames by QCYTSN/dsh-dafeiyu (MIT) at dsh-pet commit `549fff2ea33c2acfb16612c76912c6137da4a758`: a window of each clip at 12 fps, cropped and laid out as sprite sheets. The "dsh-pet" name and its project identity belong to their owners; this is an unofficial fan-made plugin, not affiliated with or endorsed by DeepSeek.
+
+Source: <https://github.com/PC2005-cloud/dsh-pet>, via <https://github.com/QCYTSN/dsh-dafeiyu>
+
+```
+MIT License
+
+Copyright (c) 2026 PC2005-cloud
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## Lobe Icons
 
 The vendor lockups the model picker draws (`packages/assets/src/icons/combine/`, inlined into `lib/client.js`) are composed by `scripts/fetch-lobe-combines.py`: most from Lobe Icons (`@lobehub/icons-static-svg` ships each vendor's mono mark, colour mark and wordmark, and `@lobehub/icons` carries each vendor's brand colour and which artwork variants exist), the rest — OpenAI's and Reflection's — from artwork the repository carries under `packages/assets/src/icons/`. Brand names and logos remain trademarks of their respective owners.

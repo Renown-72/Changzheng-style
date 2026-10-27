@@ -16,7 +16,9 @@
     // work from the top of the input area, and stands on the panel that takes
     // the card's place while the reader is asked for something.
     await probe.onlyFor(['deepy', 'crab-states'], async function () {
-      var mascotName = window.SMOKE_CASE === 'deepy' ? 'deepy' : 'changzheng'
+      // 长征姬 stands only with the reader's picture, which the stand-in host
+      // has none of: under either card the corner mascot is 大肥鱼.
+      var mascotName = 'deepy'
       var driver = window.__deepy
       var whaleNow = function () {
         var node = document.querySelector('.dsh-claude-' + mascotName)
@@ -32,7 +34,7 @@
         return {
           animation: node.getAttribute('data-animation'),
           ready: node.hasAttribute('data-ready'),
-          place: node.parentElement === null ? null : node.parentElement.getAttribute('data-dsh-claude-' + mascotName + '-anchor'),
+          place: node.getAttribute('data-place'),
           frame: offsets === null ? '0px 0px' : offsets[1] + 'px ' + offsets[2] + 'px',
           sheet: getComputedStyle(strip).backgroundImage,
           clip: { overflow: getComputedStyle(view).overflow, width: viewBox.width, height: viewBox.height, sheetWidth: stripBox.width },
@@ -78,7 +80,7 @@
       await sleep(600)
       var nowFrame = function () { var state = whaleNow(); return state === null ? null : state.frame }
       r.states.idle = { before: r.states.home && r.states.home.frame, after: nowFrame(), passes: window.__passes - deepyPasses }
-      if (mascotName === 'deepy') {
+      if (window.SMOKE_CASE === 'deepy') {
         // The motion choice holds the playing sheet's still frame: a looping
         // animation stops advancing, while a one-shot (the poke below) plays out.
         window.__pushForm({ motion: 'reduced' })
@@ -99,12 +101,12 @@
       hit.dispatchEvent(new PointerEvent('pointerup', Object.assign({ buttons: 0 }, press)))
       await sleep(250)
       r.states.poke = whaleNow()
-      if (mascotName === 'deepy') {
+      if (window.SMOKE_CASE === 'deepy') {
         // Two sheets are all this case asks for: the one it plays above, and the
         // one this state change switches to. It leaves with the page.
         deepyHero.remove()
         await sleep(200)
-        r.states.gone = whaleNow() === null && document.querySelectorAll('[data-dsh-claude-deepy-anchor]').length === 0
+        r.states.gone = whaleNow() === null
         return
       }
       // The crab plays every state on the conversation page, and stands where
@@ -225,8 +227,8 @@
       Date.now = deepyClock
       deepyConversation.remove()
       await sleep(200)
-      r.states.gone = whaleNow() === null && document.querySelectorAll('[data-dsh-claude-' + mascotName + '-anchor]').length === 0
-      if (mascotName === 'changzheng') {
+      r.states.gone = whaleNow() === null
+      if (window.SMOKE_CASE === 'crab-states') {
         // Where it appears: kept to the home page, the crab stays off the
         // conversation; with the mascot off it leaves the home card as well.
         document.body.appendChild(deepyConversation)
@@ -244,7 +246,8 @@
         window.__pushForm({ mascot: 'off' })
         await sleep(300)
         r.states.off = whaleNow()
-        window.__pushForm({ mascot: 'deepy' })
+        // 长征姬 picked without her picture: 大肥鱼 stands in.
+        window.__pushForm({ mascot: 'changzheng' })
         await sleep(300)
         r.states.deepyPicked = document.querySelector('.dsh-claude-deepy') !== null && document.querySelector('.dsh-claude-changzheng') === null
         window.__pushForm({ mascot: 'crab', mascotScope: 'all' })

@@ -1030,45 +1030,94 @@ stand-in rows — and the heat grid's empty cell **is** the zero step, so "no da
 and "a day with no usage" stay different things: a missing value draws a
 placeholder, a zero day draws the grid's own base tone.
 
-## Long March girl · 输入卡片上的长征姬
+## Corner mascot · 右下角看板娘
 
-The pixel Long March girl is the mascot on the composer. She stands on the
-composer card's top edge on both home layouts, and on the input area or the panel
-that replaces its card in a conversation (unless Where it appears keeps her to the
-home page). She is drawn on a 52×36 grid of cells at 2px a cell, crisp
-(`pixelated`, 104×72px): feet on the bottom row, on the edge of what she stands
-on, and the cells on the right take a lean, a note or a sparkle. Her resting body
-is 48×32px (columns 24–47, rows 20–35), and only it takes the pointer.
+The mascot stands in the window's bottom-right corner (`position: fixed`, 20px
+from the right and 14px from the bottom) on the layer `--dsh-claude-layer-mascot`,
+over the page and under the floating cards. It is out while the home page — or,
+when Where it appears says so, a conversation — is on screen, and it follows that
+conversation's session. The reader can drag it anywhere in the window; the offset
+from the bottom-right corner is kept per browser (`localStorage`), and the
+settings row's "Back to the corner" clears it. Under 1180px of window width it
+stands at 72%, and under 860px it leaves the conversation page to the input area.
 
-Three layers make one frame, so both colour cards share one drawing: the colour
-sheet holds what she is made of — white hair `#f4f0ff`, the skin, the crimson
-eyes, the star-gold clip `#ffd54a` — the **accent mask** holds the scarf and the
-skirt and is filled with the palette's accent, and the **ink mask** holds the
-props (the laptop, the thought bubble, letters, notes, the hard hat) and is filled
-with the tertiary label ink. Every frame lasts 80ms. The drawings come from
-`scripts/draw-changzheng.py`. With the animation choice resolved to "reduced"
-each state holds its still frame; a click or a pull still plays its reaction.
+A neon ring in the palette's accent lies under its feet (a soft shadow on the
+light canvas), and a status bubble over its head says what the agent is doing:
+thinking, on it, juggling tasks, directing helpers, waiting for you, tidying
+context, done, something failed, Zzz. The bubble's live light takes the accent,
+the failure's red and the finish's star gold. Only the character's body takes the
+pointer: a click on its left or right half pokes it, four quick clicks tickle it,
+a press that travels 4px lifts and carries it.
 
-| State | Animation | Still frame |
-|---|---|---|
-| idle, every 20–40 s a look around, a wave or a while at the laptop | `idle`, `idle-look`, `idle-wave`, `idle-laptop` | 0 |
-| the model reasons or has not answered: eyes up to a thought bubble | `thinking` | 18 |
-| the model writes or tools run: 1 / 2 / 3+ sessions at work (typing / headphones / typing in a hard hat) | `typing` / `music` / `building` | 0 / 0 / 0 |
-| subagents running: 1 / 2+ (headphones / conducting) | `music` / `conducting` | 0 / 0 |
-| a compaction runs: squashed | `compacting` | 3 |
-| an approval, a question or a plan review waits: an exclamation mark | `notification` | 0 |
-| a tool call or a turn failed (4.8 s): crossed eyes, a shake | `error` | 4 |
-| a turn or a compaction finished (5.2 s): hops, arms up | `happy` | 3 |
-| a quiet minute / the next pointer move or key | `sleeping` / `waking` | 0 / 11 |
-| a click on the left / right half, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | 0 |
+Which character stands is the mascot preference: "follow the brand" puts 长征姬
+under the crimson card and 大肥鱼 under the cyan one. Both are played by the
+same state machine (`features/mascot/mascot-stage.ts`); with the animation choice
+resolved to "reduced" each state holds its still frame, and a click or a pull
+still plays its reaction.
 
-## Big Fish · 输入卡片上的大肥鱼
+| State | Animation | 大肥鱼 clip · still | 长征姬 motion |
+|---|---|---|---|
+| idle; every 20–40 s an extra | `idle`; `idle-bubbles`, `idle-yawn`, `idle-stretch` / `idle-hop` | `idle`; `bubbles`, `yawn`, `stretch` · 0 | breath; a hop |
+| the model reasons or has not answered | `thinking` | `thinking` · 12 | a slow sway |
+| the model writes or tools run: 1 / 2 / 3+ sessions | `typing` / `music` / `building` | `working` / `archive` / `archive` · 0 | a bob, quicker for 3+ |
+| subagents running: 2+ | `conducting` | `archive` · 0 | a quick bob |
+| a compaction runs | `compacting` | `eat` · 20 | a squash |
+| an approval, a question or a plan review waits | `notification` | `waiting` · 0 | a hop every 1.6 s |
+| a tool call or a turn failed | `error` | `error` · 30 | a shake |
+| a turn or a compaction finished | `happy` | `success` · 30 | hops |
+| a quiet minute / the next pointer move or key | `sleeping` / `waking` | `idle` / `stretch` · 0 / 18 | a slow dim breath / a stretch |
+| a click on the left / right half, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | `poke`, `tickle`, `drag` · 0 | a tip, a wiggle, a tilt |
 
-Deepy is the cyan card's default mascot and can also be selected independently.
-The whale stands on the composer and follows the same activity and motion
-preferences as the Long March girl. Its 52×52 logical grid is drawn at 2px per
-cell. The source sheets contain five pixels per cell; the build reconstructs
-them as vectors so they remain legible at different display scales.
+## 大肥鱼 · Big Fish
+
+The blue-haired whale-tail maid: the clips of the MIT-licensed dsh-pet animation
+set, as re-encoded by dsh-dafeiyu (docs/THIRD_PARTY_NOTICES.md).
+`scripts/import-dafeiyu.py` takes a window of each clip at 12 fps — a loop whose
+last frame comes back close to its first, or a once-clip from the character at
+rest to where it comes back nearest to it — crops each clip to the smallest box
+that holds all its frames, and lays them out eight to a row with an 8-pixel
+transparent gutter, at 5/8 of the source's 412×344 frame, as WebP. A logical
+pixel is one source pixel and stands 0.6 CSS pixels on the page (247×206 for the
+whole frame). Each frame lasts 84 ms. The sheets are routed (about 4.8 MB for the
+fourteen clips) and each is fetched the first time an animation that plays it is
+wanted; several states share a clip (`DEEPY_SHEETS`), and the bubble tells them
+apart. The frames are soft illustration, so the browser's own smooth scaling
+draws them.
+
+## 长征姬 · Long March
+
+The reader's own picture: the `mascot` brand image (D30), uploaded on the
+settings page's mascot row or dropped by hand into
+`$DSH_HOME/dsh-claude-style/brand/` as `mascot.png` (or `.webp`, `.gif`, `.svg`,
+`.jpg`), up to 8 MB. The package carries no picture of her. It stands in a
+210×260 box, scaled to fit and standing on the box's bottom edge; an animated GIF
+or WebP plays itself. Every state is one frame of it, and the motion is the
+stylesheet's (the last column of the table above), on the sprite's own box so it
+never fights the frame's translation. On the dark canvas the picture takes a
+soft glow of the accent. Without a picture, 大肥鱼 stands in.
+
+## Neon finish · 霓虹质感
+
+`theme/neon.css` lays the command-terminal finish over every feature's own paint,
+all of it read from the palette's accent so the crimson card glows crimson and the
+cyan card cyan:
+
+- **Home backdrop** — under the skin's own palette (not over a wallpaper), the
+  hero root carries an accent aurora behind the greeting, a faint star-gold glow
+  lower right, and a 28px grid of accent hairlines (6% on dark, 5% on light).
+- **Greeting** — the hero's title runs in a gradient from the label ink into the
+  accent; on the dark canvas the brand mark glows.
+- **Composer card** — at rest a 1px accent highlight catches its top edge (dark);
+  holding focus its rim turns the accent at 55% with a 22px accent glow (dark) or
+  a 3px accent ring (light). These answer the composer restyle's gate.
+- **Glows on the dark canvas** — the send button's hover halo and the selected
+  session row's accent bar.
+- **Details** — the scrollbar thumb takes the accent while held; a rule in an
+  answer is a fading accent line.
+
+The brand marks keep their orbit at 55% opacity under the opaque star, so a
+single-colour mask (the sidebar, the hero, the settings tabs) still reads the
+two layers apart.
 
 ## Implementation notes
 

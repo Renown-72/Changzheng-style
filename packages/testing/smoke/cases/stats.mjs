@@ -209,18 +209,18 @@ export default {
       rows('models') === 6 && said('models', /^Show 2 more$/),
       JSON.stringify({ rows: rows('models'), texts: renders.models && renders.models.texts.slice(-3) }))
     const mascot = r.mascot || {}
-    check('the crab stands on the hero card idling, drawn from its inlined sheet and ink mask',
-      mascot.mounted === true && mascot.ready === true && mascot.animation === 'idle' && mascot.body === true && mascot.ink === true,
+    check('the mascot stands in the corner on the hero page idling, drawn from its routed sheet',
+      mascot.mounted === true && mascot.ready === true && mascot.animation === 'idle' && mascot.body === true,
       JSON.stringify(mascot))
-    check('a click on its left half reaches the crab and pokes it; the poke plays back to idle without waking a pass',
+    check('a click on its left half reaches the mascot and pokes it; the poke plays back to idle without waking a pass',
       mascot.reachable === true && mascot.poked === 'poke-left' && mascot.afterPoke === 'idle' && mascot.passesDuring === 0,
       JSON.stringify(mascot), 'timing')
-    // The idle still frame is the sheet's first, inside the one-cell margin around it.
+    // The idle still frame is the sheet's first, inside the 8-logical-pixel gutter at 0.6px a logical pixel.
     check('with the animation choice on "reduced" it holds the idle still frame; a click still pokes it',
-      mascot.reducedAttr === 'reduced' && mascot.stillFrame === 'translate(-2px, -2px)' && mascot.stillAnimations === 0 &&
+      mascot.reducedAttr === 'reduced' && mascot.stillFrame === 'translate(-4.8px, -4.8px)' && mascot.stillAnimations === 0 &&
         mascot.reducedClick === 'poke-left',
       JSON.stringify(mascot), 'timing')
-    check('the crab leaves with the hero page', mascot.afterHero === false, JSON.stringify(mascot))
+    check('the mascot leaves with the hero page', mascot.afterHero === false, JSON.stringify(mascot))
     check('the studio hero mark is on the document on the hero page and off it elsewhere, and the studio rules reach the stack',
       r.homeHero !== undefined && r.homeHero.onHero === true && r.homeHero.offHero === false && r.homeHero.stackMaxWidth === '720px',
       JSON.stringify(r.homeHero))

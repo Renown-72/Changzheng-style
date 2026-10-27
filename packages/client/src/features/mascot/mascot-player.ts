@@ -4,13 +4,14 @@ import { createMascotSignals } from './mascot-signals'
 import type { MascotMoment } from './mascot-signals'
 import { decideStage, finishStage, freshStage, nextDecisionAt, switchSettles, takeMoment } from './mascot-stage'
 import type { MascotPick, PlayMode } from './mascot-stage'
-import { buildElement, createStamp, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { buildElement, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
 import type { HostContext } from '@dsh-claude-style/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
-/** One animation's sheet: its frame count, its crop box `[x, y, width, height]` in logical pixels, and its still frame. */
+/** One animation's sheet: the clip it plays, its frame count, its crop box `[x, y, width, height]` in logical pixels, and its still frame. */
 export interface MascotSheet {
+  clip: string
   frames: number
   box: number[]
   still: number
@@ -25,7 +26,7 @@ export interface MascotSheets {
 }
 
 /**
- * The characters the player plays. A union of literals: the anchor mark is
+ * The characters the player plays. A union of literals: the class names are
  * built from the name, and the build reads the marks the stylesheets key on
  * off this type (scripts/source-tree.mjs).
  */
@@ -37,18 +38,46 @@ export interface MascotCharacter {
   sheets: Record<string, MascotSheet>
   frameMs: number
   gutter?: number
+  /** CSS pixels to a logical pixel of this character's sheets. */
+  unit: number
   extras: string[]
+  /** The words the status bubble shows over an animation, or null for none. */
+  say(key: string): string | null
   createSheets(onReady: () => void): MascotSheets
 }
 
+/** Where the reader dragged the mascot to: its offset from the window's bottom-right corner, kept per browser. */
+const PLACE_KEY = 'dsh-claude-style:mascot-place'
+
+/** The stored offset, or null for the stylesheet's own corner. */
+function readPlace(): { right: number, bottom: number } | null {
+  try {
+    const raw = localStorage.getItem(PLACE_KEY)
+    if (raw === null) return null
+    const place = JSON.parse(raw) as { right?: unknown, bottom?: unknown }
+    return typeof place.right === 'number' && typeof place.bottom === 'number' ? { right: place.right, bottom: place.bottom } : null
+  } catch {
+    return null
+  }
+}
+
+function writePlace(place: { right: number, bottom: number }) {
+  try {
+    localStorage.setItem(PLACE_KEY, JSON.stringify(place))
+  } catch {
+    // Storage refused (a private window): the place holds for this page only.
+  }
+}
+
 /**
- * One mascot on the composer — the pixel Long March girl or Deepy the whale —
- * played from its sheets by the state the agent is in
+ * One mascot in the window's bottom-right corner — 长征姬 (the reader's own
+ * picture) or 大肥鱼 — played from its sheets by the state the agent is in
  * (packages/client/src/features/mascot/mascot-signals.ts).
  *
- * It stands on the composer card, or on the approval panel that takes the
- * card's place: that panel is the composer chain's fallback wrapper, whose
- * class-name fragment is the placement contract. The chat target is
+ * It is out while the home page, or (when the scope preference says so) a
+ * conversation, is on screen, and follows that conversation's session; it
+ * stands in the corner rather than on the composer, so its size does not
+ * depend on the card's. The reader can drag it elsewhere; the place is kept. The chat target is
  * subscribed while a session is followed, because an unsubscribed read
  * answers nothing in the trajectory view; one-off moments come from the
  * session's event stream. Priority and the clock rules are mascot-stage.ts's.
@@ -59,10 +88,11 @@ export interface MascotCharacter {
  * placement slot or activity service retires the host reads here.
  *
  * @param ui - shared handle table (`ui.composer`).
- * @param character - `{ name, sheets, frameMs, gutter, extras, createSheets }`:
- *     `name` prefixes the class names, the custom properties and the anchor
- *     mark (`dsh-claude-<name>`); `sheets` is the animation table
- *     (`{ frames, box, still }` per key, every key the signals, moments,
+ * @param character - `{ name, sheets, frameMs, gutter, unit, extras, say, createSheets }`:
+ *     `name` prefixes the class names and the custom properties
+ *     (`dsh-claude-<name>`); `unit` is CSS pixels to a logical pixel;
+ *     `say(key)` gives the status bubble's words; `sheets` is the animation table
+ *     (`{ clip, frames, box, still }` per key, every key the signals, moments,
  *     sleep, extras and reactions name); `gutter` the transparent margin
  *     each frame cell carries in the character's sheets, in logical pixels
  *     (absent when they carry none); `extras` the idle extras;
@@ -76,12 +106,10 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** How far a press travels before it lifts the mascot. */
   const LIFT_PX = 4
   const PREFIX = `dsh-claude-${character.name}` as const
-  /** The transparent margin each frame cell carries in this character's sheets (MASCOT_GUTTER), in logical pixels. */
+  /** The transparent margin each frame cell carries in this character's sheets (DEEPY_GUTTER), in logical pixels. */
   const GUTTER = character.gutter ?? 0
-  /** A marker on the host element the mascot stands on, which makes it the mascot's containing block. */
-  const ANCHOR_ATTR = `data-${PREFIX}-anchor` as const
-  /** The stamp carrying the anchor mark across re-renders. */
-  const anchorStamp = createStamp(ANCHOR_ATTR)
+  /** CSS pixels to a logical pixel. */
+  const UNIT = character.unit
   const SHEETS = character.sheets
   const FRAME_MS = character.frameMs
 
@@ -89,6 +117,9 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   let root: HTMLElement | null = null
   let sprite: HTMLElement | null = null
   let strip: HTMLElement | null = null
+  let bubble: HTMLElement | null = null
+  /** The pointer offset inside the mascot's box while the reader carries it. */
+  let carry: { dx: number, dy: number } | null = null
   /** The signal reader, created when the mascot first stands somewhere. */
   let signals: ReturnType<typeof createMascotSignals> | null = null
 
@@ -117,13 +148,21 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
 
   /** @returns the new root; the sprite and the strip are set beside it. */
   function build() {
-    const built = buildElement('span', PREFIX)
+    const built = buildElement('span', `dsh-claude-mascot ${PREFIX}`)
     built.setAttribute('aria-hidden', 'true')
-    sprite = buildElement('span', `${PREFIX}-sprite`)
-    strip = buildElement('span', `${PREFIX}-strip`)
+    built.style.setProperty('--dsh-claude-mascot-unit', `${UNIT}px`)
+    const place = readPlace()
+    if (place !== null) {
+      built.style.right = `${place.right}px`
+      built.style.bottom = `${place.bottom}px`
+    }
+    bubble = buildElement('span', 'dsh-claude-mascot-bubble')
+    built.appendChild(bubble)
+    sprite = buildElement('span', `dsh-claude-mascot-sprite ${PREFIX}-sprite`)
+    strip = buildElement('span', `dsh-claude-mascot-strip ${PREFIX}-strip`)
     sprite.appendChild(strip)
     built.appendChild(sprite)
-    const hit = buildElement('span', `${PREFIX}-hit`)
+    const hit = buildElement('span', `dsh-claude-mascot-hit ${PREFIX}-hit`)
     hit.addEventListener('pointerdown', onPressStart)
     hit.addEventListener('pointermove', onPressMove)
     hit.addEventListener('pointerup', onPressEnd)
@@ -182,8 +221,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
       stage.quietSince = Date.now()
       signals = createMascotSignals(ctx, onMoment, refresh)
     }
-    if (root.parentNode !== stand.element) stand.element.appendChild(root)
-    anchorStamp.mark(stand.element, stand.place)
+    if (root.parentNode !== document.body) document.body.appendChild(root)
+    setAttributeIfChanged(root, 'data-place', stand.place)
     if (stand.session !== stage.sessionId) {
       stage.sessionId = stand.session
       // A moment belongs to the page it happened on.
@@ -224,7 +263,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** The strip translation that puts one frame of a sheet in the window. */
   function frameOffset(sheet: MascotSheet, frame: number) {
     const [cellWidth, cellHeight] = cellSize(sheet)
-    return `translate(${-((frame % 8) * cellWidth + GUTTER) * 2}px, ${-(Math.floor(frame / 8) * cellHeight + GUTTER) * 2}px)`
+    return `translate(${-((frame % 8) * cellWidth + GUTTER) * UNIT}px, ${-(Math.floor(frame / 8) * cellHeight + GUTTER) * UNIT}px)`
   }
 
   /**
@@ -319,14 +358,19 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (stage.reaction !== null && stage.reaction.key === next.key) stage.reaction.fresh = false
     const style = root.style
     sheets.paint(style, next.key)
-    style.setProperty(`--${PREFIX}-x`, String(sheet.box[0]))
-    style.setProperty(`--${PREFIX}-y`, String(sheet.box[1]))
-    style.setProperty(`--${PREFIX}-w`, String(sheet.box[2]))
-    // Both characters' sprite windows read the same height property.
+    // Unitless logical pixels; the stylesheet multiplies them by --dsh-claude-mascot-unit.
+    style.setProperty('--dsh-claude-mascot-x', String(sheet.box[0]))
+    style.setProperty('--dsh-claude-mascot-y', String(sheet.box[1]))
+    style.setProperty('--dsh-claude-mascot-w', String(sheet.box[2]))
     style.setProperty('--dsh-claude-mascot-h', String(sheet.box[3]))
-    style.setProperty(`--${PREFIX}-cell-w`, String(cellWidth))
-    style.setProperty(`--${PREFIX}-strip-h`, String(cellHeight * Math.ceil(sheet.frames / 8)))
+    style.setProperty('--dsh-claude-mascot-cell-w', String(cellWidth))
+    style.setProperty('--dsh-claude-mascot-strip-h', String(cellHeight * Math.ceil(sheet.frames / 8)))
     setAttributeIfChanged(root, 'data-animation', next.key)
+    if (bubble !== null) {
+      const words = character.say(next.key)
+      bubble.textContent = words ?? ''
+      root.toggleAttribute('data-saying', words !== null)
+    }
     play(strip, next.key, next.mode)
     if (!root.hasAttribute('data-ready')) root.setAttribute('data-ready', '')
   }
@@ -364,11 +408,37 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   }
 
   function onPressMove(event: PointerEvent) {
-    if (stage.press === null || stage.press.lifted || event.pointerId !== stage.press.id) return
+    if (stage.press === null || event.pointerId !== stage.press.id) return
+    if (stage.press.lifted) {
+      carryTo(event)
+      return
+    }
     if (Math.hypot(event.clientX - stage.press.x, event.clientY - stage.press.y) < LIFT_PX) return
     stage.press.lifted = true
     stage.clicks = []
+    if (root !== null) {
+      const box = root.getBoundingClientRect()
+      carry = { dx: box.right - stage.press.x, dy: box.bottom - stage.press.y }
+      root.setAttribute('data-carried', '')
+    }
     react('drag', 'loop')
+    carryTo(event)
+  }
+
+  /**
+   * Move the mascot with the reader's pointer, its box kept inside the window.
+   * The offset is written from the bottom-right corner, the stylesheet's own
+   * anchor, so a resized window keeps it near the same corner.
+   */
+  function carryTo(event: PointerEvent) {
+    if (root === null || carry === null) return
+    const box = root.getBoundingClientRect()
+    const width = document.documentElement.clientWidth
+    const height = document.documentElement.clientHeight
+    const right = Math.min(Math.max(width - (event.clientX + carry.dx), 0), Math.max(width - box.width, 0))
+    const bottom = Math.min(Math.max(height - (event.clientY + carry.dy), 0), Math.max(height - box.height, 0))
+    root.style.right = `${Math.round(right)}px`
+    root.style.bottom = `${Math.round(bottom)}px`
   }
 
   /**
@@ -381,6 +451,13 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     const lifted = stage.press.lifted
     stage.press = null
     if (lifted) {
+      carry = null
+      if (root !== null) {
+        root.removeAttribute('data-carried')
+        const right = parseFloat(root.style.right)
+        const bottom = parseFloat(root.style.bottom)
+        if (Number.isFinite(right) && Number.isFinite(bottom)) writePlace({ right, bottom })
+      }
       stage.reaction = null
       step()
     }
@@ -426,7 +503,6 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (stage.timer !== null) clearTimeout(stage.timer)
     if (stage.animation !== null) stage.animation.cancel()
     if (root !== null && root.parentNode !== null) root.parentNode.removeChild(root)
-    anchorStamp.release()
     if (signals !== null) signals.dispose()
     signals = null
     // One replacement for every field the page owned.
@@ -439,6 +515,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     root = null
     sprite = null
     strip = null
+    bubble = null
   }
 
   return { sync, release, onActivity, dispose }
