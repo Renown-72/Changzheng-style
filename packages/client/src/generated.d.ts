@@ -17,6 +17,8 @@ declare module 'virtual:dsh-claude-style/generated' {
   export const CLIENT_VERSION: string
   /** The address each of 大肥鱼's sheets plays from, by clip name (DEEPY_CLIPS). */
   export const DEEPY_SHEET_URLS: Record<string, string>
+  /** The packaged Long March portrait, used when no custom mascot image is supplied. */
+  export const CHANGZHENG_PORTRAIT_URL: string
   /** The motion tokens, by token name (packages/client/src/theme/tokens.json, D9); read through shared/motion.ts. */
   export const MOTION: Record<string, string>
   /** The colour cards the token sheet resolves (packages/client/src/theme/tokens.json, D30); the settings page's swatches read them. */

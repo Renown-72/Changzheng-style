@@ -1,7 +1,7 @@
 import { installScaledLayer } from '@dsh-claude-style/engine/scaled-layer'
 import { installFrameColumns } from './page-scale-columns'
 import { subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { PAGE_UNDER_1000_ATTR, PAGE_UNDER_480_ATTR, PAGE_UNDER_760_ATTR, PAGE_ZOOM_ATTR } from '../constants'
+import { PAGE_UNDER_1180_ATTR, PAGE_UNDER_1000_ATTR, PAGE_UNDER_860_ATTR, PAGE_UNDER_480_ATTR, PAGE_UNDER_760_ATTR, PAGE_ZOOM_ATTR } from '../constants'
 import { subscribePrefs } from '../core/prefs'
 import { pageViewport, pageZoomFactor } from './page-zoom'
 
@@ -35,7 +35,9 @@ export const PAGE_WIDTH = '--dsh-claude-page-width'
  * under its width, which is the query's own reading on a page drawn at 1.
  */
 const WIDTH_MARKS = [
+  { attr: PAGE_UNDER_1180_ATTR, width: 1180 },
   { attr: PAGE_UNDER_1000_ATTR, width: 1000 },
+  { attr: PAGE_UNDER_860_ATTR, width: 860 },
   { attr: PAGE_UNDER_760_ATTR, width: 760 },
   { attr: PAGE_UNDER_480_ATTR, width: 480 },
 ] as const

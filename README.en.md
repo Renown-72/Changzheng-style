@@ -41,7 +41,9 @@ A mascot stands in the window's bottom-right corner, with a bubble over its head
   </tr>
 </table>
 
-**Long March** shows the picture you upload: in Settings › Appearance › Mascot choose "Upload a picture" (PNG, WebP, GIF, SVG or JPG, up to 8 MB; a transparent background works best, and an animated image plays itself), or drop it at `$DSH_HOME/dsh-claude-style/brand/mascot.png`. The plugin sets her in motion — breathing, swaying, hopping, a shake on a failure. The plugin ships no picture of her: use one you may use. Until there is one, Big Fish stands in.
+**Long March** uses an included portrait created from the reference image, with breathing, swaying, hopping and other motions for her different states. In Settings › Appearance › Mascot you can upload a picture you may use (PNG, WebP, GIF, SVG or JPG, up to 8 MB; a transparent background works best), or place it at `$DSH_HOME/dsh-claude-style/brand/mascot.png`. Removing a custom picture restores the included portrait.
+
+<img src="./packages/assets/src/mascot/changzheng/portrait.png" alt="The included Long March character" width="180" />
 
 ## Installation
 

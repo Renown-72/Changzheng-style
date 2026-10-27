@@ -1087,15 +1087,16 @@ draws them.
 
 ## 长征姬 · Long March
 
-The reader's own picture: the `mascot` brand image (D30), uploaded on the
-settings page's mascot row or dropped by hand into
-`$DSH_HOME/dsh-claude-style/brand/` as `mascot.png` (or `.webp`, `.gif`, `.svg`,
-`.jpg`), up to 8 MB. The package carries no picture of her. It stands in a
+The package carries a portrait made from the supplied character reference. A
+reader can replace it with their own `mascot` brand image (D30), uploaded on the
+settings page's mascot row or placed in `$DSH_HOME/dsh-claude-style/brand/` as
+`mascot.png` (or `.webp`, `.gif`, `.svg`, `.jpg`), up to 8 MB; removing the
+custom image restores the packaged portrait. It stands in a
 210×260 box, scaled to fit and standing on the box's bottom edge; an animated GIF
 or WebP plays itself. Every state is one frame of it, and the motion is the
 stylesheet's (the last column of the table above), on the sprite's own box so it
 never fights the frame's translation. On the dark canvas the picture takes a
-soft glow of the accent. Without a picture, 大肥鱼 stands in.
+soft glow of the accent.
 
 ## Neon finish · 霓虹质感
 

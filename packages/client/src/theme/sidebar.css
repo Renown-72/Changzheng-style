@@ -3,9 +3,8 @@
    painted as an alpha mask over currentColor so it follows the label colour. The
    choice is a document attribute, so the settings page flips one attribute and
    the UI follows. Sizing: an 18px cap height to match the shipped brandName box,
-   the wordmark's width read from that height through the artwork's aspect ratio
-   (its viewBox, 210 × 100, packages/assets/src/brand/changzheng-word.svg and
-   ember-word.svg). */
+   the wordmark's width read from that height through each artwork's aspect ratio
+   (packages/assets/src/brand/changzheng-word.svg and ember-word.svg). */
 body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-claude-brand="ember"]) :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"]) > * {
   display: none !important;
 }
@@ -51,6 +50,7 @@ body[data-dsh-claude-style]:is([data-dsh-claude-brand="changzheng"], [data-dsh-c
 }
 
 body[data-dsh-claude-style][data-dsh-claude-brand="changzheng"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+  width: calc(18px * 640 / 100);
   -webkit-mask: var(--dsh-claude-mask-changzheng-word);
   mask: var(--dsh-claude-mask-changzheng-word);
 }

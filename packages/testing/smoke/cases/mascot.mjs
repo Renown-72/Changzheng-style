@@ -5,7 +5,7 @@ export default {
     basicChecks(r)
     const crab = r.states || {}
     const is = (state, animation, place) => !!state && state.animation === animation && state.place === place && state.ready === true
-    // Without the reader's picture of 长征姬 the corner mascot is 大肥鱼 under the crimson card too.
+    // The stand-in settings select 大肥鱼 for the state walk.
     check('the corner mascot stands idling while the home page is up, from its routed sheet',
       is(crab.home, 'idle', 'card') && /\.webp"\)$/.test(crab.home.sheet), JSON.stringify(crab.home))
     check('its frames change on its own node without waking a pass',
@@ -38,8 +38,8 @@ export default {
     check('kept to the home page it stays off the conversation and comes back on the home page',
       crab.backInConversation === true && crab.homeOnly === null && is(crab.homeOnlyHero, 'idle', 'card'),
       JSON.stringify({ back: crab.backInConversation, homeOnly: crab.homeOnly, hero: crab.homeOnlyHero }))
-    check('with the mascot off it leaves; picking 长征姬 without her picture puts 大肥鱼 out instead',
-      crab.off === null && crab.deepyPicked === true, JSON.stringify({ off: crab.off, deepy: crab.deepyPicked }))
+    check('with the mascot off it leaves; picking 长征姬 shows her packaged portrait',
+      crab.off === null && crab.changzhengPicked === true, JSON.stringify({ off: crab.off, changzheng: crab.changzhengPicked }))
     commonChecks(r)
   },
   // The cyan card's whale: its palette, its sheets and its reduced-motion frame.

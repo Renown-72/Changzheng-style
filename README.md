@@ -41,7 +41,9 @@
   </tr>
 </table>
 
-**长征姬**显示你自己上传的立绘：在 设置 › 外观 › 看板娘 里点「上传立绘」（PNG、WebP、GIF、SVG 或 JPG，不超过 8 MB，透明背景最佳；动图会自己播放），或者直接把图片放到 `$DSH_HOME/dsh-claude-style/brand/mascot.png`。插件会给她加上呼吸、摇摆、蹦跳、摇头等状态动效。插件本身不附带长征姬的图片，请使用你有权使用的图；没有上传时由大肥鱼代班。
+**长征姬**默认使用根据参考图定制的内置立绘，插件会给她加上呼吸、摇摆、蹦跳和摇头等状态动效。在 设置 › 外观 › 看板娘 也可以上传你有权使用的角色图（PNG、WebP、GIF、SVG 或 JPG，不超过 8 MB；透明背景最佳），或将图片放到 `$DSH_HOME/dsh-claude-style/brand/mascot.png`；移除自定义图片后恢复内置形象。
+
+<img src="./packages/assets/src/mascot/changzheng/portrait.png" alt="长征姬的内置形象" width="180" />
 
 ## 安装
 

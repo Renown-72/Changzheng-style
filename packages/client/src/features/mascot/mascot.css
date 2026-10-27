@@ -8,7 +8,7 @@
    logical pixels (one pixel of the 412×344 source frame) and the CSS pixels a
    logical pixel stands as (`--dsh-claude-mascot-unit`); each frame is a
    translation of the strip inside the sprite's window, played by the browser's
-   animation engine. 长征姬 is the reader's own picture, one frame, and the
+   animation engine. 长征姬 uses one portrait frame, and the
    motion is this sheet's, keyed on `data-animation` below.
 
    A status bubble over the head says what the agent is doing; a neon ring at
@@ -43,17 +43,13 @@ body[data-dsh-claude-style] .dsh-claude-mascot:not([data-ready]) {
 
 /* A narrow window gives the conversation's input area the corner: the mascot
    stands smaller there, still clear of the send button in most layouts. */
-@media (max-width: 1180px) {
-  body[data-dsh-claude-style] .dsh-claude-mascot {
-    scale: 0.72;
-  }
+body[data-dsh-claude-style][data-dsh-claude-page-under-1180] .dsh-claude-mascot {
+  scale: 0.72;
 }
 
-@media (max-width: 860px) {
-  body[data-dsh-claude-style] .dsh-claude-mascot[data-place="stack"],
-  body[data-dsh-claude-style] .dsh-claude-mascot[data-place="panel"] {
-    display: none;
-  }
+body[data-dsh-claude-style][data-dsh-claude-page-under-860] .dsh-claude-mascot[data-place="stack"],
+body[data-dsh-claude-style][data-dsh-claude-page-under-860] .dsh-claude-mascot[data-place="panel"] {
+  display: none;
 }
 
 @keyframes dsh-claude-mascot-enter {
@@ -143,7 +139,7 @@ body[data-dsh-claude-style] .dsh-claude-deepy .dsh-claude-mascot-hit {
   cursor: grab;
 }
 
-/* ── 长征姬: the reader's picture, set in motion here ── */
+/* ── 长征姬: the portrait, set in motion here ── */
 
 body[data-dsh-claude-style] .dsh-claude-changzheng .dsh-claude-mascot-sprite {
   position: absolute;

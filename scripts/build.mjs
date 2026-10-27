@@ -356,6 +356,9 @@ async function main() {
     claimed.add(entry.file)
     deepyUrls[name] = entry.url
   }
+  const portrait = plan.entries.get('mascot/changzheng/portrait.png')
+  if (portrait === undefined) throw new Error('build: the Long March mascot portrait is missing')
+  claimed.add(portrait.file)
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -390,6 +393,7 @@ async function main() {
     // for its build: the account Remote carries it on every call.
     CLIENT_VERSION: PACKAGE.version,
     DEEPY_SHEET_URLS: deepyUrls,
+    CHANGZHENG_PORTRAIT_URL: portrait.url,
     // The motion tokens, by name: the browser half reads the same table the
     // generated token stylesheet carries, so a duration cannot be 200 ms in the
     // CSS and 250 ms in a Web Animations call (D9).

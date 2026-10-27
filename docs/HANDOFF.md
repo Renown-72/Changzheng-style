@@ -43,7 +43,7 @@
 - `whale.ts` 保留：大肥鱼（Deepy 鲸鱼），`name: 'deepy'`。
 - `mascot.ts`：两个角色并存，按偏好挂一个、另一个释放。
 - `mascot.manifest.ts`：两个样式表（`mascot.css` rank 350、`whale.css` rank 360），四个选项标签。
-- 长征姬的每个动画是**三张** sheet：`<key>.png`（角色本色：白发、肤色、红瞳、金色星夹）、`<key>-accent.png`（领巾与裙，用 `--dsw-alias-brand-primary` 填充，两卡共用一张画）、`<key>-ink.png`（笔记本、思考泡、字母等道具，用三级文字色填充）。绘制脚本 `scripts/draw-changzheng.py`，输出在 `packages/assets/src/mascot/changzheng/`。
+- 长征姬的像素动画采用角色本色、强调色和墨色三层绘制。
 - `mascot.css` 重写为三层叠图（strip + ::before 强调色 + ::after 墨色）；命中区、锚点、尺寸沿用原来的 52×36 / 2px 约定。
 - `mascot.copy.json`：`mascotChangzheng = 长征姬`、`mascotDeepy = 大肥鱼`。
 

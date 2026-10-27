@@ -87,7 +87,7 @@ export const DEEPY_SHEETS: Record<string, MascotSheetEntry> = Object.fromEntries
 export const DEEPY_EXTRAS = ['idle-bubbles', 'idle-yawn', 'idle-stretch']
 
 /**
- * 长征姬 is the reader's own picture (the `mascot` brand image, D30): one still
+ * 长征姬 is the packaged portrait or the reader's `mascot` brand image (D30): one still
  * image, set in motion by the stylesheet per animation (mascot.css keys on
  * `data-animation`). Every animation is one frame of the whole picture.
  */

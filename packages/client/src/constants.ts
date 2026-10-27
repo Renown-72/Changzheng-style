@@ -192,7 +192,9 @@ export const PAGE_ZOOM_ATTR = 'data-dsh-claude-page-zoom'
  * these where it would write a width media query: the query reads the window
  * unzoomed, so a zoomed page would keep its wide layout in a narrow page.
  */
+export const PAGE_UNDER_1180_ATTR = 'data-dsh-claude-page-under-1180'
 export const PAGE_UNDER_1000_ATTR = 'data-dsh-claude-page-under-1000'
+export const PAGE_UNDER_860_ATTR = 'data-dsh-claude-page-under-860'
 export const PAGE_UNDER_760_ATTR = 'data-dsh-claude-page-under-760'
 export const PAGE_UNDER_480_ATTR = 'data-dsh-claude-page-under-480'
 

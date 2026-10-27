@@ -1,6 +1,7 @@
 import { COMPOSER_STACK, conversationSessionId, findComposerCard, findComposerSeat, findConversationSession, findHeroRoot } from '@dsh-claude-style/engine/host'
 import { motionReduced } from '../../core/prefs'
 import { createMascotSignals } from './mascot-signals'
+import { MASCOT_PLACE_KEY } from './mascot-place'
 import type { MascotMoment } from './mascot-signals'
 import { decideStage, finishStage, freshStage, nextDecisionAt, switchSettles, takeMoment } from './mascot-stage'
 import type { MascotPick, PlayMode } from './mascot-stage'
@@ -46,32 +47,30 @@ export interface MascotCharacter {
   createSheets(onReady: () => void): MascotSheets
 }
 
-/** Where the reader dragged the mascot to: its offset from the window's bottom-right corner, kept per browser. */
-const PLACE_KEY = 'dsh-claude-style:mascot-place'
-
 /** The stored offset, or null for the stylesheet's own corner. */
 function readPlace(): { right: number, bottom: number } | null {
   try {
-    const raw = localStorage.getItem(PLACE_KEY)
+    const raw = localStorage.getItem(MASCOT_PLACE_KEY)
     if (raw === null) return null
     const place = JSON.parse(raw) as { right?: unknown, bottom?: unknown }
     return typeof place.right === 'number' && typeof place.bottom === 'number' ? { right: place.right, bottom: place.bottom } : null
   } catch {
+    // Unavailable storage or an invalid saved value leaves the default position.
     return null
   }
 }
 
 function writePlace(place: { right: number, bottom: number }) {
   try {
-    localStorage.setItem(PLACE_KEY, JSON.stringify(place))
+    localStorage.setItem(MASCOT_PLACE_KEY, JSON.stringify(place))
   } catch {
     // Storage refused (a private window): the place holds for this page only.
   }
 }
 
 /**
- * One mascot in the window's bottom-right corner — 长征姬 (the reader's own
- * picture) or 大肥鱼 — played from its sheets by the state the agent is in
+ * One mascot in the window's bottom-right corner — 长征姬 or 大肥鱼 —
+ * played from its sheets by the state the agent is in
  * (packages/client/src/features/mascot/mascot-signals.ts).
  *
  * It is out while the home page, or (when the scope preference says so) a

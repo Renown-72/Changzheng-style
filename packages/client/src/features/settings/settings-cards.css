@@ -87,10 +87,28 @@ body[data-dsh-claude-style] .dsh-claude-brand-card {
 }
 
 body[data-dsh-claude-style] .dsh-claude-brand-card-word {
-  flex: none;
+  flex: 0 1 auto;
   width: calc(16px * 210 / 100);
+  max-width: calc(100% - 42px);
   height: 16px;
   background-color: currentColor;
+}
+
+body[data-dsh-claude-style] .dsh-claude-brand-card[data-brand="changzheng"] {
+  --dsh-claude-card-word-mask: var(--dsh-claude-mask-changzheng-word);
+}
+
+body[data-dsh-claude-style] .dsh-claude-brand-card[data-brand="ember"] {
+  --dsh-claude-card-word-mask: var(--dsh-claude-mask-ember-word);
+}
+
+body[data-dsh-claude-style] .dsh-claude-brand-card .dsh-claude-brand-card-word {
+  -webkit-mask: var(--dsh-claude-card-word-mask);
+  mask: var(--dsh-claude-card-word-mask);
+}
+
+body[data-dsh-claude-style] .dsh-claude-brand-card[data-brand="changzheng"] .dsh-claude-brand-card-word {
+  width: calc(16px * 640 / 100);
 }
 
 body[data-dsh-claude-style] .dsh-claude-brand-card-lockup {
@@ -635,11 +653,6 @@ body[data-dsh-claude-style] .dsh-claude-mascot-thumb {
   height: 76px;
   background-position: 50% 100%;
   background-repeat: no-repeat;
-}
-
-body[data-dsh-claude-style] .dsh-claude-mascot-thumb[data-empty] {
-  background: var(--dsh-claude-image-changzheng-mark) no-repeat 50% 60% / 40px 40px;
-  opacity: 0.55;
 }
 
 body[data-dsh-claude-style] .dsh-claude-mascot-thumb[data-auto] {

@@ -16,8 +16,7 @@
     // work from the top of the input area, and stands on the panel that takes
     // the card's place while the reader is asked for something.
     await probe.onlyFor(['deepy', 'crab-states'], async function () {
-      // 长征姬 stands only with the reader's picture, which the stand-in host
-      // has none of: under either card the corner mascot is 大肥鱼.
+      // The state walk starts with 大肥鱼 selected in the stand-in settings.
       var mascotName = 'deepy'
       var driver = window.__deepy
       var whaleNow = function () {
@@ -246,10 +245,10 @@
         window.__pushForm({ mascot: 'off' })
         await sleep(300)
         r.states.off = whaleNow()
-        // 长征姬 picked without her picture: 大肥鱼 stands in.
+        // The packaged portrait is available without an uploaded picture.
         window.__pushForm({ mascot: 'changzheng' })
         await sleep(300)
-        r.states.deepyPicked = document.querySelector('.dsh-claude-deepy') !== null && document.querySelector('.dsh-claude-changzheng') === null
+        r.states.changzhengPicked = document.querySelector('.dsh-claude-changzheng') !== null && document.querySelector('.dsh-claude-deepy') === null
         window.__pushForm({ mascot: 'crab', mascotScope: 'all' })
         scopeHero.remove()
         await sleep(200)

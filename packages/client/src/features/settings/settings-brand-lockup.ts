@@ -1,8 +1,7 @@
 import * as React from 'react'
-import { BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-claude-style/contracts/brand'
-import type { BrandImageKind } from '@dsh-claude-style/contracts/brand'
+import { BRAND_IMAGE_TYPES } from '@dsh-claude-style/contracts/brand'
 import { BRAND_CHANGZHENG, BRAND_EMBER, BRAND_INK_ORIGINAL, BRAND_NAME_MAX } from '../../constants'
-import { loadBrandImages, readBrandImages, removeBrandImage, subscribeBrandImages, uploadBrandImage } from '../../shared/custom-brand'
+import { useBrandImageSeat } from '../../shared/brand-image-seat'
 import type { BrandImage } from '../../shared/custom-brand'
 import type { Prefs } from '../../constants'
 import type { SettingsView } from './settings-controls'
@@ -29,8 +28,8 @@ const NAME_SAVE_DEBOUNCE_MS = 600
 /**
  * The art each brand draws when the reader supplied no picture, and the
  * proportions of the brand's own word. Each word is an asset whose box is the
- * drawing's own, so `wordRatio` is that box's width over its height (both words
- * are drawn in a 210 × 100 box) and `wordHeight` is how tall the box stands
+ * drawing's own, so `wordRatio` is that box's width over its height and
+ * `wordHeight` is how tall the box stands
  * against the cap height. Both marks are square.
  */
 const BRAND_ART = {
@@ -38,7 +37,7 @@ const BRAND_ART = {
     mark: 'var(--dsh-claude-image-changzheng-mark)',
     word: 'var(--dsh-claude-image-changzheng-word)',
     markRatio: 1,
-    wordRatio: 210 / 100,
+    wordRatio: 640 / 100,
     wordHeight: 1,
   },
   [BRAND_EMBER]: {
@@ -50,64 +49,7 @@ const BRAND_ART = {
   },
 }
 
-/** The images in hand, following the shared state, read once the control mounts. */
-function useBrandImages() {
-  const [images, setImages] = React.useState(readBrandImages())
-  React.useEffect(() => {
-    const off = subscribeBrandImages(setImages)
-    loadBrandImages()
-    setImages(readBrandImages())
-    return off
-  }, [])
-  return images
-}
-
-/**
- * One seat's own picture: the file it picked, the reply while a change
- * travels and the reason the last one was refused. The file is held to the
- * accepted formats and size here, so a refusal is said before the bytes
- * travel; the host half checks both again.
- */
-function useBrandSeat(kind: BrandImageKind) {
-  const images = useBrandImages()
-  const [busy, setBusy] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
-  const picker = React.useRef<HTMLInputElement>(null)
-  const run = (pending: Promise<void>) => {
-    setBusy(true)
-    setError(null)
-    // A refusal from the host half is said on the row; the stored image stays (D12).
-    pending.then(() => setBusy(false), (reason: { message?: string }) => {
-      setBusy(false)
-      setError(copy('brandImageFailed', { detail: reason?.message ?? String(reason) }))
-    })
-  }
-  const pick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    event.target.value = ''
-    if (file === undefined) return
-    if (BRAND_IMAGE_TYPES[file.type] === undefined) {
-      setError(copy('brandImageType'))
-      return
-    }
-    if (file.size > BRAND_IMAGE_MAX_BYTES) {
-      setError(copy('brandImageSize'))
-      return
-    }
-    run(uploadBrandImage(kind, file))
-  }
-  return {
-    image: images[kind],
-    busy,
-    error,
-    picker,
-    pick,
-    open: () => picker.current?.click(),
-    remove: () => run(removeBrandImage(kind)),
-  }
-}
-
-type Seat = ReturnType<typeof useBrandSeat>
+type Seat = ReturnType<typeof useBrandImageSeat>
 
 /** The hidden file input a seat opens. */
 function SeatPicker(props: { seat: Seat }) {
@@ -217,8 +159,9 @@ function NameField(props: { value: string, onChange: (value: string) => void, on
  * removal in the corner the action plate leaves free.
  */
 export function BrandLockup(props: { prefs: Prefs, write: SettingsView['write'], disabled?: boolean }) {
-  const mark = useBrandSeat('mark')
-  const word = useBrandSeat('wordmark')
+  const messages = { type: copy('brandImageType'), size: copy('brandImageSize'), failed: (detail: string) => copy('brandImageFailed', { detail }) }
+  const mark = useBrandImageSeat('mark', messages)
+  const word = useBrandImageSeat('wordmark', messages)
   const [editing, setEditing] = React.useState(false)
   const [draft, setDraft] = React.useState(props.prefs.brandName)
   const timer = React.useRef<number | null>(null)
