@@ -19,9 +19,10 @@ export function createGreetingCopy() {
     sync(hero: boolean) {
       if (hero && !wasHero) draw = Math.random()
       wasHero = hero
+      const name = getUsername()
       const greeting = readPrefs().homeLayout === HOME_LAYOUT_STUDIO
-        ? pickStudioGreeting(getUsername())
-        : pickHeroGreeting(getUsername(), draw)
+        ? pickStudioGreeting(name)
+        : pickHeroGreeting(name, draw)
       // The host renders one title group per hero variant; the first span of
       // each is the greeting (a preview badge may sit before it).
       const groups = document.querySelectorAll('[data-dsh-claude-part~="hero-title-group"]')

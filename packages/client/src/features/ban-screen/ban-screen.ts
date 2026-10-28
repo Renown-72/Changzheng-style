@@ -24,18 +24,13 @@ export interface BanHandle extends FeatureHandle {
 }
 
 /**
- * The "Your account is on hold" screen, reproduced from Claude's own
- * account-hold page. It is an EASTER EGG, not a real state: nothing here
- * touches the host, the session, or the preference store — the overlay is
- * one node appended to `<body>` and removed again on the way out.
+ * The account-hold drill is an easter egg: it does not change the host,
+ * the session, or preferences. The overlay is removed on dismissal.
  *
  * Entry is the account row at the top of the sidebar footer's account
  * popover (packages/client/src/features/account/account-footer.ts binds that row to
  * `ui.ban.open()`). Exit follows the way in — every control the page
- * paints ("Sign out", "Request a review", the two "What you can do" rows,
- * the toast's dismiss button, the window controls) closes it, and Esc
- * closes it (scheduler.ts's global key handler). Nothing inside the overlay
- * performs the action its label names.
+ * paints closes it, and Esc closes it (scheduler.ts's global key handler).
  *
  * Losing focus does NOT close it, on purpose. The page is something to
  * READ: the reader has to switch windows to look something up, and an
@@ -231,12 +226,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       '<path d="M12 16.8h.01"></path>'
     ),
     close: banSvg('<path d="M6.4 6.4 17.6 17.6"></path><path d="M17.6 6.4 6.4 17.6"></path>'),
-    download: banSvg('<path d="M12 3.5v11"></path><path d="m7.5 10 4.5 4.5 4.5-4.5"></path><path d="M4.5 19.5h15"></path>'),
+    download: banSvg('<path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path>'),
     trash: banSvg(
-      '<path d="M4.5 6.8h15"></path>' +
-      '<path d="M9.5 6.8V5.2a1.2 1.2 0 0 1 1.2-1.2h2.6a1.2 1.2 0 0 1 1.2 1.2v1.6"></path>' +
-      '<path d="M6.8 6.8 7.7 19a1.5 1.5 0 0 0 1.5 1.4h5.6a1.5 1.5 0 0 0 1.5-1.4l.9-12.2"></path>' +
-      '<path d="M10.3 10.4v6.2"></path><path d="M13.7 10.4v6.2"></path>'
+      '<circle cx="12" cy="12" r="8"></circle>' +
+      '<path d="m9 9 6 6"></path><path d="m15 9-6 6"></path>'
     ),
     chevron: banSvg('<path d="m9.5 5.5 7 6.5-7 6.5"></path>'),
     minimize: banSvg('<path d="M4 12h16"></path>'),
@@ -299,15 +292,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const stamp = formatBanStamp(banOpenedAt)
     const username = getUsername()
 
-    // The wordmark is Claude's own, whatever the brand preference says: the
-    // page reproduces a Claude screen, so it draws the Claude lockup (the
-    // starburst and the wordmark) in every brand.
+    // The shared masks follow the selected brand and its own artwork.
     root.innerHTML =
       `<div class="dsh-claude-ban-bar"><div class="dsh-claude-ban-brand"><span class="dsh-claude-ban-mark dsh-claude-masked-mark"></span><span class="dsh-claude-ban-word dsh-claude-masked-word"></span></div><div class="dsh-claude-ban-bar-actions"><button type="button" class="dsh-claude-ban-signout" data-dsh-ban-dismiss>${copy('signOut')}</button><div class="dsh-claude-ban-window" aria-hidden="true"><button type="button" class="dsh-claude-ban-win" tabindex="-1" data-dsh-ban-dismiss>${BAN_ICONS.minimize}</button><button type="button" class="dsh-claude-ban-win" tabindex="-1" data-dsh-ban-dismiss>${BAN_ICONS.restore}</button><button type="button" class="dsh-claude-ban-win" tabindex="-1" data-dsh-ban-dismiss>${BAN_ICONS.close}</button></div></div></div><div class="dsh-claude-ban-toast" data-dsh-ban-dismiss role="status"><span class="dsh-claude-ban-toast-icon">${BAN_ICONS.warning}</span><span class="dsh-claude-ban-toast-text"></span><span class="dsh-claude-ban-toast-close">${BAN_ICONS.close}</span></div><div class="dsh-claude-ban-scroll"><div class="dsh-claude-ban-column"><span class="dsh-claude-ban-lock">${BAN_ICONS.lock}</span><h1 class="dsh-claude-ban-title">${copy('title')}</h1><p class="dsh-claude-ban-lead">${copy('lead', { time: stamp })}</p><p class="dsh-claude-ban-lead">${copy('leadError')}</p><p class="dsh-claude-ban-next">${copy('nextLabel')}</p><div class="dsh-claude-ban-card"><div class="dsh-claude-ban-step"><span class="dsh-claude-ban-step-num">1</span><span class="dsh-claude-ban-step-body"><span class="dsh-claude-ban-step-title">${copy('step1Title')}</span><span class="dsh-claude-ban-step-desc">${copy('step1Desc')}</span></span></div><div class="dsh-claude-ban-step"><span class="dsh-claude-ban-step-num">2</span><span class="dsh-claude-ban-step-body"><span class="dsh-claude-ban-step-title">${copy('step2Title')}</span><span class="dsh-claude-ban-step-desc">${copy('step2Desc')}</span></span></div><div class="dsh-claude-ban-step"><span class="dsh-claude-ban-step-num">3</span><span class="dsh-claude-ban-step-body"><span class="dsh-claude-ban-step-title">${copy('step3Title')}</span><span class="dsh-claude-ban-step-desc">${copy('step3Desc')}</span></span></div></div><button type="button" class="dsh-claude-ban-primary" data-dsh-ban-dismiss>${copy('review')}</button><h2 class="dsh-claude-ban-subtitle">${copy('whatYouCanDo')}</h2><div class="dsh-claude-ban-card dsh-claude-ban-actions"><button type="button" class="dsh-claude-ban-action" data-dsh-ban-dismiss><span class="dsh-claude-ban-action-icon">${BAN_ICONS.download}</span><span class="dsh-claude-ban-action-text"><span class="dsh-claude-ban-action-title">${copy('exportTitle')}</span><span class="dsh-claude-ban-action-desc">${copy('exportDesc')}</span></span><span class="dsh-claude-ban-action-chevron">${BAN_ICONS.chevron}</span></button><button type="button" class="dsh-claude-ban-action" data-dsh-ban-dismiss><span class="dsh-claude-ban-action-icon">${BAN_ICONS.trash}</span><span class="dsh-claude-ban-action-text"><span class="dsh-claude-ban-action-title dsh-claude-ban-action-title-danger">${copy('deleteTitle')}</span><span class="dsh-claude-ban-action-desc">${copy('deleteDesc')}</span></span><span class="dsh-claude-ban-action-chevron">${BAN_ICONS.chevron}</span></button></div></div></div>`
     // The username is user- and host-supplied text (a preference, the OS user,
     // the account nickname), so it is written as text, never spliced into the
     // markup above.
-    root.querySelector('.dsh-claude-ban-toast-text')!.textContent = `${username}: account_banned`
+    root.querySelector('.dsh-claude-ban-toast-text')!.textContent = copy('toast', { name: username })
 
     // One listener for every way out that is a click: the markup marks each
     // control with `data-dsh-ban-dismiss`, and a click that lands on the

@@ -14,6 +14,8 @@
 
 The interface takes the Long March girl's command terminal as its cue: a deep violet canvas, an accent aurora and a faint grid behind the home page, a gradient greeting and a composer card that lights up when it holds focus. Switch between the crimson and cyan palettes in the plugin settings; light and dark follow the system.
 
+New conversations show a Chinese greeting that addresses the user as 同志 (comrade). When the account-hold easter egg is enabled, the account menu opens a simulated access-hold drill; closing it returns to the current task.
+
 ### The corner mascot
 
 A mascot stands in the window's bottom-right corner, with a bubble over its head saying what the agent is doing; drag it anywhere and it keeps its place. It can follow the theme (crimson → Long March, cyan → Big Fish), or be chosen on its own.

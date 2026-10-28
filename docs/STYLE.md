@@ -212,8 +212,7 @@ Under the host typeface the skin's own faces fall back to the host's:
 carries no condensed display face), `--dsh-claude-font-code` to
 `--ds-font-family-code`.
 
-The account-hold page keeps its own colours, reproducing the console screen it
-draws.
+The account-hold drill uses the active palette and brand mark.
 The reasoning slider and its trigger take the theme accent: the dot matrix and
 knob glow read `--dsh-claude-apex*`, and the level ramp reads
 `--dsh-claude-effort-*`. Translucent neutral hover tints and the usage panel's
@@ -922,7 +921,7 @@ inside `…_composerStack …_composerHero` — so only the arrangement differs.
 
 | | Classic | Studio |
 |---|---|---|
-| greeting | centred, 44.2px condensed display, brand mark on its line | top left, one fixed line naming the user ("What's up next, …?") in the 22px sans UI face, a 26px brand mark on its line |
+| greeting | centred, 44.2px condensed display, brand mark on its line | top left, one fixed Chinese line addressing the user as 同志 in the 22px sans UI face, a 26px brand mark on its line |
 | composer card | vertically centred in the scroll body | the conversation's single-line inline form, resting on the window's bottom edge (16px foot) |
 | between them | — | the usage panel |
 | permission control | the segment group | the conversation's trigger and its card |

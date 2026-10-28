@@ -1,16 +1,4 @@
-/* ---------- Claude Code layout: account-ban easter egg ---------- */
-/* A reproduction of Claude's own "Your account is on hold" page, shown when the
-   account row at the top of the sidebar's account popover is clicked. It is an
-   easter egg, not a real state (packages/client/src/features/ban-screen/ban-screen.ts), and it is a
-   full-window overlay rather than a page: `position: fixed` at the top of the
-   stacking order, so it covers the titlebar, sidebar and composer whatever the
-   host paints underneath, and can never be clipped by the sidebar column the
-   account popover itself has to dodge.
-
-   Palette: the page is Claude's ivory canvas, so the light rules carry the
-   measurements and the dark theme re-maps the same slots onto the skin's warm
-   black. Every colour is a custom property, which is what lets one set of rules
-   serve both canvases. */
+/* The account-hold drill covers the window and follows the selected palette. */
 body[data-dsh-claude-style] .dsh-claude-ban {
   --dsh-ban-canvas: #faf9f5;
   --dsh-ban-text: #141413;
@@ -28,8 +16,6 @@ body[data-dsh-claude-style] .dsh-claude-ban {
   --dsh-ban-toast-text: #7a4f12;
   --dsh-ban-toast-icon: #9a5a15;
   --dsh-ban-toast-hover: rgba(20, 20, 19, 0.09);
-  /* The two brand marks are alpha masks over these slots, so the starburst
-     keeps the clay accent while the wordmark stays in the page's ink. */
   --dsh-ban-mark: #d97757;
   --dsh-ban-word: #141413;
   position: fixed !important;
@@ -50,6 +36,27 @@ body[data-dsh-claude-style] .dsh-claude-ban {
      takes no more presses (ban-screen.ts). */
   transform-origin: center;
   animation: dsh-claude-ban-in var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle);
+}
+
+body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban] {
+  --dsh-ban-canvas: var(--dsw-alias-bg-base);
+  --dsh-ban-text: var(--dsw-alias-label-primary);
+  --dsh-ban-muted: var(--dsw-alias-label-secondary);
+  --dsh-ban-card: var(--dsw-alias-bg-layer-1);
+  --dsh-ban-hairline: var(--dsw-alias-border-l1);
+  --dsh-ban-hover: color-mix(in srgb, var(--dsw-alias-brand-primary) 10%, transparent);
+  --dsh-ban-primary-fill: var(--dsw-alias-label-primary);
+  --dsh-ban-primary-text: var(--dsw-alias-bg-base);
+  --dsh-ban-primary-hover: color-mix(in srgb, var(--dsw-alias-label-primary) 82%, var(--dsw-alias-brand-primary));
+  --dsh-ban-danger: var(--dsw-alias-label-primary);
+  --dsh-ban-danger-hover: var(--dsw-alias-brand-text);
+  --dsh-ban-toast-bg: var(--dsw-alias-bg-layer-1);
+  --dsh-ban-toast-border: var(--dsw-alias-border-l1);
+  --dsh-ban-toast-text: var(--dsw-alias-label-primary);
+  --dsh-ban-toast-icon: var(--dsw-alias-brand-text);
+  --dsh-ban-toast-hover: var(--dsh-ban-hover);
+  --dsh-ban-mark: var(--dsh-claude-logo-ink);
+  --dsh-ban-word: var(--dsw-alias-label-primary);
 }
 
 /* The page is the window, so it keeps none of the dialog cap theme/chrome.css
@@ -78,26 +85,6 @@ body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-leaving] {
 @keyframes dsh-claude-ban-out {
   from { opacity: 1; transform: none; }
   to { opacity: 0; transform: scale(var(--dsh-claude-scale-dialog)); }
-}
-
-body[data-dsh-claude-style][data-ds-dark-theme] .dsh-claude-ban {
-  --dsh-ban-canvas: #141413;
-  --dsh-ban-text: #faf9f5;
-  --dsh-ban-muted: #b0aea5;
-  --dsh-ban-card: #1c1b1a;
-  --dsh-ban-hairline: #2e2c29;
-  --dsh-ban-hover: rgba(255, 255, 255, 0.07);
-  --dsh-ban-primary-fill: #faf9f5;
-  --dsh-ban-primary-text: #141413;
-  --dsh-ban-primary-hover: #e8e6dc;
-  --dsh-ban-danger: #e08a6d;
-  --dsh-ban-danger-hover: #eb9f84;
-  --dsh-ban-toast-bg: #3a2a22;
-  --dsh-ban-toast-border: #55402f;
-  --dsh-ban-toast-text: #f0d8b8;
-  --dsh-ban-toast-icon: #e0a86a;
-  --dsh-ban-toast-hover: rgba(255, 255, 255, 0.08);
-  --dsh-ban-word: #faf9f5;
 }
 
 body[data-dsh-claude-style] .dsh-claude-ban *,
@@ -130,10 +117,7 @@ body[data-dsh-claude-style] .dsh-claude-ban-brand {
   color: var(--dsh-ban-word);
 }
 
-/* The page is Claude's own, so its lockup is the Claude one in every brand: the
-   ember starburst beside the wordmark, both masked over the page's ink. The
-   artwork comes from the shared masked classes (shared/masked.css); the ink
-   and the box are the page's own. */
+/* The shared masks paint the currently selected brand (shared/masked.css). */
 body[data-dsh-claude-style] .dsh-claude-ban-mark {
   flex: none;
   width: 21px;
@@ -143,9 +127,13 @@ body[data-dsh-claude-style] .dsh-claude-ban-mark {
 
 body[data-dsh-claude-style] .dsh-claude-ban-word {
   flex: none;
-  width: 89px;
+  width: calc(21px * 640 / 100);
   height: 21px;
   background-color: var(--dsh-ban-word);
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="ember"] .dsh-claude-ban-word {
+  width: calc(21px * 210 / 100);
 }
 
 body[data-dsh-claude-style] .dsh-claude-ban-bar-actions {
